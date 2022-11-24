@@ -7,7 +7,7 @@ use near_sdk:: AccountId;
 pub const STORAGE_COST: u128 = 1_000_000_000_000_000_000_000;
 pub const ONE_NEAR: Balance = 1_000_000_000_000_000_000_000_000;
 
-
+pub type Date = u64;
 pub type IdeaId=u64;
 pub type InvestmentId=u64;
 
@@ -18,6 +18,7 @@ pub use crate::views::*;
 mod calls;
 mod views;
 mod internal;
+
 
 // Define the contract structure
 #[near_bindgen]
@@ -71,12 +72,16 @@ pub struct Team {
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 #[derive(Debug)]
+#[derive(Clone, Copy)]
 //struct for project with phase goals
 pub struct ProjectPhaseGoals{
     pub idea_id: IdeaId,
     pub project_phase: u8,
     pub amount: Balance,
     pub goal_reached: bool,
+    pub phase_start: u64,
+    pub phase_closed: bool,
+    pub collect_enabled: bool,
 }
 
 //struct
@@ -113,31 +118,71 @@ pub fn get_total_invested_by_idea(&self, idea_id: IdeaId)->Balance{
     .sum()
 }
 
-// //create new goals
-// pub fn new_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
-//     let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
-//     goals.push(ProjectPhaseGoals{idea_id, project_phase, amount, goal_reached: false});
-//     self.goals.insert(&idea_id, &goals);
-// }
-
-
 
 //get goals
 pub fn get_goals(&self, idea_id: IdeaId) -> Vec<ProjectPhaseGoals> {
     self.goals.get(&idea_id).unwrap_or_else(||Vec::new())
 } 
 
-//if goal exist update goal othervise create new goal
-pub fn update_or_create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
+//get current active goal for idea
+pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
+    let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    let mut current_phase = ProjectPhaseGoals{idea_id: 0, project_phase: 0, amount: 0, goal_reached: false, phase_start: 0, phase_closed: false, collect_enabled: false};
+    for goal in goals{
+        if goal.goal_reached == false && goal.phase_closed == false{
+            current_phase = goal;
+            break;
+        }
+    }
+    current_phase.project_phase
+}
+
+pub fn create_project_phase_goal(&mut self, idea_id: IdeaId, amount: Balance){
+    let current_phase = self.get_active_project_phase(idea_id);
+    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    if current_phase == 0{
+        goals.push(ProjectPhaseGoals{idea_id, project_phase: 1, amount, goal_reached: true, phase_start: env::block_timestamp(), phase_closed: false, collect_enabled: false});
+        self.goals.insert(&idea_id, &goals);
+        log!("New project phase goal created beacuse no active goal was found");
+    }else if current_phase >= 1 && goals[current_phase as usize - 1].goal_reached == true{
+        goals.push(ProjectPhaseGoals{idea_id, project_phase: current_phase + 1, amount, goal_reached: false, phase_start: env::block_timestamp(), phase_closed: false, collect_enabled: false});
+        self.goals.insert(&idea_id, &goals);
+        log!("New project phase goal created beacuse current goal was reached");
+    }else if current_phase >= 1 && goals[current_phase as usize -1].goal_reached == false{
+        panic!("Current goal is not reached yet");
+    }
+        
+    
+
+    
+    }
+
+//if goal exist and it is reached create new goal
+pub fn create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
     let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
     let mut goal_exist = false;
+    let mut previous_goal_reached=false;
     for goal in goals.iter_mut(){
         if goal.idea_id == idea_id && goal.project_phase == project_phase{
             goal_exist = true;
         }
     }
-    if !goal_exist{
-        goals.push(ProjectPhaseGoals{idea_id, project_phase, amount, goal_reached: false});
+    
+    for goal in goals.iter_mut(){
+        if goal.idea_id == idea_id && goal.project_phase == project_phase-1 && goal.goal_reached == false{
+            previous_goal_reached = false;
+            log! ("Previous goal not reached");
+        }else if goal.idea_id == idea_id && goal.project_phase == project_phase-1 && goal.goal_reached == true{
+            previous_goal_reached = true;
+            log!("Previous goal reached");
+        }
+    }
+    let mut active_goal = self.get_active_project_phase(idea_id);
+    log!("Goal exist: {}", goal_exist);
+    log!("Previous goal reached: {}", previous_goal_reached);
+    log!("Active goal: {}", active_goal);
+    if !goal_exist && previous_goal_reached || self.get_active_project_phase(idea_id) == 0{
+        goals.push(ProjectPhaseGoals{idea_id, project_phase, amount, goal_reached: false, phase_start: env::block_timestamp(),phase_closed: false, collect_enabled: false});
     }
     self.goals.insert(&idea_id, &goals);
 }
@@ -155,92 +200,24 @@ pub fn update_or_create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amo
 }
 
 
-// //get amount for project phase goal by idea_id and project_phase
-// pub fn get_goal_amount_by_idea_id(&self, idea_id: IdeaId, project_phase: u8)->Balance{
-//     self.goals
-//     .iter()
-//     .filter(|(_, goal)| goal.idea_id == idea_id && goal.project_phase == project_phase)
-//     .map(|(_, goal)| goal.amount)
-//     .sum()
-// }
-
-#[payable]
-//invest in idea by project phase
-pub fn invest_in_idea(&mut self, idea_id: IdeaId, project_phase: u8){
-   
-    let investor_id = env::predecessor_account_id();
-    //random number for investment id
-    let investment_id = env::random_seed().iter().fold(0u64, |a, &b| (a << 8) | (b as u64));
-    //get atached deposit
-    let amount = env::attached_deposit();
-     //assert if get_total_invested_by_idea_id + amount <= get_goal_amount_by_idea_id
-    //assert that projectphase for that idea is not null
-
-    //razdvojiti total invested i invested so far
-    let invested=self.get_total_invested_by_idea_id(idea_id, project_phase);
-    let to_be_invested=self.get_total_invested_by_idea_id(idea_id, project_phase) + amount;
-    let goal=self.get_amount_by_project_phase(idea_id, project_phase)*ONE_NEAR;
-    let mut still_to_invest:f32=0.0;
-
-
-   
- 
-    assert!(
-        self.get_amount_by_project_phase(idea_id, project_phase) != 0,
-        "The project phase for that idea is not set",
-    );
-    
-
-        still_to_invest=(goal as f32 - invested as f32) as f32;
-        
-        
-    assert!(
-        to_be_invested <= goal,
-        // self.get_total_invested_by_idea_id(idea_id, project_phase) + amount <= self.get_amount_by_project_phase(idea_id, project_phase) *ONE_NEAR,
-        "The amount of the investment is greater than the goal amount, left to invest:{}", still_to_invest,
-    );
-
-
-    //create investment
-    let investment = InvestmentMetadata{
-        idea_id,
-        project_phase,
-        investor_id,
-        amount,
-    };
-    self.investment.insert(&investment_id, &investment);
-
-//check if goal is reached and call function set_goal_reached
-log!("to be invested:{}", to_be_invested);
-log!("goal:{}", goal);
-if to_be_invested == goal{
-    self.set_goal_reached(idea_id, project_phase);
-    log!("Goal reached");
-    //TODO; enable button to collect funds and enable second phase of project
-}
-
-
-
-    // //if total invested is equal to goal amount, set goal_reached to true
-    // if self.get_total_invested_by_idea_id(idea_id, project_phase) == self.get_goal_amount_by_idea_id(idea_id, project_phase) *ONE_NEAR{
-    //     let mut goal = self.goals.get(&idea_id).unwrap();
-    //     goal.goal_reached = true;
-    //     self.goals.insert(&idea_id, &goal);
-    // }
-    
-}
-
 //once the buton is clicked, the funds are collected and the second phase of the project is enabled
 //see if the one calling the function is the owner of the idea
 //if yes, collect funds and enable second phase of project
 //if no, return error
 pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8){
+    
+    let phase_cloased = self.get_phase_closed(idea_id, project_phase);
+    assert!(
+        phase_cloased == false,
+        "The phase is already closed",
+    );
     //check if the goal is reached
     let goal_reached = self.get_goal_reached(idea_id, project_phase);
     assert!(
         goal_reached == true,
         "Goal not reached"
     );
+    
     let owner_id = env::predecessor_account_id();
     let idea = self.ideas.get(&idea_id).unwrap();
     assert!(
@@ -250,9 +227,116 @@ pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8){
     //transfer funds to owner, call internal function transfer_funds
     self.transfer_funds(idea_id, project_phase);
     //enable second phase of project
+    self.set_phase_closed(idea_id, project_phase)
 }
 
+//check if phase is closed
+pub fn get_phase_closed(&self, idea_id: IdeaId, project_phase: u8) -> bool{
+    let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    let mut phase_closed = false;
+    for goal in goals.iter(){
+        if goal.idea_id == idea_id && goal.project_phase == project_phase{
+            phase_closed = goal.phase_closed;
+        }
+    }
+    phase_closed
 }
+
+//set project phase to closed
+pub fn set_phase_closed(&mut self, idea_id: IdeaId, project_phase: u8){
+    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    for goal in goals.iter_mut(){
+        if goal.idea_id == idea_id && goal.project_phase == project_phase{
+            goal.phase_closed = true;
+            goal.collect_enabled=false;
+        }
+    }
+    self.goals.insert(&idea_id, &goals);
+}
+
+
+//calculate time passed from phase_start_time
+//if time passed is greater than 30 days and goal_reached=true then transfer funds to owner and enable next phase,  othwevise if time passed is greater than 30 days and goal_reached=false return to investors
+//check date
+//if date is greater than 30 days, call internal function transfer_funds
+
+pub fn time_passed(&self, idea_id: IdeaId, project_phase: u8) -> u64{
+    let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    let mut time_passed = 0;
+    for goal in goals.iter(){
+        if goal.idea_id == idea_id && goal.project_phase == project_phase{
+            time_passed = env::block_timestamp() - goal.phase_start;
+        }
+    }
+    time_passed
+}
+
+pub fn check_date(&mut self, idea_id: IdeaId, project_phase: u8){
+    let time_passed = self.time_passed(idea_id, project_phase);
+    let goal_reached = self.get_goal_reached(idea_id, project_phase);
+    let phase_closed = self.get_phase_closed(idea_id, project_phase);
+    if time_passed > 259200000000 && goal_reached == true && phase_closed == false{
+        log!("time passed and goal reached and phase not closed");
+        self.transfer_funds(idea_id, project_phase);
+        self.set_phase_closed(idea_id, project_phase);
+        
+    }
+    else if time_passed > 259200000000 && goal_reached == false{
+        log!("time passed and goal not reached");
+        self.return_to_investors(idea_id, project_phase);
+        
+    }else if time_passed < 259200000000{
+        log!("time not passed");
+    }
+}
+
+//check date for project phases
+pub fn check_date_for_project_phases(&mut self, idea_id: IdeaId){
+    let project_phases = self.get_project_phases(idea_id);
+    for project_phase in project_phases.iter(){
+        self.check_date(idea_id, *project_phase);
+    }
+}
+
+//get project phases
+pub fn get_project_phases(&self, idea_id: IdeaId) -> Vec<u8>{
+    let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    let mut project_phases = Vec::new();
+    for goal in goals.iter(){
+        if goal.idea_id == idea_id{
+            project_phases.push(goal.project_phase);
+        }
+    }
+    project_phases
+}
+
+
+
+// //check_date for all ideas and all phases
+// pub fn check_date_all(&mut self){
+//     let ideas = self.ideas.keys_as_vector();
+//     for idea_id in ideas.iter(){
+//         let idea = self.ideas.get(&idea_id).unwrap();
+//         let project_phases = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+//         for goal in project_phases.iter(){
+//             self.check_date(idea_id, goal.project_phase);
+//         }
+//     }
+// }
+
+//return money to investors
+pub fn return_to_investors(&mut self, idea_id: IdeaId, project_phase: u8){
+    let investments = self.investment.keys_as_vector();
+    for investment_id in investments.iter(){
+        let investment = self.investment.get(&investment_id).unwrap();
+        if investment.idea_id == idea_id && investment.project_phase == project_phase{
+            Promise::new(investment.investor_id).transfer(investment.amount);
+            log!("Funds returned to investor");
+        }
+    }
+}
+}
+
 
 
 

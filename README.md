@@ -27,7 +27,7 @@ export NEARID=AccountID\
    ```near call $NEARID new_default_meta '{"contract_owner_id": "'$NEARID'"}' --accountId $NEARID```
    
 2. **Create idea:**\
-```near call $NEARID create_idea '{"idea_id":1, "metadata": { "title": "Blockchain game characters", "description": "Building a blockchain character ecosytem", "picture_url": "https://bafybeidl4hjbpdr6u6xvlrizwxbrfcyqurzvcnn5xoilmcqbxfbdwrmp5m.ipfs.dweb.link/", "tags":["economy","games", "ecosystem"],"value_proposition":"blockchain based platform", "owner_id":"'$NEARID'", "team": {"name":"Jonny doe", "cv":"This is some CV"}}}' --accountId $NEARID```
+```near call $NEARID create_idea '{"idea_id":12, "metadata": { "title": "Blockchain game characters", "description": "Building a blockchain character ecosytem", "picture_url": "https://bafybeidl4hjbpdr6u6xvlrizwxbrfcyqurzvcnn5xoilmcqbxfbdwrmp5m.ipfs.dweb.link/", "tags":["economy","games", "ecosystem"],"value_proposition":"blockchain based platform", "owner_id":"'$NEARID'", "team": {"name":"Jonny doe", "cv":"This is some CV"}}, "amount":1}' --accountId $NEARID```
 
 3. **View idea info**\
 ```near view $NEARID get_idea '{"idea_id": 1}'```
@@ -36,10 +36,10 @@ export NEARID=AccountID\
 ```near view $NEARID get_ideas_by_owner_id '{"owner_id":"'$NEARID'"}'```
 
 5. **Set phase goals for idea**\
-```near call $NEARID update_or_create_goals '{"idea_id":1,"project_phase":2, "amount":1}' --accountId $NEARID```
+```near call $NEARID create_goals '{"idea_id":1,"project_phase":2, "amount":1}' --accountId $NEARID```
 
 6. **Invest in idea**\
-```near call $NEARID invest_in_idea '{"idea_id":1,"project_phase":4}' --accountId $NEARID --deposit 0.8```
+```near call $NEARID invest_in_idea '{"idea_id":1,"project_phase":2}' --accountId $NEARID --deposit 0.8```
 
 7. **Check how much is invested in idea**\
 ```near call $NEARID get_total_invested_by_idea '{"idea_id":1}' --accountId $NEARID```
