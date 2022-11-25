@@ -93,7 +93,26 @@ impl Contract {
     }
 
 
-   
+
+
+    // //get goals for idea with active goals
+    // pub fn get_goals_for_idea(&self, idea_id: IdeaId)->Vec<Goal>{
+    //     let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    //     let mut active_goals:Vec<Goal> = Vec::new();
+    //     for goal in goals.iter(){
+    //         if goal.idea_id == idea_id && goal.goal_reached == false {
+    //             active_goals.push(goal.clone());
+    //         }
+    //     }
+    //     active_goals
+    // }
+
+    // //get all goals for idea
+    // pub fn get_all_goals_for_idea(&self, idea_id: IdeaId)->Vec<Goal>{
+    //     let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    //     goals
+    // }
+
 
 
     //get all investments

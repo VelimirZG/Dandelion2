@@ -310,6 +310,41 @@ pub fn get_project_phases(&self, idea_id: IdeaId) -> Vec<u8>{
     project_phases
 }
 
+//edit ideametadata if the one calling the function is the owner of the idea
+pub fn edit_idea_metadata(&mut self, idea_id: IdeaId, metadata: IdeaMetadata){
+    let owner_id = env::predecessor_account_id();
+    let idea = self.ideas.get(&idea_id).unwrap();
+    assert!(
+        owner_id == idea.owner_id,
+        "Only the owner of the idea can edit the idea metadata",
+    );
+    self.ideas.insert(&idea_id, &metadata);
+}
+
+
+//edit project_phase_goals if goal is not reached
+pub fn edit_project_phase_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: u128){
+    let owner_id = env::predecessor_account_id();
+    let idea = self.ideas.get(&idea_id).unwrap();
+    assert!(
+        owner_id == idea.owner_id,
+        "Only the owner of the idea can edit the idea metadata",
+    );
+    let goal_reached = self.get_goal_reached(idea_id, project_phase);
+    assert!(
+        goal_reached == false,
+        "Goal reached, cannot edit project phase goals",
+    );
+    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    for goal in goals.iter_mut(){
+        if goal.idea_id == idea_id && goal.project_phase == project_phase{
+            goal.amount = amount;
+        
+        }
+    }
+    self.goals.insert(&idea_id, &goals);
+}
+
 
 
 // //check_date for all ideas and all phases
@@ -335,8 +370,49 @@ pub fn return_to_investors(&mut self, idea_id: IdeaId, project_phase: u8){
         }
     }
 }
+
+pub fn get_sum_of_amount(&self, idea_id: IdeaId) -> u128{
+    let investments = self.investment.keys_as_vector();
+    let mut sum_of_amount = 0;
+    for investment_id in investments.iter(){
+        let investment = self.investment.get(&investment_id).unwrap();
+        if investment.idea_id == idea_id{
+            sum_of_amount += investment.amount;
+        }
+    }
+    sum_of_amount
 }
 
+    //get all the ideas for owner id and call get_sum_of_amount for each idea
+    pub fn get_sum_of_amount_for_owner(&self, owner_id: AccountId) -> u128{
+        let ideas = self.ideas.keys_as_vector();
+        let mut sum_of_amount = 0;
+        for idea_id in ideas.iter(){
+            let idea = self.ideas.get(&idea_id).unwrap();
+            if idea.owner_id == owner_id{
+                sum_of_amount += self.get_sum_of_amount(idea_id);
+            }
+        }
+        sum_of_amount
+    }
+    //get all the ideas for owner id and call get_sum_of_amount for each idea - use pagination
+    pub fn get_sum_of_amount_for_owner_pagination(&self, owner_id: AccountId, from_index: u64, limit: u64) -> u128{
+        let ideas = self.ideas.keys_as_vector();
+        let mut sum_of_amount = 0;
+        let mut index = 0;
+        for idea_id in ideas.iter(){
+            let idea = self.ideas.get(&idea_id).unwrap();
+            if idea.owner_id == owner_id{
+                if index >= from_index && index < from_index + limit{
+                    sum_of_amount += self.get_sum_of_amount(idea_id);
+                }
+                index += 1;
+            }
+        }
+        sum_of_amount
+    }
+
+}
 
 
 
