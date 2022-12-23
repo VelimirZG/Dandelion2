@@ -34,6 +34,7 @@ export NEARID=AccountID\
 
 4. **View ideas per creator**\
 ```near view $NEARID get_ideas_by_owner_id '{"owner_id":"'$NEARID'"}'```
+Need to be replaced by more complex view
 
 5. **Set phase goals for idea**\
 ```near call $NEARID create_goals '{"idea_id":1,"project_phase":2, "amount":1}' --accountId $NEARID```
@@ -46,9 +47,8 @@ export NEARID=AccountID\
 
 8. **View all investments**\
 ```near view $NEARID get_all_investments '{"from_index":0,"limit":100}'```
+This one needs to be replaced with more complex view
 
-9. **View total number of investments**\
-```near view $NEARID total_investments```
 
 10. **View investment goal for idea**\
 ```near view $NEARID get_goals '{"idea_id":1}'```
@@ -56,9 +56,25 @@ export NEARID=AccountID\
 11. **View all ideas**\
 ```near view $NEARID get_all_ideas '{"from_index":0,"limit":100}'```
 
+11. **View all ideas for homepage**\
+```near view $NEARID get_all_ideas_homepage '{"from_index":0,"limit":20}'```
+
+11. **Get idea for single**\
+```near view $NEARID get_idea_for_single '{"idea_id":16}'```
+
+**DASHBOARD:**\
+11. **Get sum of received investments for ideas of one owner - check does it need pagination**\
+```near view $NEARID get_sum_of_amount_for_owner '{"owner_id":"'$NEARID'"}'``` 
+
+11. **Get number of investors for ideas for one owner - check does it need pagination**\
+```near view $NEARID get_investor_count_for_owner '{"owner_id":"'$NEARID'"}'``` 
+
+11. **Get number of succesful phases and ideas for owner**\
+```near view $NEARID count_phases_and_ideas_by_owner_id '{"owner_id":"'$NEARID'"}'``` 
+
 TODO:
 12. **Collect investment**\
-```near view $NEARID get_all_ideas```
+```near call $NEARID collect_funds '{"idea_id":17, "project_phase":1}' --accountId $NEARID```
 
 13. **Return investment if not realized**\
 ```near view $NEARID get_all_ideas```
