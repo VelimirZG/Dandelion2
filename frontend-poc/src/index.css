@@ -1,0 +1,56 @@
+/* @import-normalize; */
+
+/* #root {
+  max-width: 1400px;
+  margin: 0 auto;
+} */
+
+
+body {
+  font-family: 'PTSerif', sans-serif !important;
+}
+
+button {
+  border: none;
+  background-color: transparent;
+}
+
+p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+h1 {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@font-face {
+  font-family: "Titillium Web";
+  src: url("../public/fonts/TitilliumWeb-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Titillium Web";
+  src: url("../public/fonts/TitilliumWeb-Regular.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Titillium Web";
+  src: url("../public/fonts/TitilliumWeb-SemiBold.ttf");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Titillium Web";
+  src: url("../public/fonts/TitilliumWeb-Black.ttf");
+  font-weight: 800;
+  font-style: normal;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+}
