@@ -35,7 +35,7 @@ const Archive2 = () => {
   useEffect(() => { 
     get_all_ideas().then( resIdeas => {
       console.log('ideas from all ideas: ', resIdeas);
-      get_ideas_info(resIdeas);
+      setIdeas(resIdeas);
     });
   }, [] )
 
@@ -298,17 +298,17 @@ const Archive2 = () => {
                   <div className="col-12 mt-3 card-wrap">
                     <div className="card">
                         <div className="d-flex mt-auto flex-sm-column flex-lg-row row">
-                          <div className="col-xs-12 col-sm-12 col-lg-4 d-flex justify-content-center align-items-center p-0 img-container" style={{backgroundImage: 'url(' + item.metadata.picture_url + ')'}}>
+                          <div className="col-xs-12 col-sm-12 col-lg-4 d-flex justify-content-center align-items-center p-0 img-container" style={{backgroundImage: 'url(' + item.picture_url + ')'}}>
                             {/* <img className="w-100 h-100" src={item.metadata.picture_url} alt="Card image cap" /> */}
                           </div>
                           <div className="card-content d-flex mb-lg-auto flex-column justify-content-center  col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                            <h4 className="card-title text-center text-md-start text-lg-start" style={{cursor: 'pointer'}} onClick={() => { window.location.href= process.env.PUBLIC_URL + '/' + item.idea_id}}>{item.metadata.title}</h4>
+                            <h4 className="card-title text-center text-md-start text-lg-start" style={{cursor: 'pointer'}} onClick={() => { window.location.href= process.env.PUBLIC_URL + '/' + item.idea_id}}>{item.title}</h4>
                             <p className="card-text">
-                              {item.metadata.excerpt}
+                              {item.excerpt}
                             </p>
                             <p className="card-tags d-flex justify-content-start align-items-start flex-wrap">
                               {
-                                item.metadata.tags.map((element, i) => {
+                                item.tags.map((element, i) => {
                                   if(i === 0) {
                                     return (<Button key={i} className="tag-btn me-2">{element}</Button>);
                                   }else {
@@ -327,11 +327,11 @@ const Archive2 = () => {
                                 <div className="info-raised-text">
                                   <p className="">Raised</p>
                                   <div className="stat-wrap">
-                                    <span className="out-of ms-1">300 /</span> <span className="out-of-total">500</span>
+                                    <span className="out-of ms-1">{item.sum} /</span> <span className="out-of-total">{item.amount}</span>
                                   </div>
                                 </div>
                                 <div className="progress" style={{backgroundColor: "#313131"}}>
-                                  <div className="progress-bar" style={{ width: ((100 * item.inv_total) / item.inv_goal ) + '%', background: "linear-gradient(142.91deg, #F9ED32 -54.28%, #E8A523 -12.42%, #CE225B 48.56%, #693E98 100%)" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                  <div className="progress-bar" style={{ width: ((100 * item.amount) / item.sum ) + '%', background: "linear-gradient(142.91deg, #F9ED32 -54.28%, #E8A523 -12.42%, #CE225B 48.56%, #693E98 100%)" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                               </div>
                               {/* <div className="supp-wrap d-flex justify-content-between align-items-center mt-3">
