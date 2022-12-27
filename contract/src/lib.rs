@@ -293,6 +293,16 @@ pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8){
     self.set_phase_closed(idea_id, project_phase)
 }
 
+//edit ideametadata if the one calling the function is the owner of the idea
+pub fn edit_idea_metadata(&mut self, idea_id: IdeaId, metadata: IdeaMetadata){
+    let owner_id = env::predecessor_account_id();
+    let idea = self.ideas.get(&idea_id).unwrap();
+    assert!(
+        owner_id == idea.owner_id,
+        "Only the owner of the idea can edit the idea metadata",
+    );
+    self.ideas.insert(&idea_id, &metadata);
+}
 
 
 }
@@ -379,16 +389,7 @@ pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8){
 
 
 
-// //edit ideametadata if the one calling the function is the owner of the idea
-// pub fn edit_idea_metadata(&mut self, idea_id: IdeaId, metadata: IdeaMetadata){
-//     let owner_id = env::predecessor_account_id();
-//     let idea = self.ideas.get(&idea_id).unwrap();
-//     assert!(
-//         owner_id == idea.owner_id,
-//         "Only the owner of the idea can edit the idea metadata",
-//     );
-//     self.ideas.insert(&idea_id, &metadata);
-// }
+
 
 
 // //edit project_phase_goals if goal is not reached

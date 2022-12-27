@@ -70,7 +70,7 @@ pub struct JsonIdea {
     pub owner_id: AccountId,
     pub project_phase: u8,
     pub amount: Balance,
-    pub sum: Balance,
+    pub sum: f64,
     pub goal_reached: bool,
     pub phase_start: u64,
     pub investors_count: u64,
@@ -123,5 +123,5 @@ pub struct JsonIdeaWithInvestments{
 pub struct Investment {
     pub project_phase: u8,
     pub goal: Balance,
-    pub sum: u128
+    pub sum: f64,
 }

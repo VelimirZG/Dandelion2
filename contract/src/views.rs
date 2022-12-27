@@ -1,6 +1,8 @@
 
-use crate::*;
 
+
+use crate::*;
+use near_sdk::{Balance};
 #[near_bindgen]
 
 impl Contract {
@@ -64,6 +66,14 @@ impl Contract {
     //     ideas_with_active_goals
     // }
 
+    fn yocto_to_near(&self, yocto: u128) -> f64 {
+        let yocto = yocto as f64;
+        let near = yocto / ONE_NEAR as f64;
+        //return near with 1 decimal places
+        f64::trunc(near * 10.0) / 10.0
+
+    }
+
     //get all ideas with active goals and investment amount sum and investors count
     pub fn get_all_ideas_homepage(&self, from_index: usize,limit: usize, )->Vec<JsonIdea>{              
         let mut ideas_with_active_goals:Vec<JsonIdea> = Vec::new();
@@ -75,6 +85,7 @@ impl Contract {
             let investors_count = self.get_investors_count_by_idea_id2(*idea_id);
             let idea_metadata = idea.clone();
             let goals_metadata = goals.clone();
+            let near = self.yocto_to_near(investment_amount_sum);
             ideas_with_active_goals.push(JsonIdea{
                 idea_id: *idea_id,
                 title: idea_metadata.title,
@@ -88,7 +99,8 @@ impl Contract {
                 owner_id: idea_metadata.owner_id,
                 project_phase: goals_metadata.project_phase,
                 amount: goals_metadata.amount,
-                sum: investment_amount_sum,
+                sum: near,
+                //sum: f64::trunc((investment_amount_sum as f64/ONE_NEAR as f64)*100.0)/100.0,
                 goal_reached: goals_metadata.goal_reached,
                 phase_start: goals_metadata.phase_start,
                 investors_count: investors_count,
@@ -123,7 +135,7 @@ impl Contract {
                     owner_id: idea_metadata.owner_id,
                     project_phase: goals_metadata.project_phase,
                     amount: goals_metadata.amount,
-                    sum: investment_amount_sum,
+                    sum: investment_amount_sum as f64,
                     goal_reached: goals_metadata.goal_reached,
                     phase_start: goals_metadata.phase_start,
                     investors_count: investors_count,
@@ -784,15 +796,17 @@ impl Contract {
         let mut investments: Vec<Investment> = Vec::new();
         for project_phase in 1..=active_phase {
             let mut sum: u128 = 0;
+            let mut near_sum:f64 = 0.0;
             let investments_by_idea_id = self.get_investments_by_idea_id(idea_id, project_phase);
             for (_, investment) in investments_by_idea_id.iter() {
                 sum = sum + investment.amount;
+                near_sum= self.yocto_to_near(sum);
             }
     
             investments.push(Investment {
                 project_phase,
                 goal: project_phase_goals[project_phase as usize - 1].amount,
-                sum,
+                sum:near_sum,
             });
         }
     
