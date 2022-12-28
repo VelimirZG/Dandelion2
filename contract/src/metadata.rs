@@ -11,9 +11,10 @@ pub struct IdeaMetadata {
     pub competitors: Option<Vec<String>>,
     pub value_proposition: Option<String>, // unique value proposition
     pub tags:Option<Vec<String>>,
-    pub team:Vec<Option<Team>>,
+    pub team:Option<String>, 
     pub picture_url: Option<String>,
     pub owner_id: AccountId,
+    pub website: Option<String>,
 }
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
@@ -65,9 +66,10 @@ pub struct JsonIdea {
     pub competitors: Option<Vec<String>>,
     pub value_proposition: Option<String>, // unique value proposition
     pub tags:Option<Vec<String>>,
-    pub team:Vec<Option<Team>>,
+    pub team:Option<String>, 
     pub picture_url: Option<String>,
     pub owner_id: AccountId,
+    pub website: Option<String>,
     pub project_phase: u8,
     pub amount: Balance,
     pub sum: f64,
@@ -89,9 +91,10 @@ pub struct JsonIdeaWithGoals{
     pub competitors: Option<Vec<String>>,
     pub value_proposition: Option<String>, // unique value proposition
     pub tags:Option<Vec<String>>,
-    pub team:Vec<Option<Team>>,
+    pub team:Option<String>, 
     pub picture_url: Option<String>,
     pub owner_id: AccountId,
+    pub website: Option<String>,
     pub goals: Vec<ProjectPhaseGoals>,
    
 }
@@ -109,9 +112,10 @@ pub struct JsonIdeaWithInvestments{
     pub competitors: Option<Vec<String>>,
     pub value_proposition: Option<String>, // unique value proposition
     pub tags:Option<Vec<String>>,
-    pub team:Vec<Option<Team>>,
+    pub team:Option<String>, 
     pub picture_url: Option<String>,
     pub owner_id: AccountId,
+    pub website: Option<String>,
     pub investments: Vec<Investment>,
     pub investors_count: u64,
    
