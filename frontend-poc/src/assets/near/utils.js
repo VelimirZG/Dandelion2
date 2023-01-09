@@ -19,9 +19,9 @@ export async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['ideas_for_owner', 'get_idea_for_single', 'get_investments', 'total_investments', 'get_all_ideas_homepage', 'get_investment_goal', 'get_investment_for_idea'],
+    viewMethods: ['count_phases_and_ideas_by_owner_id', 'get_investor_count_for_owner', 'get_sum_of_amount_for_owner', 'get_all_ideas_homepage_by_owner_id', 'ideas_for_owner', 'get_idea_for_single', 'get_investments', 'total_investments', 'get_all_ideas_homepage', 'get_investment_goal', 'get_investment_for_idea'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['create_idea', 'invest', 'add_like_to_idea'],
+    changeMethods: ['edit_idea_metadata', 'create_idea', 'invest_in_idea', 'add_like_to_idea'],
   })
 }
 
@@ -47,6 +47,14 @@ export async function create_idea(data){
   return response
 }
 
+export async function editIdea(data){
+  let response = await window.contract.edit_idea_metadata({
+    args: data,
+    contractId: window.contract.contractId
+  })
+  return response
+}
+
 export async function ideas_for_owner(){
   const owner_ideas = await window.contract.ideas_for_owner({account_id: "dandelion_test.testnet"})
   return owner_ideas
@@ -66,8 +74,8 @@ export async function total_investments(){
   const total_investments = await window.contract.total_investments()
   return total_investments
 }
-export async function get_all_ideas(){
-  const all_ideas = await window.contract.get_all_ideas_homepage({"from_index":0,"limit":20})
+export async function get_all_ideas(index, limit){
+  const all_ideas = await window.contract.get_all_ideas_homepage({"from_index": index, "limit": limit})
   return all_ideas;
 }
 
@@ -79,7 +87,7 @@ export async function get_investment_goal(ideaId){
 export async function invest(data){
   console.log('DATA: ', data);
   let gas = 300000000000000;
-  const invested = await window.contract.invest({account_id: data.acc, idea_id: data.ideaId}, gas.toLocaleString('fullwide', {useGrouping:false}) , data.value.toLocaleString('fullwide', {useGrouping:false}));
+  const invested = await window.contract.invest_in_idea({account_id: data.acc, idea_id: data.ideaId}, gas.toLocaleString('fullwide', {useGrouping:false}) , data.value.toLocaleString('fullwide', {useGrouping:false}));
   return invested;
 }
 
@@ -87,4 +95,24 @@ export async function add_like_to_idea(data){
   console.log('LIKE DATA: ', data);
   const likeIdea = await window.contract.add_like_to_idea({account: data.accountId, idea_id: data.ideaId});
   return likeIdea;
+}
+
+export async function get_all_ideas_homepage_by_owner_id(accountId){
+  const invested = await window.contract.get_all_ideas_homepage_by_owner_id({owner_id: accountId, from_index: 0, limit: 10});
+  return invested;
+}
+
+export async function get_sum_of_amount_for_owner(accountId){
+  const amount = await window.contract.get_sum_of_amount_for_owner({owner_id: accountId});
+  return amount;
+}
+
+export async function get_investor_count_for_owner(accountId){
+  const investors = await window.contract.get_investor_count_for_owner({owner_id: accountId});
+  return investors;
+}
+
+export async function count_phases_and_ideas_by_owner_id(accountId){
+  const phases = await window.contract.count_phases_and_ideas_by_owner_id({owner_id: accountId});
+  return phases;
 }

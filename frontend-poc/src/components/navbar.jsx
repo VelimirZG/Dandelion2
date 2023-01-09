@@ -13,6 +13,7 @@ const Navbar = () => {
   
   const [openIdeaForm, setOpenIdeaForm] = useState(false);
   const accountId = window.accountId;
+  console.log(accountId);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   function mobileMenu() {
@@ -59,7 +60,7 @@ const Navbar = () => {
             <li><a href="#">About</a></li>
           </ul>
           {
-            !accountId && 
+            accountId && 
               <button className="btn header-button create-idea-btn" onClick={()=> setOpenIdeaForm(true)}>
                   Create idea
               </button>
@@ -91,12 +92,13 @@ const Navbar = () => {
             <div className="mobile-buttons">
 
               {
-                !accountId && 
+                accountId && 
                   <button className="btn header-button mb-3 create-idea-btn" onClick={()=> setOpenIdeaForm(true)}>
                       Create idea
                   </button>
               }
-              {accountId ? 
+              {
+              accountId ? 
                 <button className="btn btn-danger" onClick={()=> walletLogout()}>Disconnect wallet</button>
                   :
                 <button className="btn header-button connect-wallet" onClick={()=>login()}>Connect wallet</button>

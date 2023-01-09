@@ -87,7 +87,9 @@ const Single = (props) => {
                       </div>
                     </div>
                     <div className="col-12 col-lg-3 link-wrap">
-                      <a href="https://google.com">Go to <b>Website</b> <img src={`${process.env.PUBLIC_URL}/pointer.png`} className="link-img"/></a>
+                      {
+                        idea.website && <a href={idea.website}>Go to <b>Website</b> <img src={`${process.env.PUBLIC_URL}/pointer.png`} className="link-img"/></a>
+                      }
                     </div>
                   </div>
               
@@ -123,26 +125,36 @@ const Single = (props) => {
                       <ul className="progress-list">
                       {
                           idea.investments.map((investment, i) => {
+
+                            console.log(Math.round((100 * investment.sum) / investment.goal ));
+                            console.log(investment.sum);
+                            console.log(investment.total);
+                            console.log(investment);
                             let title;
                             let color;
+                            let iconPath;
 
                             if (i==0){
                               title="Idea";
                               color="#F9ED32";
+                              iconPath = process.env.PUBLIC_URL + '/phase_1.png';
                             } else if (i==1){
                               title="Prototype";
                               color="#EEA91E";
+                              iconPath = process.env.PUBLIC_URL + '/phase_2.png';
                             } else if (i==2){
                               title="MVP";
                               color="#693E98";
+                              iconPath = process.env.PUBLIC_URL + '/phase_3.png';
                             }else{
                               title="Presale";
                               color="#CE225B";
+                              iconPath = process.env.PUBLIC_URL + '/phase_4.png';
                             }
                             return (<li class="progress-list-item-wrap">
                             <div className="row progress-list-item w-100 m-0">
                               <div className="idea-img-wrap">
-                                <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/progress-img.png`} alt="Card image cap" />
+                                <img className="w-100 idea-img" src={iconPath} alt="Card image cap" />
                               </div>
                               <div className="p-0 info-wrap">
                                 <div className="row m-0 w-100 status-first-part">
@@ -157,15 +169,15 @@ const Single = (props) => {
                                     <p className="goal-goal">{investment.goal} st</p>
                                     <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
                                     {
-                                       investment.sum > investment.total ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
+                                       investment.sum == investment.goal ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
                                     }
-                                    <p className="percentage">{Math.round((100 * investment.sum) / investment.total ) } %</p>
+                                    <p className="percentage">{Math.round((100 * investment.sum) / investment.goal ) } %</p>
                                   </div>
                                 </div>
                                 <div className="row  m-0">
                                   <div className="col p-0">
-                                    <div className="progress" style={{backgroundColor: color}}>
-                                      <div className="progress-bar" style={{ width: ((100 * investment.sum) / investment.total ) + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div className="progress" style={{backgroundColor: '#262626'}}>
+                                      <div className="progress-bar" style={{ width: ((100 * investment.sum) / investment.goal ) + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                   </div>
                                 </div>
@@ -174,136 +186,6 @@ const Single = (props) => {
                           </li>);
                           })
                         }
-                      {/* <li class="progress-list-item-wrap">
-                          <div className="row progress-list-item w-100 m-0">
-                            <div className="idea-img-wrap">
-                              <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/progress-img.png`} alt="Card image cap" />
-                            </div>
-                            <div className="p-0 info-wrap">
-                              <div className="row m-0 w-100 status-first-part">
-                                <div className="col-4 col-lg-3 p-0">
-                                  <p className="goal-title">Idea</p>
-                                  <div className="mobile-goal-wrap">
-                                    <p className="goal-goal">125,000 st</p>
-                                    <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  </div>
-                                </div>
-                                <div className="col-8 col-lg-9 list-item-wrap p-0">
-                                  <p className="goal-goal">125,000 st</p>
-                                  <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  {
-                                    Math.round((100 * idea.inv_total) / idea.inv_goal ) >= 100 ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
-                                  }
-                                  <p className="percentage">100 %</p>
-                                </div>
-                              </div>
-                              <div className="row  m-0">
-                                <div className="col p-0">
-                                  <div className="progress" style={{backgroundColor: "#F9ED32"}}>
-                                    <div className="progress-bar" style={{ width: '100%', backgroundColor: "#F9ED32" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </li><li class="progress-list-item-wrap">
-                          <div className="row progress-list-item w-100 m-0">
-                            <div className="idea-img-wrap">
-                              <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/progress-img.png`} alt="Card image cap" />
-                            </div>
-                            <div className="p-0 info-wrap">
-                              <div className="row m-0 w-100 status-first-part">
-                                <div className="col-4 col-lg-3 p-0">
-                                  <p className="goal-title">Idea</p>
-                                  <div className="mobile-goal-wrap">
-                                    <p className="goal-goal">125,000 st</p>
-                                    <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  </div>
-                                </div>
-                                <div className="col-8 col-lg-9 list-item-wrap p-0">
-                                  <p className="goal-goal">125,000 st</p>
-                                  <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  {
-                                    Math.round((100 * idea.inv_total) / idea.inv_goal ) >= 100 ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >COMPLETED</Button>
-                                  }
-                                  <p className="percentage">100 %</p>
-                                </div>
-                              </div>
-                              <div className="row  m-0">
-                                <div className="col p-0">
-                                  <div className="progress" style={{backgroundColor: "#F9ED32"}}>
-                                    <div className="progress-bar" style={{ width: '100%', backgroundColor: "#F9ED32" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </li><li class="progress-list-item-wrap">
-                          <div className="row progress-list-item w-100 m-0">
-                            <div className="idea-img-wrap">
-                              <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/progress-img.png`} alt="Card image cap" />
-                            </div>
-                            <div className="p-0 info-wrap">
-                              <div className="row m-0 w-100 status-first-part">
-                                <div className="col-4 col-lg-3 p-0">
-                                  <p className="goal-title">Idea</p>
-                                  <div className="mobile-goal-wrap">
-                                    <p className="goal-goal">125,000 st</p>
-                                    <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  </div>
-                                </div>
-                                <div className="col-8 col-lg-9 list-item-wrap p-0">
-                                  <p className="goal-goal">125,000 st</p>
-                                  <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  {
-                                    Math.round((100 * idea.inv_total) / idea.inv_goal ) >= 100 ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
-                                  }
-                                  <p className="percentage">100 %</p>
-                                </div>
-                              </div>
-                              <div className="row  m-0">
-                                <div className="col p-0">
-                                  <div className="progress" style={{backgroundColor: "#F9ED32"}}>
-                                    <div className="progress-bar" style={{ width: '100%', backgroundColor: "#F9ED32" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="progress-list-item-wrap">
-                          <div className="row progress-list-item w-100 m-0">
-                            <div className="idea-img-wrap">
-                              <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/progress-img.png`} alt="Card image cap" />
-                            </div>
-                            <div className="p-0 info-wrap">
-                              <div className="row m-0 w-100 status-first-part">
-                                <div className="col-4 col-lg-3 p-0">
-                                  <p className="goal-title">Idea</p>
-                                  <div className="mobile-goal-wrap">
-                                    <p className="goal-goal">125,000 st</p>
-                                    <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  </div>
-                                </div>
-                                <div className="col-8 col-lg-9 list-item-wrap p-0">
-                                  <p className="goal-goal">125,000 st</p>
-                                  <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                  {
-                                    Math.round((100 * idea.inv_total) / idea.inv_goal ) >= 100 ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
-                                  }
-                                  <p className="percentage">100 %</p>
-                                </div>
-                              </div>
-                              <div className="row  m-0">
-                                <div className="col p-0">
-                                  <div className="progress" style={{backgroundColor: "#F9ED32"}}>
-                                    <div className="progress-bar" style={{ width: '100%', backgroundColor: "#F9ED32" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </li> */}
                       </ul>
                     {
                       !accountId ?
@@ -323,13 +205,13 @@ const Single = (props) => {
                   <div className="tab-wrap">
                     <Tabs defaultActiveKey="description" id="uncontrolled-tab-example" >
                       <Tab eventKey="description" title="Description">
-                        <p>{idea.description}</p>
+                        <p dangerouslySetInnerHTML={{__html: idea.description.replace(/\n/g, "<br />")}} />
                       </Tab>
                       <Tab eventKey="competitors" title="Competitors">
                         <p>{idea.competitors}</p>
                       </Tab>
                       <Tab eventKey="valueProposition" title="Value proposition">
-                        <p>{idea.value_proposition}</p>
+                        <p dangerouslySetInnerHTML={{__html: idea.value_proposition.replace(/\n/g, "<br />")}} />
                       </Tab>
                       <Tab eventKey="team" title="Team">
                         {/* <p>{idea.team}</p> */}

@@ -2,7 +2,7 @@
   background-image: url('../../public/background.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /* background-size: 100% 100%; */
+  background-size: cover;
   background-position: center;
 }
 .hero-section {
@@ -291,7 +291,9 @@
 }
 
 .tag-btn:focus {
-  box-shadow: 0px 0px 50px #d8603f !important;
+  box-shadow: none !important;
+  background: #CE225B !important;
+  border-radius: 5px;
 }
 
 .project-info-wrap .form-select  {

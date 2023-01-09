@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import Archive from "./pages/archive";
 import Single from "./pages/single";
 import './index.css';
-import Archive2 from "./pages/archive2";
+import Homepage from "./pages/homepage";
 import Profile from "./pages/profile";
 
 const Main = () => {
@@ -32,7 +31,7 @@ const Main = () => {
 
   return (
     <BrowserRouter >
-      <Route exact path="/" render={() => <Archive2/> } />
+      <Route exact path="/" render={() => <Homepage/> } />
       <Route exact path="/:ideaId"  render={() => <Single/> } />
       <Route exact path="/profile"  render={() => <Profile/> } />
     </BrowserRouter>
