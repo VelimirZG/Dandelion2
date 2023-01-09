@@ -242,6 +242,34 @@ pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
         investor_count
     }
 
+    //get how much one account invested in ideas
+    pub fn get_sum_of_amount_for_investor(&self, investor_id: AccountId) -> u128{
+        let investments = self.investment.keys_as_vector();
+        let mut sum_of_amount = 0;
+        for investment_id in investments.iter(){
+            let investment = self.investment.get(&investment_id).unwrap();
+            if investment.investor_id == investor_id{
+                sum_of_amount += investment.amount;
+            }
+        }
+        sum_of_amount
+    }
+
+//get sum of ideas that investor invested in
+pub fn get_invested_ideas_count(&self, investor_id: AccountId) -> u64{
+    let investments = self.investment.keys_as_vector();
+    let mut invested_ideas_count = 0;
+    for investment_id in investments.iter(){
+        let investment = self.investment.get(&investment_id).unwrap();
+        if investment.investor_id == investor_id{
+            invested_ideas_count += 1;
+        }
+    }
+    invested_ideas_count
+}
+
+
+
 // //get sum of amount of investments for each prject phase
 // pub fn get_sum_of_amounts(&self, idea_id: IdeaId, project_phase: u8)->Balance{
 //     self.investment
@@ -302,6 +330,29 @@ pub fn edit_idea_metadata(&mut self, idea_id: IdeaId, metadata: IdeaMetadata){
         "Only the owner of the idea can edit the idea metadata",
     );
     self.ideas.insert(&idea_id, &metadata);
+}
+
+//edit project_phase_goals if goal is not reached
+pub fn edit_project_phase_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: u128){
+    let owner_id = env::predecessor_account_id();
+    let idea = self.ideas.get(&idea_id).unwrap();
+    assert!(
+        owner_id == idea.owner_id,
+        "Only the owner of the idea can edit the idea metadata",
+    );
+    let goal_reached = self.get_goal_reached(idea_id, project_phase);
+    assert!(
+        goal_reached == false,
+        "Goal reached, cannot edit project phase goals",
+    );
+    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    for goal in goals.iter_mut(){
+        if goal.idea_id == idea_id && goal.project_phase == project_phase{
+            goal.amount = amount;
+        
+        }
+    }
+    self.goals.insert(&idea_id, &goals);
 }
 
 
@@ -392,28 +443,6 @@ pub fn edit_idea_metadata(&mut self, idea_id: IdeaId, metadata: IdeaMetadata){
 
 
 
-// //edit project_phase_goals if goal is not reached
-// pub fn edit_project_phase_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: u128){
-//     let owner_id = env::predecessor_account_id();
-//     let idea = self.ideas.get(&idea_id).unwrap();
-//     assert!(
-//         owner_id == idea.owner_id,
-//         "Only the owner of the idea can edit the idea metadata",
-//     );
-//     let goal_reached = self.get_goal_reached(idea_id, project_phase);
-//     assert!(
-//         goal_reached == false,
-//         "Goal reached, cannot edit project phase goals",
-//     );
-//     let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
-//     for goal in goals.iter_mut(){
-//         if goal.idea_id == idea_id && goal.project_phase == project_phase{
-//             goal.amount = amount;
-        
-//         }
-//     }
-//     self.goals.insert(&idea_id, &goals);
-// }
 
 
 
