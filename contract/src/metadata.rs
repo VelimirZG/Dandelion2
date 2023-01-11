@@ -129,4 +129,5 @@ pub struct Investment {
     pub project_phase: u8,
     pub goal: Balance,
     pub sum: f64,
+    pub goal_reached: bool,
 }

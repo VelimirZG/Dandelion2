@@ -125,41 +125,7 @@ pub fn get_amount_by_project_phase(&self, idea_id: IdeaId, project_phase: u8) ->
     amount
 }
 
-//if goal exist and it is reached create new goal
-pub fn create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
-    let owner_id = env::predecessor_account_id();
-    let idea = self.ideas.get(&idea_id).unwrap();
-    assert!(
-        owner_id == idea.owner_id,
-        "Only the owner of the idea can edit create goals",
-    );
-    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
-    let mut goal_exist = false;
-    let mut previous_goal_reached=false;
-    for goal in goals.iter_mut(){
-        if goal.idea_id == idea_id && goal.project_phase == project_phase{
-            goal_exist = true;
-        }
-    }
-    
-    for goal in goals.iter_mut(){
-        if goal.idea_id == idea_id && goal.project_phase == project_phase-1 && goal.goal_reached == false{
-            previous_goal_reached = false;
-            log! ("Previous goal not reached");
-        }else if goal.idea_id == idea_id && goal.project_phase == project_phase-1 && goal.goal_reached == true{
-            previous_goal_reached = true;
-            log!("Previous goal reached");
-        }
-    }
-    let active_goal = self.get_active_project_phase(idea_id);
-    log!("Goal exist: {}", goal_exist);
-    log!("Previous goal reached: {}", previous_goal_reached);
-    log!("Active goal: {}", active_goal);
-    if !goal_exist && previous_goal_reached || self.get_active_project_phase(idea_id) == 0{
-        goals.push(ProjectPhaseGoals{idea_id, project_phase, amount, goal_reached: false, phase_start: env::block_timestamp(),phase_closed: false, collect_enabled: false});
-    }
-    self.goals.insert(&idea_id, &goals);
-}
+
 
 
 //this is used to regularly check if the goal has expried
@@ -346,12 +312,12 @@ pub fn collect_funds_for_all_phases(&mut self, idea_id: IdeaId) {
         log!("Collecting funds for phase {} and idea_id {}", project_phase, idea_id);
         let result = self.collect_funds(idea_id, project_phase);
         let result_str = String::from_utf8(result).unwrap();
-        println!("Result for phase {}: {:?}", project_phase, result_str);
+        log!("Result for phase {}: {:?}", project_phase, result_str);
         // check the value of result_str
         // if it's equals to "Funds collected successfully" the funds collection for that phase succeeded
         // otherwise it contains the reason why the collection failed
     }
-    println!("Funds collection for all phases completed.");
+    log!("Funds collection for all phases completed.");
 }
 
 
@@ -414,20 +380,92 @@ pub fn edit_project_phase_goals(&mut self, idea_id: IdeaId, project_phase: u8, a
     self.goals.insert(&idea_id, &goals);
 }
 
-//get project phases
-pub fn get_project_phases(&self, idea_id: IdeaId) -> Vec<u8>{
-    let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
-    let mut project_phases = Vec::new();
-    for goal in goals.iter(){
-        if goal.idea_id == idea_id{
-            project_phases.push(goal.project_phase);
-        }
+//if goal exist and it is reached create new goal
+// pub fn create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
+//     let owner_id = env::predecessor_account_id();
+//     let idea = self.ideas.get(&idea_id).unwrap();
+//     assert!(
+//         owner_id == idea.owner_id,
+//         "Only the owner of the idea can edit create goals",
+//     );
+//     let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+//     let mut goal_exist = false;
+//     let mut previous_goal_reached=false;
+//     for goal in goals.iter_mut(){
+//         if goal.idea_id == idea_id && goal.project_phase == project_phase{
+//             goal_exist = true;
+//         }
+//     }
+    
+//     for goal in goals.iter_mut(){
+//         if goal.idea_id == idea_id && goal.project_phase == project_phase-1 && goal.goal_reached == false{
+//             previous_goal_reached = false;
+//             log! ("Previous goal not reached");
+//         }else if goal.idea_id == idea_id && goal.project_phase == project_phase-1 && goal.goal_reached == true{
+//             previous_goal_reached = true;
+//             log!("Previous goal reached");
+//         }
+//     }
+//     let active_goal = self.get_active_project_phase(idea_id);
+//     log!("Goal exist: {}", goal_exist);
+//     log!("Previous goal reached: {}", previous_goal_reached);
+//     log!("Active goal: {}", active_goal);
+//     if !goal_exist && previous_goal_reached || self.get_active_project_phase(idea_id) == 0{
+//         goals.push(ProjectPhaseGoals{idea_id, project_phase, amount, goal_reached: false, phase_start: env::block_timestamp(),phase_closed: false, collect_enabled: false});
+//     }
+//     self.goals.insert(&idea_id, &goals);
+// }
+
+//refactor create_goals just to input goal, without any checks
+pub fn create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
+    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    goals.push(ProjectPhaseGoals{idea_id, project_phase, amount, goal_reached: false, phase_start: env::block_timestamp(),phase_closed: false, collect_enabled: false});
+    self.goals.insert(&idea_id, &goals);
+    log!("Goal phase {} created", project_phase);
+}
+
+
+//combine edit_idea_metadata and edit_project_phase_goals into one function
+pub fn edit_idea(&mut self, idea_id: IdeaId, metadata: IdeaMetadata, amount1:u128, amount2:u128, amount3:u128, amount4:u128){
+    let owner_id = env::predecessor_account_id();
+    let idea = self.ideas.get(&idea_id).unwrap();
+    assert!(
+        owner_id == idea.owner_id,
+        "Only the owner of the idea can edit the idea metadata",
+    );
+    self.ideas.insert(&idea_id, &metadata);
+    
+    let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    let ProjectPhaseGoals = [amount1, amount2, amount3, amount4];
+    let mut i =0;
+   let mut previous_goal_reached = false;
+    for goal in goals.iter_mut(){
+        if goal.idea_id == idea_id {
+            let goal_reached = self.get_goal_reached(idea_id, goal.project_phase);
+    if goal_reached == true{
+        log!("Goal phase {} reached, cannot edit", goal.project_phase);
+        previous_goal_reached = true;
+        i=i+1;
+
+        continue;
+    }else if previous_goal_reached == true{
+            log!("Goal phase {} edited", goal.project_phase);
+            log!("New amount: {}", ProjectPhaseGoals[i]);
+            goal.amount = ProjectPhaseGoals[i];
+            i=i+1; 
+            previous_goal_reached = false;
+            }else{
+             log!("Goal phase {}, cannot edit. Previous goal not reached", goal.project_phase);
+            }
     }
-    project_phases
+        
+    }
+    self.goals.insert(&idea_id, &goals);
+}
 }
 
 
-}
+
 
 
 // pub fn create_project_phase_goal(&mut self, idea_id: IdeaId, amount: Balance){

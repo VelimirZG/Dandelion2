@@ -9,19 +9,36 @@ use crate::*;
 #[near_bindgen]
 impl Contract {
 //create idea
+    // #[payable]
+    // pub fn create_idea(&mut self, idea_id:IdeaId, metadata:IdeaMetadata, amount:u128) {
+    //     log!("displaying metadata: {:?}", metadata);
+    //     assert!(
+    //         self.ideas.insert(&idea_id, &metadata).is_none(),
+    //         "Idea already exists"
+    //     );
+
+    //     self.ideas.insert(&idea_id, &metadata);
+    //     let projectphase=1;
+    //     self.create_goals(idea_id, projectphase, amount)
+    // }
+
     #[payable]
-    pub fn create_idea(&mut self, idea_id:IdeaId, metadata:IdeaMetadata, amount:u128) {
+    pub fn create_idea(&mut self, idea_id:IdeaId, metadata:IdeaMetadata, amount1:u128, amount2:u128, amount3:u128, amount4:u128) {
         log!("displaying metadata: {:?}", metadata);
         assert!(
             self.ideas.insert(&idea_id, &metadata).is_none(),
             "Idea already exists"
         );
 
+        let ProjectPhaseGoals = [amount1, amount2, amount3, amount4];
         self.ideas.insert(&idea_id, &metadata);
-        let projectphase=1;
-        self.create_goals(idea_id, projectphase, amount)
+        for i in 0..ProjectPhaseGoals.len() {
+            let projectphase:u8 = (i+1).try_into().unwrap();
+            self.create_goals(idea_id, projectphase, ProjectPhaseGoals[i])
+        }
     }
     
+
  
 
     //invest in idea

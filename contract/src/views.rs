@@ -1226,17 +1226,59 @@ pub fn get_all_ideas_homepage_by_investor_id2(&self, investor_id:AccountId)->Vec
     //     })
     // }
 
-    //refactor upper idea with investor count for idea
-    pub fn get_idea_for_single(&self, idea_id: IdeaId) -> Option<JsonIdeaWithInvestments> {
+    // //refactor upper idea with investor count for idea
+    // pub fn get_idea_for_single(&self, idea_id: IdeaId) -> Option<JsonIdeaWithInvestments> {
+    //     let idea = self.ideas.get(&idea_id);
+    //     let idea_metadata = idea.unwrap();
+    //     let project_phase_goals = self.goals.get(&idea_id).unwrap_or_else(|| Vec::new());
+    //     let active_phase = self.get_active_project_phase(idea_id);
+    
+    //     let mut investments: Vec<Investment> = Vec::new();
+    //     for project_phase in 1..=active_phase {
+    //         let mut sum: u128 = 0;
+    //         let mut near_sum:f64 = 0.0;
+    //         let investments_by_idea_id = self.get_investments_by_idea_id(idea_id, project_phase);
+    //         for (_, investment) in investments_by_idea_id.iter() {
+    //             sum = sum + investment.amount;
+    //             near_sum= self.yocto_to_near(sum);
+    //         }
+    
+    //         investments.push(Investment {
+    //             project_phase,
+    //             goal: project_phase_goals[project_phase as usize - 1].amount,
+    //             sum:near_sum,
+    //         });
+    //     }
+    
+    //     Some(JsonIdeaWithInvestments {
+    //         idea_id: idea_id,
+    //         title: idea_metadata.title,
+    //         excerpt: idea_metadata.excerpt,
+    //         description: idea_metadata.description,
+    //         competitors: idea_metadata.competitors,
+    //         value_proposition: idea_metadata.value_proposition,
+    //         tags: idea_metadata.tags,
+    //         team: idea_metadata.team,
+    //         picture_url: idea_metadata.picture_url,
+    //         website: idea_metadata.website,
+    //         owner_id: idea_metadata.owner_id,
+    //         investments,
+    //         investors_count: self.get_investors_count_by_idea_id2(idea_id),
+    //     })
+    // }
+
+     //refactor upper idea with investor count for idea
+     pub fn get_idea_for_single(&self, idea_id: IdeaId) -> Option<JsonIdeaWithInvestments> {
         let idea = self.ideas.get(&idea_id);
         let idea_metadata = idea.unwrap();
         let project_phase_goals = self.goals.get(&idea_id).unwrap_or_else(|| Vec::new());
-        let active_phase = self.get_active_project_phase(idea_id);
+        //let active_phase = self.get_active_project_phase(idea_id);
     
         let mut investments: Vec<Investment> = Vec::new();
-        for project_phase in 1..=active_phase {
+        for project_phase in 1..=4 {
             let mut sum: u128 = 0;
             let mut near_sum:f64 = 0.0;
+            let goal_reached = self.get_goal_reached(idea_id, project_phase);
             let investments_by_idea_id = self.get_investments_by_idea_id(idea_id, project_phase);
             for (_, investment) in investments_by_idea_id.iter() {
                 sum = sum + investment.amount;
@@ -1247,6 +1289,7 @@ pub fn get_all_ideas_homepage_by_investor_id2(&self, investor_id:AccountId)->Vec
                 project_phase,
                 goal: project_phase_goals[project_phase as usize - 1].amount,
                 sum:near_sum,
+                goal_reached,
             });
         }
     
