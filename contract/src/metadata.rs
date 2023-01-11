@@ -76,6 +76,7 @@ pub struct JsonIdea {
     pub goal_reached: bool,
     pub phase_start: u64,
     pub investors_count: u64,
+    pub collect_enabled: bool,
     
 }
 

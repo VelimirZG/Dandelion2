@@ -41241,7 +41241,7 @@ module.exports = function() {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getConfig", ()=>getConfig);
-const CONTRACT_NAME = "dev-1669898119365-24277707240195";
+const CONTRACT_NAME = "dev-1673357237742-18962786232725";
 function getConfig(env) {
     switch(env){
         case "production":

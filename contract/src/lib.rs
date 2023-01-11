@@ -1,4 +1,6 @@
 
+
+
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{UnorderedMap};
 use near_sdk::{log, near_bindgen, Promise, env, Balance};
@@ -103,6 +105,15 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
     current_phase.project_phase
 }
 
+//create function that will make a for loop 4 times with function get_amount_by_project_phase and make sum of results
+pub fn get_total_amount_by_idea(&self, idea_id: IdeaId) -> Balance {
+    let mut total_amount = 0;
+    for i in 1..5{
+        total_amount += self.get_amount_by_project_phase(idea_id, i);
+    }
+    total_amount
+}
+
 pub fn get_amount_by_project_phase(&self, idea_id: IdeaId, project_phase: u8) -> Balance {
     let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
     let mut amount = 0;
@@ -116,6 +127,12 @@ pub fn get_amount_by_project_phase(&self, idea_id: IdeaId, project_phase: u8) ->
 
 //if goal exist and it is reached create new goal
 pub fn create_goals(&mut self, idea_id: IdeaId, project_phase: u8, amount: Balance) {
+    let owner_id = env::predecessor_account_id();
+    let idea = self.ideas.get(&idea_id).unwrap();
+    assert!(
+        owner_id == idea.owner_id,
+        "Only the owner of the idea can edit create goals",
+    );
     let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
     let mut goal_exist = false;
     let mut previous_goal_reached=false;
@@ -188,16 +205,18 @@ pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
     // }
 
     //USE THIS INSTEAD ONE ABOVE, it is faster BUT CHECK IF IT WORKS FOR LARGE NUMBERS
-    pub fn get_sum_of_amount_for_owner(&self, owner_id: AccountId) -> u128{
+    pub fn get_sum_of_amount_for_owner(&self, owner_id: AccountId) -> f64{
         let ideas = self.ideas.keys_as_vector();
         let mut sum_of_amount = 0;
+        let mut sum_as_near:f64 = 0.0;
         for idea_id in ideas.iter(){
             let idea = self.ideas.get(&idea_id).unwrap();
             if idea.owner_id == owner_id{
                 sum_of_amount += self.get_sum_of_amount(idea_id);
+                sum_as_near= self.yocto_to_near(sum_of_amount);
             }
         }
-        sum_of_amount
+        sum_as_near
     }
 
     // //get investor count for all ideas for owner id - use pagination
@@ -291,35 +310,75 @@ pub fn get_sum_of_amount(&self, idea_id: IdeaId) -> u128{
     sum_of_amount
 }
 
-//once the buton is clicked, the funds are collected and the second phase of the project is enabled
-//see if the one calling the function is the owner of the idea
-//if yes, collect funds and enable second phase of project
-//if no, return error
-pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8){
+
+
+
+
+// //collect funds for project phase(replaced by newer function to enable multiple phases)
+// pub fn collect_funds_old_working(&mut self, idea_id: IdeaId, project_phase: u8){
     
+//     let phase_cloased = self.get_phase_closed(idea_id, project_phase);
+//     assert!(
+//         phase_cloased == false,
+//         "The phase is already closed",
+//     );
+//     //check if the goal is reached
+//     let goal_reached = self.get_goal_reached(idea_id, project_phase);
+//     assert!(
+//         goal_reached == true,
+//         "Goal not reached"
+//     );
+    
+//     let owner_id = env::predecessor_account_id();
+//     let idea = self.ideas.get(&idea_id).unwrap();
+//     assert!(
+//         owner_id == idea.owner_id,
+//         "Only the owner of the idea can collect funds",
+//     );
+//     //transfer funds to owner, call internal function transfer_funds
+//     self.transfer_funds(idea_id, project_phase);
+//     //enable second phase of project
+//     self.set_phase_closed(idea_id, project_phase)
+// }
+
+pub fn collect_funds_for_all_phases(&mut self, idea_id: IdeaId) {
+    for project_phase in 1..=4 {
+        log!("Collecting funds for phase {} and idea_id {}", project_phase, idea_id);
+        let result = self.collect_funds(idea_id, project_phase);
+        let result_str = String::from_utf8(result).unwrap();
+        println!("Result for phase {}: {:?}", project_phase, result_str);
+        // check the value of result_str
+        // if it's equals to "Funds collected successfully" the funds collection for that phase succeeded
+        // otherwise it contains the reason why the collection failed
+    }
+    println!("Funds collection for all phases completed.");
+}
+
+
+pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8) -> Vec<u8>{
     let phase_cloased = self.get_phase_closed(idea_id, project_phase);
-    assert!(
-        phase_cloased == false,
-        "The phase is already closed",
-    );
+    if phase_cloased {
+        return "The phase is already closed".as_bytes().to_vec();
+    }
     //check if the goal is reached
     let goal_reached = self.get_goal_reached(idea_id, project_phase);
-    assert!(
-        goal_reached == true,
-        "Goal not reached"
-    );
-    
+    if !goal_reached {
+        return "Goal not reached".as_bytes().to_vec();
+    }
     let owner_id = env::predecessor_account_id();
     let idea = self.ideas.get(&idea_id).unwrap();
-    assert!(
-        owner_id == idea.owner_id,
-        "Only the owner of the idea can collect funds",
-    );
+    if owner_id != idea.owner_id {
+        return "Only the owner of the idea can collect funds".as_bytes().to_vec();
+    }
     //transfer funds to owner, call internal function transfer_funds
     self.transfer_funds(idea_id, project_phase);
     //enable second phase of project
-    self.set_phase_closed(idea_id, project_phase)
+    self.set_phase_closed(idea_id, project_phase);
+    "Funds collected successfully".as_bytes().to_vec()
 }
+
+
+
 
 //edit ideametadata if the one calling the function is the owner of the idea
 pub fn edit_idea_metadata(&mut self, idea_id: IdeaId, metadata: IdeaMetadata){
@@ -353,6 +412,18 @@ pub fn edit_project_phase_goals(&mut self, idea_id: IdeaId, project_phase: u8, a
         }
     }
     self.goals.insert(&idea_id, &goals);
+}
+
+//get project phases
+pub fn get_project_phases(&self, idea_id: IdeaId) -> Vec<u8>{
+    let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+    let mut project_phases = Vec::new();
+    for goal in goals.iter(){
+        if goal.idea_id == idea_id{
+            project_phases.push(goal.project_phase);
+        }
+    }
+    project_phases
 }
 
 
@@ -426,17 +497,6 @@ pub fn edit_project_phase_goals(&mut self, idea_id: IdeaId, project_phase: u8, a
 //     }
 // }
 
-// //get project phases
-// pub fn get_project_phases(&self, idea_id: IdeaId) -> Vec<u8>{
-//     let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
-//     let mut project_phases = Vec::new();
-//     for goal in goals.iter(){
-//         if goal.idea_id == idea_id{
-//             project_phases.push(goal.project_phase);
-//         }
-//     }
-//     project_phases
-// }
 
 
 

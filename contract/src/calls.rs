@@ -31,6 +31,7 @@ impl Contract {
         let investor_id = env::predecessor_account_id();
         let investment_id = env::random_seed().iter().fold(0u64, |a, &b| (a << 8) | (b as u64));
         let amount = env::attached_deposit();
+        assert!(amount >=10000000000000000000000, "The minimum amount to invest is 0.01 NEAR");
         let invested = self.get_total_invested_by_idea_id(idea_id, project_phase);
         let to_be_invested = invested + amount;
         let goal = self.get_amount_by_project_phase(idea_id, project_phase) * ONE_NEAR;
