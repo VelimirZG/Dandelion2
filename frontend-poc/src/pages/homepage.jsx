@@ -24,7 +24,7 @@ const Homepage = () => {
   
   const [ideas, setIdeas] = useState([]);
   const [index, setIndex] = useState(0);
-  const limit = 4;
+  const limit = 20;
   
   useEffect(() => { 
     listIdeas();
