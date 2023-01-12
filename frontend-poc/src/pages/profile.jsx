@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner } from "../assets/near/utils";
+import { get_all_ideas, get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner } from "../assets/near/utils";
 
 import '../stylesheets/profile.scss';
 import IdeaForm from "../components/ideaForm";
@@ -25,26 +25,11 @@ const Profile = (props) => {
   const [index, setIndex] = useState(0);
   const limit = 20;
 
-  // Near collected:
-  // near view $NEARID get_sum_of_amount_for_owner '{"owner_id":"'$NEARID'"}'
   
-  // Total supporters:
-  // near view $NEARID get_investor_count_for_owner '{"owner_id":"'$NEARID'"}'
-
-  // Succesful phases and ideas for owner
-  // near view $NEARID count_phases_and_ideas_by_owner_id '{"owner_id":"'$NEARID'"}'
-
-  // Get idea info on edit
-  // near view $NEARID get_idea_for_single '{"idea_id":1}'
-
-
-  // Update idea
-  // near call $NEARID create_idea '{"idea_id":3, "metadata": { "title": "Unique platform for buying and selling shares in small businesses, allowing individuals to invest in and support local entrepreneurship", "description":"A decentralized platform for buying and selling shares in small businesses could be a platform that allows individuals to invest in and support small businesses using cryptocurrency. This platform could be built on a blockchain, allowing for a secure and transparent system for
-
   useEffect(() => { 
    
     count_phases_and_ideas_by_owner_id(accountId).then((phases) => {
-      setPhases(phases)
+      setPhases(phases.join('/'))
     });
     get_investor_count_for_owner(accountId).then((investors) => {
       setInvestors(investors);
@@ -57,7 +42,7 @@ const Profile = (props) => {
 
   function listIdeas(nextPage = false) {
     get_all_ideas_homepage_by_owner_id(accountId).then( res => {
-      console.log('ideas from all ideas: ', res);
+      console.log('idea profile: ', res);
       if(nextPage) {
         setIdeas([...ideas, ...res])
       }else {
