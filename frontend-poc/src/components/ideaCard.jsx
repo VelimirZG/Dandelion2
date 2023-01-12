@@ -19,7 +19,7 @@ const IdeaCard = (props) => {
     
     if(accountId) {
       const ideaId = event.target.getAttribute('data-idea');
-      invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: ideaId});
+      invest({value: currentInvValue * ONE_NEAR, acc: accountId, ideaId: parseInt(ideaId)});
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to invest into the idea'});
     }
