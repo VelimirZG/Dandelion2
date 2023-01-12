@@ -81,31 +81,15 @@ const DialogContent = withStyles((theme) => ({
 function IdeaForm(props) {
 
   const [ideaInfo, setIdeaInfo] = useState(false);
-  const [ideaPhases, setIdeaPhases] = useState({1: false});
 
   useEffect(() => {
     if(props.ideaId) {
       getIdea(props.ideaId).then( idea => {
         console.log(idea);
         setIdeaInfo(idea);
-        disablePhases(idea);
       });
     }
   },[]);
-
-  function disablePhases(idea) {
-    let phases = ['', {'disabled': true, 'amount': ''}, {'disabled': true, 'amount': ''}, {'disabled': true, 'amount': ''}, {'disabled': true, 'amount': ''}];
-    idea.investments.forEach((inv) => {
-      
-      if(inv.goal == inv.sum) {
-        phases[inv.project_phase] = {'disabled': true, 'amount' : inv.goal }
-      }else {
-        phases[inv.project_phase] = {'disabled': false, 'amount' : inv.goal }
-      }
-    });
-    console.log(phases);
-    setIdeaPhases(phases);
-  }
 
   function submitIdea(event) {
     event.preventDefault();
@@ -122,7 +106,6 @@ function IdeaForm(props) {
     let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id'];
     let data = {};
     for (let [key, value] of formData.entries()) {
-      console.log(key, value);
       if(metadata.includes(key)) {
         if(data['metadata']) {
           data['metadata'][key] = value;
@@ -136,12 +119,10 @@ function IdeaForm(props) {
       }else if(key === 'tags') {
         let tags = value.split(',');
         data['metadata'][key] = tags;
-      }else if(key === 'phase_1') {
-        data['amount'] = parseInt(value);
       }else if(key === 'idea_id') {
         data['idea_id'] = parseInt(value);
       }else {
-        data[key] = value;
+        data[key] = parseInt(value);
       }
     }
     console.log('DATA:', data);
@@ -150,11 +131,40 @@ function IdeaForm(props) {
         console.log('response from create idea: ', response)
       });
     }else {
+      data['amount2'] = 0;
+      data['amount3'] = 0;
+      data['amount4'] = 0;
       create_idea(data).then((response)=>
         console.log('response from create idea: ', response)
       )
     }
+  }
+
+  const renderPhasesInput = () => {
+    if(!ideaInfo) {
+      return;
+    }
+    let content = [];
+    ideaInfo.investments.forEach((inv, i) => {
+      let disabled = false;
+      if(inv.goal_reached) {
+        disabled = true;
+      }else {
+        if(ideaInfo.investments[i-1].goal_reached) {
+          disabled = false
+        }else {
+          disabled = true;
+        }
+      }
+      content.push(
+        <div className="mb-5">
+          <label className="form-label" htmlFor={"amount" + (i+1)}>Phase {i +1} goal:</label>
+          <input name={"amount" + (i+1)} type="number" className="form-control" id={"amount" + (i+1)} readOnly={disabled} defaultValue={ inv.goal } />
+        </div>
+      );
+    })
     
+    return content;
   }
 
   return (
@@ -215,22 +225,14 @@ function IdeaForm(props) {
                     <label className="form-label" htmlFor="picture_url">Idea image file path:</label>
                     <input name="picture_url" type="url" className="form-control" id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
                   </div>
-                  <div className="mb-5">
-                    <label className="form-label" htmlFor="phase_1">Phase 1 goal:</label>
-                    <input name="phase_1" type="number" className="form-control" id="phase_1" disabled={ ideaPhases && 1 in ideaPhases ? ideaPhases[1].disabled : true } defaultValue={ ideaPhases && 1 in ideaPhases ? ideaPhases[1].amount : '' } />
-                  </div>
-                  <div className="mb-5">
-                    <label className="form-label" htmlFor="phase_2">Phase 2 goal:</label>
-                    <input name="phase_2" type="number" className="form-control" id="phase_2" disabled={ ideaPhases && 2 in ideaPhases ? ideaPhases[2].disabled : true } defaultValue={ ideaPhases && 2 in ideaPhases ? ideaPhases[2].amount : '' } />
-                  </div>
-                  <div className="mb-5">
-                    <label className="form-label" htmlFor="phase_3">Phase 3 goal:</label>
-                    <input name="phase_3" type="number" className="form-control" id="phase_3" disabled={ ideaPhases && 3 in ideaPhases ? ideaPhases[3].disabled : true } defaultValue={ ideaPhases && 3 in ideaPhases ? ideaPhases[3].amount : '' } />
-                  </div>
-                  <div className="mb-5">
-                    <label className="form-label" htmlFor="phase_4">Phase 4 goal:</label>
-                    <input name="phase_4" type="number" className="form-control" id="phase_4" disabled={ ideaPhases && 4 in ideaPhases ? ideaPhases[4].disabled : true } defaultValue={ ideaPhases && 4 in ideaPhases ? ideaPhases[4].amount : '' } />
-                  </div>
+                  {ideaInfo ? 
+                    renderPhasesInput()
+                    : 
+                    <div className="mb-5">
+                      <label className="form-label" htmlFor="amount1">Phase 1 goal:</label>
+                      <input name="amount1" type="number" className="form-control" id="amount1" />
+                    </div>
+                }
                   <div className="mb-3 d-flex justify-content-between align-items-center">
                     <button className="btn btn-danger" onClick={(e) => props.setOpenIdeaForm(false)}>CANCEL</button>
                     <button type="submit" className="btn btn-primary">SUBMIT</button>
