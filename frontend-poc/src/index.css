@@ -76,3 +76,9 @@ h1 {
 .me-2 {
   padding: 10px !important;
 }
+
+input:read-only {
+  background-color: #e9ecef;
+  opacity: 1;
+  pointer-events: none;
+}
