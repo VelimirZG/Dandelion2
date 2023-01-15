@@ -152,6 +152,19 @@
       }
     }
   }
+
+  .investInput {
+    background: #262626;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 21px;
+    color: #FFFFFF;
+    padding: 10px 0 9px 14px;
+  }
  
 
   .tag-btn {
@@ -166,6 +179,7 @@
     color: #FFFFFF !important;
     padding: 9px 12px 10px 12px;
     cursor: pointer;
+    padding: 10px 35px;
     
     &:focus {
       box-shadow: none !important;
@@ -176,7 +190,7 @@
 
   .idea-img {
     border-radius: 15px;
-    margin-top: auto;
+    // margin-top: auto;
 
     @media (max-width: 568px) {
       border-radius: 0;
@@ -753,7 +767,7 @@
               background: #08C6B4;
               border: none;
               margin-left: 11px;
-              min-width: 83px;
+              min-width: 90px;
 
               &.hidden {
                 visibility: hidden;
@@ -767,8 +781,8 @@
               font-size: 18px;
               line-height: 27px;
               text-align: right;
-  
               color: #FFFFFF;
+              min-width: 45px;
             }
           }
           .progress {

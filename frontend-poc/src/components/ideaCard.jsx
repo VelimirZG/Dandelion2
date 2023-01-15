@@ -12,6 +12,7 @@ const IdeaCard = (props) => {
   const ONE_NEAR= 1000000000000000000000000;
   const accountId = window.accountId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
+  const investOptions = [0.1,0.2,0.5,1,2,3,5,10,15,20];
 
   const isOnProfile = props.onProfile;
 
@@ -90,12 +91,21 @@ const IdeaCard = (props) => {
                           ( 
                             <div className="invest-wrap d-flex justify-content-start align-items-center">
                               <select className="form-select" defaultValue={0.1} style={{width: '30%'}} aria-label="Default select example" onChange={(e) => setCurrentInvValue(e.target.value)}>
-                                <option value="0.1">0.1</option>
+                                {
+                                  investOptions.map((option) => {
+                                    if(option < (item.amount - item.sum)) {
+                                      return (
+                                        <option value={option}>{option}</option>
+                                      )
+                                    }
+                                  })
+                                }
+                                {/* <option value="0.1">0.1</option>
                                 <option value="0.2">0.2</option>
                                 <option value="0.5">0.5</option>
                                 <option value="1">1</option>
                                 <option value="5">5</option>
-                                <option value="10">10</option>
+                                <option value="10">10</option> */}
                               </select>
                               <img src={`${process.env.PUBLIC_URL}/near-logo-white.png`} className="ms-3" style={{height: '17px', width: '17px'}}/>
                               <Button variant="outline-primary ms-auto tag-btn" data-idea={item.idea_id} onClick={(e) => investInIdea(e)}>INVEST</Button>
