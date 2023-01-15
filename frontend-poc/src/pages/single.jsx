@@ -118,11 +118,7 @@ const Single = (props) => {
                       <ul className="progress-list">
                       {
                           idea.investments.map((investment, i) => {
-
-                            console.log(Math.round((100 * investment.sum) / investment.goal ));
-                            console.log(investment.sum);
-                            console.log(investment.total);
-                            console.log(investment);
+                            let percentage = investment.goal == 0 ? 0 : (Math.round((100 * investment.sum) / investment.goal ));
                             let title;
                             let color;
                             let iconPath;
@@ -164,13 +160,13 @@ const Single = (props) => {
                                     {
                                        investment.sum == investment.goal ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
                                     }
-                                    <p className="percentage">{Math.round((100 * investment.sum) / investment.goal ) } %</p>
+                                    <p className="percentage">{percentage} %</p>
                                   </div>
                                 </div>
                                 <div className="row  m-0">
                                   <div className="col p-0">
                                     <div className="progress" style={{backgroundColor: '#262626'}}>
-                                      <div className="progress-bar" style={{ width: ((100 * investment.sum) / investment.goal ) + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div className="progress-bar" style={{ width: percentage + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                   </div>
                                 </div>
