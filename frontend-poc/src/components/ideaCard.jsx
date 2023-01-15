@@ -39,7 +39,6 @@ const IdeaCard = (props) => {
     
   }
 
-
   const ideas = props.ideas;
   return (
     <React.Fragment>
