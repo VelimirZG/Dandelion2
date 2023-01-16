@@ -97,7 +97,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
     let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
     let mut current_phase = ProjectPhaseGoals{idea_id: 0, project_phase: 0, amount: 0, goal_reached: false, phase_start: 0, phase_closed: false, collect_enabled: false};
     for goal in goals{
-        if goal.goal_reached == false && goal.phase_closed == false {
+        if goal.goal_reached == false && goal.phase_closed == false && goal.amount != 0 {
             current_phase = goal;
             break;
         }

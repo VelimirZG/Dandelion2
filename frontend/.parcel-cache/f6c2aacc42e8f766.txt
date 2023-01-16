@@ -1,11 +1,11 @@
 10977
 47/home/velimir/Dandelion_v2/frontend/near-api.js1664942589103167802 0
-58/home/velimir/Dandelion_v2/frontend/dist/index.3d214d75.js1673329822001761146 0
+58/home/velimir/Dandelion_v2/frontend/dist/index.3d214d75.js1673553788774588441 0
 59/home/velimir/Dandelion_v2/frontend/dist/index.bc0daea6.css1668505587070241469 0
 58/home/velimir/Dandelion_v2/frontend/dist/index.044656cc.js1668505791352131033 0
 63/home/velimir/Dandelion_v2/frontend/dist/index.bc0daea6.css.map1668505587074241506 0
 64/home/velimir/Dandelion_v2/frontend/dist/logo-black.54439fde.svg1668505791352131033 0
-62/home/velimir/Dandelion_v2/frontend/dist/index.3d214d75.js.map1673329822013761468 0
+62/home/velimir/Dandelion_v2/frontend/dist/index.3d214d75.js.map1673553788794588465 0
 61/home/velimir/Dandelion_v2/frontend/dist/favicon.eee7a1e8.ico1668505587062241394 0
 53/home/velimir/Dandelion_v2/frontend/package-lock.json1664942640263199715 0
 52/home/velimir/Dandelion_v2/frontend/ui-components.js1664942589103167802 0
@@ -8613,7 +8613,7 @@
 71/home/velimir/Dandelion_v2/frontend/node_modules/lodash/fp/castArray.js1664942638863195267 0
 106/home/velimir/Dandelion_v2/frontend/node_modules/regenerate-unicode-properties/Script_Extensions/Lydian.js1664942638659194641 0
 65/home/velimir/Dandelion_v2/frontend/node_modules/lodash/fp/get.js1664942638963195575 0
-40/home/velimir/Dandelion_v2/frontend/dist1673329822021761683 1
+40/home/velimir/Dandelion_v2/frontend/dist1673553788802588476 1
 69/home/velimir/Dandelion_v2/frontend/node_modules/lodash/fp/findKey.js1664942638947195526 0
 108/home/velimir/Dandelion_v2/frontend/node_modules/regenerate-unicode-properties/Script_Extensions/Phags_Pa.js1664942638843195206 0
 69/home/velimir/Dandelion_v2/frontend/node_modules/lodash/fp/omitAll.js1664942639067195900 0

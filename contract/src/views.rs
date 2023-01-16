@@ -117,7 +117,7 @@ impl Contract {
     
         for (key, goal) in self.goals.iter() {
             for goal in goal.iter() {
-                if goal.goal_reached == false && goal.phase_closed == false {
+                if goal.goal_reached == false && goal.phase_closed == false &&goal.amount > 0 {
                     if index >= from_index && index < from_index + limit {
                         log!("idea_id: {}", key);
                         let idea = self.ideas.get(&key).expect("Idea not found for given idea_id");
