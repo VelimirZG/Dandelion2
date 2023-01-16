@@ -19,7 +19,7 @@ export async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['get_all_ideas_homepage_sorted', 'count_phases_and_ideas_by_owner_id', 'get_investor_count_for_owner', 'get_sum_of_amount_for_owner', 'get_all_ideas_homepage_by_owner_id', 'ideas_for_owner', 'get_idea_for_single', 'get_investments', 'total_investments', 'get_all_ideas_homepage', 'get_investment_goal', 'get_investment_for_idea'],
+    viewMethods: ['get_all_ideas_homepage_by_investor_id2', 'get_invested_ideas_count', 'count_phases_and_ideas_by_investor_id', 'get_sum_of_amount_for_investor', 'get_all_ideas_homepage_sorted', 'count_phases_and_ideas_by_owner_id', 'get_investor_count_for_owner', 'get_sum_of_amount_for_owner', 'get_all_ideas_homepage_by_owner_id', 'ideas_for_owner', 'get_idea_for_single', 'get_investments', 'total_investments', 'get_all_ideas_homepage', 'get_investment_goal', 'get_investment_for_idea'],
     // Change methods can modify the state. But you don't receive the returned value when called.
     changeMethods: ['edit_idea_metadata', 'create_idea', 'invest_in_idea', 'add_like_to_idea'],
   })
@@ -120,4 +120,24 @@ export async function get_investor_count_for_owner(accountId){
 export async function count_phases_and_ideas_by_owner_id(accountId){
   const phases = await window.contract.count_phases_and_ideas_by_owner_id({owner_id: accountId});
   return phases;
+}
+
+export async function get_all_ideas_homepage_by_investor_id2(accountId){
+  const invested = await window.contract.get_all_ideas_homepage_by_investor_id2({investor_id: accountId, from_index: 0, limit: 10});
+  return invested;
+}
+
+export async function get_sum_of_amount_for_investor(accountId){
+  const sumAmount = await window.contract.get_sum_of_amount_for_investor({investor_id: accountId});
+  return sumAmount;
+}
+
+export async function get_invested_ideas_count(accountId){
+  const ideasCount = await window.contract.get_invested_ideas_count({investor_id: accountId});
+  return ideasCount;
+}
+
+export async function count_phases_and_ideas_by_investor_id(accountId){
+  const countPhases = await window.contract.count_phases_and_ideas_by_investor_id({investor_id: accountId});
+  return countPhases;
 }

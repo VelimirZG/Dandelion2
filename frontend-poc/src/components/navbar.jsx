@@ -13,7 +13,6 @@ const Navbar = () => {
   
   const [openIdeaForm, setOpenIdeaForm] = useState(false);
   const accountId = window.accountId;
-  console.log(accountId);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   function mobileMenu() {
