@@ -12,10 +12,11 @@ import { Contract } from 'near-api-js'
 
 import './homepage.css';
 import '../stylesheets/homepage.scss';
-import { get_all_ideas, logout } from "../assets/near/utils";
+import { get_all_ideas, get_all_ideas_homepage_sorted } from "../assets/near/utils";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import IdeaCard from "../components/ideaCard";
+import FeaturedIdeaCard from "../components/featuredIdeaCard";
 
 
 
@@ -23,6 +24,7 @@ import IdeaCard from "../components/ideaCard";
 const Homepage = () => {
   
   const [ideas, setIdeas] = useState([]);
+  const [featuredIdeas, setFeaturedIdeas] = useState([]);
   const [index, setIndex] = useState(0);
   const limit = 20;
   
@@ -42,6 +44,10 @@ const Homepage = () => {
       }
       console.log(ideas);
     });
+    get_all_ideas_homepage_sorted(index, 1000).then( res => {
+      console.log('featured ideas: ', res);
+      setFeaturedIdeas(res);
+    });
   }
 
  
@@ -58,11 +64,7 @@ const Homepage = () => {
     setIndex(index + limit);
     listIdeas(true);
   }
-  
-  // function walletLogout() {
-  //   logout();
-  //   console.log('AFTER LOGUT: ', accountId)
-  // }
+
   return (
     <React.Fragment>
       <div className="container-fluid g-0 first-section">
@@ -127,143 +129,14 @@ const Homepage = () => {
                   </div>
                 </div>
               </div>
-              
-              <Swiper 
-                modules={[Navigation, Pagination]}
-                spaceBetween={10}
-                slidesPerView={1}
-                navigation={{
-                  nextEl: '.next-btn',
-                  prevEl: '.prev-btn'
-                }}
-                pagination={{ 
-                  el: '.swiper-pagination',
-                  clickable: true 
-                }}
-                breakpoints={{
-                  640: {
-                    slidesPerView: 2,
-                    spaceBetween: 10,
-                  },
-                  768: {
-                    slidesPerView: 3,
-                    spaceBetween: 10,
-                  },
-              
-                  1024: {
-                    slidesPerView: 3,
-                    spaceBetween: 10,
-                  },
-                  1280: {
-                    slidesPerView: 4,
-                    spaceBetween: 10,
-                  },
-                }}
-              >
-                <SwiperSlide >
-                  <div className="card swiper-card-wrap p-1" {...useHover({"border": "none", "opacity": "0.8", "borderRadius": "5px", "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('/preuzmi.png')"}, {"borderRadius": "5px", "border": "none", "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("/preuzmi.png")`})}>
-                    <div className="card-body">
-                      <div className="card-title">
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
-                      </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <div className="progress-wrap-card mt-3">
-                        <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width:  '50%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                      </div>
-                      <div className="progress-text mt-3">
-                        <span className="raised">Raised </span>
-                        <span className="out-of ms-1">300 /</span> <span className="out-of-total">500</span>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide >
-                  <div className="card swiper-card-wrap p-1" {...useHover({"border": "none", "opacity": "0.8", "borderRadius": "5px", "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('/preuzmi.png')"}, {"borderRadius": "5px", "border": "none", "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("/preuzmi.png")`})}>
-                    <div className="card-body">
-                      <div className="card-title">
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
-                      </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <div className="progress-wrap-card mt-3">
-                        <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width:  '50%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                      </div>
-                      <div className="progress-text mt-3">
-                        <span className="raised">Raised </span>
-                        <span className="out-of ms-1">300 /</span> <span className="out-of-total">500</span>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide >
-                  <div className="card swiper-card-wrap p-1" {...useHover({"border": "none", "opacity": "0.8", "borderRadius": "5px", "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('/preuzmi.png')"}, {"borderRadius": "5px", "border": "none", "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("/preuzmi.png")`})}>
-                    <div className="card-body">
-                      <div className="card-title">
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
-                      </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <div className="progress-wrap-card mt-3">
-                        <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width:  '50%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                      </div>
-                      <div className="progress-text mt-3">
-                        <span className="raised">Raised </span>
-                        <span className="out-of ms-1">300 /</span> <span className="out-of-total">500</span>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide >
-                  <div className="card swiper-card-wrap p-1" {...useHover({"border": "none", "opacity": "0.8", "borderRadius": "5px", "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('/preuzmi.png')"}, {"borderRadius": "5px", "border": "none", "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("/preuzmi.png")`})}>
-                    <div className="card-body">
-                      <div className="card-title">
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
-                      </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <div className="progress-wrap-card mt-3">
-                        <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width:  '50%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                      </div>
-                      <div className="progress-text mt-3">
-                        <span className="raised">Raised </span>
-                        <span className="out-of ms-1">300 /</span> <span className="out-of-total">500</span>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide >
-                  <div className="card swiper-card-wrap p-1" {...useHover({"border": "none", "opacity": "0.8", "borderRadius": "5px", "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('/preuzmi.png')"}, {"borderRadius": "5px", "border": "none", "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("/preuzmi.png")`})}>
-                    <div className="card-body">
-                      <div className="card-title">
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
-                      </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <div className="progress-wrap-card mt-3">
-                        <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width:  '50%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                      </div>
-                      <div className="progress-text mt-3">
-                        <span className="raised">Raised </span>
-                        <span className="out-of ms-1">300 /</span> <span className="out-of-total">500</span>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                
-              </Swiper>
+              {featuredIdeas &&
+                <FeaturedIdeaCard ideas={featuredIdeas} />
+              };
             </div>
           </section>
           <section className="container-lg projects-wrap pt-5 mt-5 d-flex flex-column">
               <h5 className="projects-headline">Projects</h5>
               <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} />
-             
-            {/* </div> */}
           </section>
           <section id="news" className="custom-slider">
             <div className="container-lg py-5 news-container-wrap">

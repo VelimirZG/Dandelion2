@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Navbar from "../components/navbar";
+import Popup from '../pages/popup';
 
 import '../stylesheets/single.scss';
 import Footer from "../components/footer";
@@ -19,12 +20,13 @@ const Single = (props) => {
   console.log(accountId)
   const [currentInvValue, setCurrentInvValue] = useState(0);
   const ideaId = props.match.params.ideaId;
+  const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
 
   const ONE_NEAR= 1000000000000000000000000;
 
   useEffect(() => { 
     getIdea(ideaId).then( idea => {
-      
+      console.log(idea);
       calculateIdeaStatus(idea);
       
     });
@@ -42,21 +44,12 @@ const Single = (props) => {
     console.log('idea: ', idea);
   }
 
-
-  async function getIdeaInfo(idea) {
-    const goal = await get_investment_goal(idea.idea_id);
-    idea.inv_goal = goal;
-
-    const inv = await get_investment_for_idea(idea.idea_id)
-    idea.inv_total = inv.total_amount / ONE_NEAR;
-
-    console.log('PERC: ', ((100 * idea.inv_total) / idea.inv_goal));
-    setIdea(idea);
-  }
-
   function investInIdea() {
-
-    invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: ideaId});
+    if(currentInvValue > (idea.goal - idea.sum)) {
+      setPopupInfo({open: true, msg: 'You cannot invest more than needed for current phase'});
+    }else {
+      invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: ideaId});  
+    }
   }
 
   
@@ -125,11 +118,7 @@ const Single = (props) => {
                       <ul className="progress-list">
                       {
                           idea.investments.map((investment, i) => {
-
-                            console.log(Math.round((100 * investment.sum) / investment.goal ));
-                            console.log(investment.sum);
-                            console.log(investment.total);
-                            console.log(investment);
+                            let percentage = investment.goal == 0 ? 0 : (Math.round((100 * investment.sum) / investment.goal ));
                             let title;
                             let color;
                             let iconPath;
@@ -171,13 +160,13 @@ const Single = (props) => {
                                     {
                                        investment.sum == investment.goal ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
                                     }
-                                    <p className="percentage">{Math.round((100 * investment.sum) / investment.goal ) } %</p>
+                                    <p className="percentage">{percentage} %</p>
                                   </div>
                                 </div>
                                 <div className="row  m-0">
                                   <div className="col p-0">
                                     <div className="progress" style={{backgroundColor: '#262626'}}>
-                                      <div className="progress-bar" style={{ width: ((100 * investment.sum) / investment.goal ) + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                      <div className="progress-bar" style={{ width: percentage + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
                                   </div>
                                 </div>
@@ -192,9 +181,9 @@ const Single = (props) => {
                       (<button type="button" className="connect-btn mt-3" onClick={() => login()  }>Connect wallet to fund</button>)
                       :
                       <div className="invest-wrap d-flex mt-3  justify-content-start align-items-center">
-                        <input type="number"  onChange={(event) => setCurrentInvValue(event.target.value)}/>
-                        <img src="/near-logo.png" className="ms-2" style={{height: '30px', width: 'auto'}}/>
-                        <Button variant="outline-primary ms-auto" className="connect-btn" onClick={(e) => investInIdea(e)}>INVEST</Button>
+                        <input type="number" className="investInput" onChange={(event) => setCurrentInvValue(event.target.value)} />
+                        <img src="/near-logo-single.png" className="ms-2" style={{height: '30px', width: 'auto'}}/>
+                        <Button variant="outline-primary ms-auto" className="btn btn-outline-primary ms-auto tag-btn" onClick={(e) => investInIdea(e)}>INVEST</Button>
                       </div>
                     }
                   </div>
@@ -256,6 +245,10 @@ const Single = (props) => {
           </div>
         </div>  
       </div>
+      {
+      popupInfo.open &&
+        <Popup msg={popupInfo.msg} setPopupInfo={setPopupInfo} />
+      }
       <Footer />
     </React.Fragment>
     );
