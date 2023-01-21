@@ -8,6 +8,13 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 
+
+import Modal from 'react-bootstrap/Modal';
+
+
+import '../stylesheets/popups.scss';
+import { useEffect } from "react";
+
 const styles = (theme) => ({
   root: {
     margin: 0,
@@ -53,52 +60,29 @@ const ModalBody = styled.div`
   }
 `;
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-    </MuiDialogTitle>
-  );
-});
-
-const DialogContent = withStyles((theme) => ({
-  root: {
-    padding: theme.spacing(2),
-  },
-}))(MuiDialogContent);
-
 function Popup(props) {
-  
+
+
+  useEffect(() => {
+    document.body.style.overflowY = 'hidden';
+
+    return () => {
+      document.body.style.overflowY = 'auto';
+    }    
+  }, []);
+
   return (
-    <div>
-      <Dialog
-        aria-labelledby="customized-dialog-title"
-        open={true}
-      >
-        <DialogTitle id="customized-dialog-title">
-          Information:
-        </DialogTitle>
-        <DialogContent dividers>
-          <ModalBody>
-            <>
-              <Typography>{props.msg}</Typography>
-            </>
-          </ModalBody>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => props.setPopupInfo({open: false, msg: ''})} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
+    <div className="custom-modal ">
+      <div className="custom-modal-content container">
+        <div className="row modal-wrap">
+          <div className="col-12 col-lg-8 modal-content-wrap">
+            <span className="close" onClick={() => props.setPopupInfo({open: false, msg: ''})}>&times;</span>
+            <img src={`${process.env.PUBLIC_URL}/popup-img.png`} />
+            <h3>Ooops!</h3>
+            <p>{props.msg}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,101 @@
+/* The Modal (background) */
+.custom-modal {
+  position: fixed; /* Stay in place */
+  z-index: 10000000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100vh; /* Full height */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0 !important;
+  overscroll-behavior: contain;
+}
+
+/* Modal Content/Box */
+.custom-modal-content {
+  // position: relative;
+  padding: 0;
+
+  @media (max-width: 820px) {
+    height: 100%;
+    padding: 0 !important;
+  }
+
+  .modal-wrap {
+    display: flex;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+
+    @media (max-width: 820px) {
+      height: 100%;
+    }
+    
+
+    .modal-content-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-image: url('../../public/popup-background.png');
+      background-position: center;
+      background-size: cover;
+      border-radius: 10px;
+      padding-top: 185px;
+      padding-bottom: 185px;
+      position: relative;
+
+      @media (max-width: 820px) {
+        padding: 100px 30px;
+        height: 100%;
+      }
+
+      img {
+        margin-bottom: 33px;
+      }
+
+      h3 {
+        font-family: 'Titillium Web';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 50px;
+        line-height: 36px;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #CE225B;
+      }
+      p {
+        font-family: 'Titillium Web';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 30px;
+        text-align: center;
+        color: #FFFFFF;
+      }
+    }
+  }
+
+  /* The Close Button */
+  .close {
+    color: #FFF;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close:hover {
+    color:#CE225B;
+  }
+}
+
