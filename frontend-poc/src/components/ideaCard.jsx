@@ -100,12 +100,6 @@ const IdeaCard = (props) => {
                                     }
                                   })
                                 }
-                                {/* <option value="0.1">0.1</option>
-                                <option value="0.2">0.2</option>
-                                <option value="0.5">0.5</option>
-                                <option value="1">1</option>
-                                <option value="5">5</option>
-                                <option value="10">10</option> */}
                               </select>
                               <img src={`${process.env.PUBLIC_URL}/near-logo-white.png`} className="ms-3" style={{height: '17px', width: '17px'}}/>
                               <Button variant="outline-primary ms-auto tag-btn" data-idea={item.idea_id} onClick={(e) => investInIdea(e)}>INVEST</Button>
@@ -124,7 +118,7 @@ const IdeaCard = (props) => {
                               }
                               
                               <Button variant="outline-primary ms-auto tag-btn edit-btn" data-idea={item.idea_id} onClick={(e) => props.editIdea(e)}>
-                                EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`}/>
+                                EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
                               </Button>
                             </div>
                         }
