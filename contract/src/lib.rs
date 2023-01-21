@@ -26,16 +26,17 @@ mod internal;
 mod metadata;
 
 
+
 // Define the contract structure
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct Contract {
     pub ideas: UnorderedMap<IdeaId, IdeaMetadata>,
     pub investment: UnorderedMap<InvestmentId, InvestmentMetadata>,
-    pub goals:UnorderedMap<IdeaId,Vec<ProjectPhaseGoals>>,
-
-   
+    pub goals:UnorderedMap<IdeaId,Vec<ProjectPhaseGoals>>,   
 }
+
+
 
 // Define the default, which automatically initializes the contract
 impl Default for Contract{
@@ -52,6 +53,7 @@ impl Default for Contract{
 #[near_bindgen]
 impl Contract {
 
+
 //get total invested in idea by project phase
 pub fn get_total_invested_by_idea_id(&self, idea_id: IdeaId, project_phase: u8)->Balance{
     self.investment
@@ -60,6 +62,8 @@ pub fn get_total_invested_by_idea_id(&self, idea_id: IdeaId, project_phase: u8)-
     .map(|(_, investment)| investment.amount)
     .sum()
 }
+
+
 
 //get toal invested in idea
 pub fn get_total_invested_by_idea(&self, idea_id: IdeaId)->Balance{
@@ -228,15 +232,17 @@ pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
     }
 
     //get how much one account invested in ideas
-    pub fn get_sum_of_amount_for_investor(&self, investor_id: AccountId) -> u128{
+    pub fn get_sum_of_amount_for_investor(&self, investor_id: AccountId) -> f64{
         let investments = self.investment.keys_as_vector();
-        let mut sum_of_amount = 0;
+        let mut sum = 0;
+        let mut sum_of_amount = 0.0;
         for investment_id in investments.iter(){
             let investment = self.investment.get(&investment_id).unwrap();
             if investment.investor_id == investor_id{
-                sum_of_amount += investment.amount;
+                sum+= investment.amount;
             }
         }
+        sum_of_amount = self.yocto_to_near(sum);
         sum_of_amount
     }
 
