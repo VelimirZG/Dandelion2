@@ -53,8 +53,8 @@ const IdeaCard = (props) => {
                   <div className="d-flex mt-auto flex-column flex-lg-row ">
                     <div className="col-xs-12 col-sm-12 col-lg-4 d-flex justify-content-center align-items-center p-0 img-container" style={{backgroundImage: 'url(' + item.picture_url + ')'}}>
                     </div>
-                    <div className="card-content d-flex mb-lg-auto flex-column justify-content-between  col-xs-12 col-sm-12 col-md-12 col-lg-5">
-                      <h4 className="card-title text-center text-md-start text-lg-start" style={{cursor: 'pointer'}} onClick={() => { window.location.href= process.env.PUBLIC_URL + '/' + item.idea_id}}>{item.title}</h4>
+                    <a href={process.env.PUBLIC_URL + '/' + item.idea_id} className="card-content d-flex mb-lg-auto flex-column justify-content-between  col-xs-12 col-sm-12 col-md-12 col-lg-5" style={{textDecoration: 'none'}}>
+                      <h4 className="card-title text-center text-md-start text-lg-start" style={{cursor: 'pointer'}} >{item.title}</h4>
                       <p className="card-text">
                         {item.excerpt}
                       </p>
@@ -69,7 +69,7 @@ const IdeaCard = (props) => {
                           })
                         }
                       </p>
-                    </div>
+                    </a>
                     <div className="card-info col-xs-12 col-sm-12 col-lg-3 mt-4 mt-md-0 mt-lg-0">
                       <button className="ms-auto favorite-icon" style={{height: '35px'}} data-idea={item.idea_id} onClick={(e) => likeIdea(e)} >
                         <HeartFill color="#C6C6C6" size='30px'/>
