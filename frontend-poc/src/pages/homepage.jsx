@@ -25,8 +25,8 @@ const Homepage = () => {
   
   const [ideas, setIdeas] = useState([]);
   const [featuredIdeas, setFeaturedIdeas] = useState([]);
-  const [index, setIndex] = useState(0);
-  const limit = 20;
+  const [index, setIndex] = useState(2);
+  const limit = 2;
   
   useEffect(() => { 
     listIdeas();
@@ -34,7 +34,12 @@ const Homepage = () => {
 
 
   function listIdeas(nextPage = false) {
-    get_all_ideas(index, limit).then( res => {
+    console.log('INDEX: ', index);
+    let currentIndex = index;
+    if(!nextPage) {
+        currentIndex = 0;
+    }
+    get_all_ideas(currentIndex, limit).then( res => {
       console.log('ideas from all ideas: ', res);
       console.log([...ideas, ...res]);
       if(nextPage) {
@@ -48,16 +53,6 @@ const Homepage = () => {
       console.log('featured ideas: ', res);
       setFeaturedIdeas(res);
     });
-  }
-
- 
-  function useHover(styleOnHover, styleOnNotHover = {}) {
-    const [style, setStyle] = React.useState(styleOnNotHover);
-
-    const onMouseEnter = () => setStyle(styleOnHover)
-    const onMouseLeave = () => setStyle(styleOnNotHover)
-
-    return {style, onMouseEnter, onMouseLeave}
   }
 
   function loadMoreIdeas() {
