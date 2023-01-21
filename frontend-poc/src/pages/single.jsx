@@ -3,7 +3,7 @@ import {withRouter} from "react-router-dom";
 import Badge from 'react-bootstrap/Badge';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { getIdea, get_investment_for_idea, get_investment_goal, login, invest } from "../assets/near/utils";
+import { getIdea, login, invest } from "../assets/near/utils";
 import { useState } from "react";
 import { useEffect } from "react";
 import Button from 'react-bootstrap/Button';
@@ -15,14 +15,13 @@ import Footer from "../components/footer";
 
 const Single = (props) => {
 
-  const [idea, setIdea] = useState(false);
+  const [idea, setIdea] = useState(0);
   const accountId = window.accountId;
-  console.log(accountId)
   const [currentInvValue, setCurrentInvValue] = useState(0);
   const ideaId = props.match.params.ideaId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
 
-  const ONE_NEAR= 1000000000000000000000000;
+  const ONE_NEAR= 1000000000000000000000001;
 
   useEffect(() => { 
     getIdea(ideaId).then( idea => {
@@ -46,9 +45,13 @@ const Single = (props) => {
 
   function investInIdea() {
     if(currentInvValue > (idea.goal - idea.sum)) {
+      setCurrentInvValue(idea.goal - idea.sum);
       setPopupInfo({open: true, msg: 'You cannot invest more than needed for current phase'});
+    }else if(currentInvValue.toString().split(".")[1].length > 2) {
+      setCurrentInvValue(parseFloat(currentInvValue).toFixed(2));
+      setPopupInfo({open: true, msg: 'Maximum decimal places is 2'});
     }else {
-      invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: ideaId});  
+      invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: parseInt(ideaId)});  
     }
   }
 
@@ -71,10 +74,10 @@ const Single = (props) => {
                   </div>
                   <div className="row d-flex justify-content-center align-items-center w-100 m-0">
                     <div className="col-12 col-lg-9 tag-wrap">
-                      <div class="tags">
+                      <div className="tags">
                         {
                           idea.tags.map((element, i) => {
-                            return (<Button pill key={i} className="tag-btn me-2" >{element}</Button>);
+                            return (<Button key={i} className="tag-btn me-2" >{element}</Button>);
                           })
                         }
                       </div>
@@ -140,39 +143,40 @@ const Single = (props) => {
                               color="#CE225B";
                               iconPath = process.env.PUBLIC_URL + '/phase_4.png';
                             }
-                            return (<li class="progress-list-item-wrap">
-                            <div className="row progress-list-item w-100 m-0">
-                              <div className="idea-img-wrap">
-                                <img className="w-100 idea-img" src={iconPath} alt="Card image cap" />
-                              </div>
-                              <div className="p-0 info-wrap">
-                                <div className="row m-0 w-100 status-first-part">
-                                  <div className="col-4 col-lg-3 p-0">
-                                    <p className="goal-title">{title}</p>
-                                    <div className="mobile-goal-wrap">
+                            return (
+                            <li key={i} className="progress-list-item-wrap">
+                              <div className="row progress-list-item w-100 m-0">
+                                <div className="idea-img-wrap">
+                                  <img className="w-100 idea-img" src={iconPath} alt="Card image cap" />
+                                </div>
+                                <div className="p-0 info-wrap">
+                                  <div className="row m-0 w-100 status-first-part">
+                                    <div className="col-4 col-lg-3 p-0">
+                                      <p className="goal-title">{title}</p>
+                                      <div className="mobile-goal-wrap">
+                                        <p className="goal-goal">{investment.goal} st</p>
+                                        <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
+                                      </div>
+                                    </div>
+                                    <div className="col-8 col-lg-9 list-item-wrap p-0">
                                       <p className="goal-goal">{investment.goal} st</p>
                                       <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
+                                      {
+                                        investment.sum == investment.goal ? <Button className="status-btn me-2" >COMPLETED</Button> : <Button className="status-btn me-2" >IN PROGRESS</Button>
+                                      }
+                                      <p className="percentage">{percentage} %</p>
                                     </div>
                                   </div>
-                                  <div className="col-8 col-lg-9 list-item-wrap p-0">
-                                    <p className="goal-goal">{investment.goal} st</p>
-                                    <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
-                                    {
-                                       investment.sum == investment.goal ? <Button pill className="status-btn me-2" >COMPLETED</Button> : <Button pill className="status-btn me-2" >IN PROGRESS</Button>
-                                    }
-                                    <p className="percentage">{percentage} %</p>
-                                  </div>
-                                </div>
-                                <div className="row  m-0">
-                                  <div className="col p-0">
-                                    <div className="progress" style={{backgroundColor: '#262626'}}>
-                                      <div className="progress-bar" style={{ width: percentage + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                  <div className="row  m-0">
+                                    <div className="col p-0">
+                                      <div className="progress" style={{backgroundColor: '#262626'}}>
+                                        <div className="progress-bar" style={{ width: percentage + '%', backgroundColor: color }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          </li>);
+                            </li>);
                           })
                         }
                       </ul>
@@ -181,7 +185,7 @@ const Single = (props) => {
                       (<button type="button" className="connect-btn mt-3" onClick={() => login()  }>Connect wallet to fund</button>)
                       :
                       <div className="invest-wrap d-flex mt-3  justify-content-start align-items-center">
-                        <input type="number" className="investInput" onChange={(event) => setCurrentInvValue(event.target.value)} />
+                        <input type="number" className="investInput" value={currentInvValue} onChange={(event) => setCurrentInvValue(event.target.value)} />
                         <img src="/near-logo-single.png" className="ms-2" style={{height: '30px', width: 'auto'}}/>
                         <Button variant="outline-primary ms-auto" className="btn btn-outline-primary ms-auto tag-btn" onClick={(e) => investInIdea(e)}>INVEST</Button>
                       </div>
