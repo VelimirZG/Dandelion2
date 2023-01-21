@@ -9,7 +9,7 @@ import { invest, add_like_to_idea } from "../assets/near/utils";
 const IdeaCard = (props) => {
 
   const [currentInvValue, setCurrentInvValue] = useState(0.2);
-  const ONE_NEAR= 1000000000000000000000000;
+  const ONE_NEAR= 1000000000000000000000001;
   const accountId = window.accountId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
   const investOptions = [0.1,0.2,0.5,1,2,3,5,10,15,20];
