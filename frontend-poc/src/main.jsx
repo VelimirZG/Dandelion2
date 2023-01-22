@@ -4,6 +4,7 @@ import Single from "./pages/single";
 import './index.css';
 import Homepage from "./pages/homepage";
 import Profile from "./pages/profile";
+import Page from "./pages/page";
 
 const Main = () => {
 
@@ -34,6 +35,7 @@ const Main = () => {
       <Route exact path="/" render={() => <Homepage/> } />
       <Route exact path="/:ideaId"  render={() => <Single/> } />
       <Route exact path="/profile"  render={() => <Profile/> } />
+      <Route exact path="/page"  render={() => <Page/> } />
     </BrowserRouter>
   );
 

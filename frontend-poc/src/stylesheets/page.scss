@@ -1,0 +1,76 @@
+.page {
+  .page-wrap {
+    max-width: 935px;
+  }
+  .page-title {
+    font-family: 'Titillium Web';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 54px;
+    color: #FFFFFF;
+    margin: 92px 0 !important;
+  }
+  .content-wrap {
+    background: #000;
+    
+    padding: 85px 65px 91px 70px;
+    margin-bottom: 240px;
+
+    h1 {
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 50px;
+      line-height: 54px;
+      color: #FFFFFF;
+      margin-bottom: 13px !important;
+    }
+  
+    h2 {
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 40px;
+      line-height: 54px;
+      color: #FFFFFF;
+      margin-bottom: 13px;
+    }
+  
+    h3 {
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 700;
+      font-size: 30px;
+      line-height: 54px;
+      color: #FFFFFF;
+      margin-bottom: 13px;
+    }
+  
+    p {
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 27px;
+      color: #FFFFFF;
+      margin-bottom: 41px !important;
+    }
+  
+    ul {
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 27px;
+      padding: 0;
+  
+      color: #FFFFFF;
+      
+      li {
+        list-style-position: inside;
+      }
+    }
+  }
+  
+}
