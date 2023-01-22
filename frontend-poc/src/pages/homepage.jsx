@@ -4,13 +4,13 @@ import {withRouter, Redirect} from "react-router-dom";
 import 'regenerator-runtime/runtime'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
+import { ideasCount, get_all_ideas, get_all_ideas_homepage_sorted } from "../assets/near/utils";
 
 // Import Swiper styles
 import 'swiper/css';
 
 import './homepage.css';
 import '../stylesheets/homepage.scss';
-import { get_all_ideas, get_all_ideas_homepage_sorted } from "../assets/near/utils";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import IdeaCard from "../components/ideaCard";
@@ -23,11 +23,16 @@ const Homepage = () => {
   
   const [ideas, setIdeas] = useState([]);
   const [featuredIdeas, setFeaturedIdeas] = useState([]);
-  const [index, setIndex] = useState(2);
-  const limit = 2;
+  const [index, setIndex] = useState(4);
+  const limit = 4;
+  const [allIdeasCount, setAllIdeasCount] = useState(0);
   
   useEffect(() => { 
     listIdeas();
+    ideasCount().then((count) => {
+      setAllIdeasCount(count);
+      console.log(count);
+    })
   }, [] )
 
 
@@ -129,7 +134,7 @@ const Homepage = () => {
           </section>
           <section className="container-lg projects-wrap pt-5 mt-5 d-flex flex-column">
               <h5 className="projects-headline">Projects</h5>
-              <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} />
+              <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} ideasCount={allIdeasCount} ideaIndex={index} />
           </section>
           <section id="news" className="custom-slider">
             <div className="container-lg py-5 news-container-wrap">

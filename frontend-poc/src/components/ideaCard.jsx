@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Popup from '../pages/popup';
 
-import { invest, add_like_to_idea } from "../assets/near/utils";
+import { invest, add_like_to_idea, ideasCount } from "../assets/near/utils";
 
 const IdeaCard = (props) => {
 
@@ -13,7 +13,6 @@ const IdeaCard = (props) => {
   const accountId = window.accountId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
   const investOptions = [0.1,0.2,0.5,1,2,3,5,10,15,20];
-
   const isOnProfile = props.onProfile;
 
   function investInIdea(event) {
@@ -133,7 +132,7 @@ const IdeaCard = (props) => {
       })
     }
     {
-      ideas &&
+      ideas && (props.ideasCount > props.ideaIndex) &&
         <button className="btn header-button mb-3 load-more-btn" onClick={()=> props.loadMoreIdeas()}>
           Load more ideas
         </button>
