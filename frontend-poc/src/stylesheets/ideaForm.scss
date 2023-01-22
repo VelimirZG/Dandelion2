@@ -8,6 +8,19 @@
       height: 100%;
       max-height: initial;
     }
+
+    .MuiIconButton-root {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      margin-left: auto;
+
+      .MuiIconButton-label {
+        color: white;
+        font-size: 20px;
+      }
+    }
+    
     .form-header {
       font-family: 'Titillium Web';
       font-style: normal;

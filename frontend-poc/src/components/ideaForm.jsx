@@ -12,6 +12,7 @@ import { create_idea, editIdea, getIdea } from "../assets/near/utils";
 import { useEffect, useState } from "react";
 
 import '../stylesheets/ideaForm.scss';
+import { IconButton } from "@material-ui/core";
 
 const ModalBody = styled.div`
   display: flex;
@@ -241,7 +242,11 @@ function IdeaForm(props) {
         className="idea-form"
       >
         <DialogContent dividers>
+          <IconButton aria-label="Close" onClick={(e) => props.setOpenIdeaForm(false)}>
+            X
+          </IconButton>
           <ModalBody fullWidth>
+            
             <div className="container-fluid">
               <div className="row">
                 <div className="col col-wrap">
