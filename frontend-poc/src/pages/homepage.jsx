@@ -8,8 +8,6 @@ import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 // Import Swiper styles
 import 'swiper/css';
 
-import { Contract } from 'near-api-js'
-
 import './homepage.css';
 import '../stylesheets/homepage.scss';
 import { get_all_ideas, get_all_ideas_homepage_sorted } from "../assets/near/utils";

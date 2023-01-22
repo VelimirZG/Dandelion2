@@ -11,66 +11,120 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import { create_idea, editIdea, getIdea } from "../assets/near/utils";
 import { useEffect, useState } from "react";
 
-const styles = (theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(2),
-  },
-  closeButton: {
-    position: "absolute",
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500],
-  },
-  paper: {
-    backgroundColor: "rgba(0,0,0,1)",
-  },
-});
+import '../stylesheets/ideaForm.scss';
 
 const ModalBody = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: transparent;
+  padding: 50px 70px;
 
-  div {
-    margin: 5px;
+  @media (max-width: 860px) {
+    padding: 30px 0;
   }
-  p {
-    margin: 20px;
+
+  .col-wrap {
+    @media (max-width: 860px) {
+      padding: 0;
+    }
   }
-  .data-privacy {
-    max-height: 300px;
-    overflow: hidden;
-    overflow-y: scroll;
-    border-color: black;
-    border-width: thin;
-    border-style: solid;
-  }
-  .agree-or-not {
+
+  .input-wrap {
     display: flex;
-    flex-direction: row;
-    align-items: space-between;
-    button {
-      margin: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+
+    @media (max-width: 860px) {
+      flex-direction: column;
+      justify-content: start;
+      align-items: start;
+    }
+
+
+    &.textarea-wrap {
+      align-items: start;
+    }
+    
+    .form-label {
+      margin-bottom: 0;
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 27px;
+      color: #FFFFFF;
+      width: 100%;
+
+      @media (max-width: 860px) {
+        margin-bottom: 10px;
+      }
+
+      span {
+        font-size: 14px;
+        color: #4D4949;
+        padding-left: 5px;
+      }
+    }
+
+    label {
+      width: 30%;
+    }
+
+    input, textarea {
+      background: #000000;
+      border: 1px solid #4D4949;
+      border-radius: 2px;
+      font-family: 'Titillium Web';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 27px;
+
+      color: #FFFFFF;
+    }
+  }
+
+  .phase-wrap {
+    display: flex;
+
+    @media (max-width: 860px) {
+      flex-direction: column;
+    }
+    
+    .input-wrap {
+      width: 50%;
+      display: flex;
+      justify-content: space-between;
+
+      @media (max-width: 860px) {
+        width: 100%;
+      }
+
+      &:nth-child(2) {
+        padding-left: 75px;
+
+        @media (max-width: 860px) {
+          padding-left: 0;
+        }
+      }
+
+      .form-label {
+        width: 100%;
+      }
+
+      input {
+        width: 60%;
+
+        @media (max-width: 860px) {
+          width: 100%;
+        }
+      }
     }
   }
 `;
 
-const DialogActions = withStyles((theme) => ({
-  root: {
-    margin: 0,
-    padding: theme.spacing(1),
-  },
-}))(MuiDialogActions);
-
-const DialogTitle = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-  return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
-    </MuiDialogTitle>
-  );
-});
 
 const DialogContent = withStyles((theme) => ({
   root: {
@@ -145,6 +199,7 @@ function IdeaForm(props) {
       return;
     }
     let content = [];
+    let res = [];
     ideaInfo.investments.forEach((inv, i) => {
       let disabled = false;
       if(inv.goal_reached) {
@@ -156,15 +211,23 @@ function IdeaForm(props) {
           disabled = true;
         }
       }
+      
+      if(i == 2) {
+        content = [];
+      }
       content.push(
-        <div className="mb-5">
+        <div className="input-wrap">
           <label className="form-label" htmlFor={"amount" + (i+1)}>Phase {i +1} goal:</label>
           <input name={"amount" + (i+1)} type="number" className="form-control" id={"amount" + (i+1)} readOnly={disabled} defaultValue={ inv.goal } />
         </div>
-      );
+      );    
+
+      if(i == 1 || i == 3) {
+        res.push(<div className="phase-wrap">{content}</div>);
+      }
     })
     
-    return content;
+    return res;
   }
 
   return (
@@ -175,69 +238,72 @@ function IdeaForm(props) {
         fullWidth
         maxWidth="md"
         style={{'zIndex': 2000000}}
+        className="idea-form"
       >
-        <DialogTitle id="customized-dialog-title" style={{textAlign: 'center', fontWeight: 'bold'}}>
-          {ideaInfo ? 'UPDATE YOUR IDEA' : 'CREATE NEW IDEA'}
-        </DialogTitle>
         <DialogContent dividers>
           <ModalBody fullWidth>
             <div className="container-fluid">
               <div className="row">
-                <div className="col">
-                <form onSubmit={submitIdea}>
-                  <div className="mb-3">
-                    <label htmlFor="title" className="form-label">Title:</label>
-                    <input type="text" name="title" className="form-control" id="title" aria-describedby="title" defaultValue={ideaInfo ? ideaInfo.title : ''}/>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="excerpt">Excerpt:</label>
-                    <textarea name="excerpt" className="form-control" id="excerpt" rows="3" defaultValue={ideaInfo ? ideaInfo.excerpt : ''}></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="description">Description:</label>
-                    <textarea name="description" className="form-control" id="description" rows="3" defaultValue={ideaInfo ? ideaInfo.description : ''}></textarea>
-                  </div>
-                  {/* <div className="mb-3">
-                    <label htmlFor="investment_goal" className="form-label">Investment goal:</label>
-                    <input name="investment_goal" type="number" className="form-control" id="investment_goal" aria-describedby="investment_goal" />
-                  </div> */}
-                  <div className="mb-3">
-                    <label htmlFor="team" className="form-label">Team:</label>
-                    <input name="team" type="text" className="form-control" id="team" aria-describedby="team" defaultValue={ideaInfo ? ideaInfo.team : ''} />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="tags" className="form-label">Tags (devide by comma):</label>
-                    <input name="tags" type="text" className="form-control" id="tags" aria-describedby="tags" defaultValue={ideaInfo ? ideaInfo.tags.join(',') : ''} />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="competitors" className="form-label">Competitors:</label>
-                    <input name="competitors" type="text" className="form-control" id="competitors" aria-describedby="competitors" defaultValue={ideaInfo ? ideaInfo.competitors.join(',') : ''} />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="value_proposition" className="form-label">Value proposition:</label>
-                    <input name="value_proposition" type="text" className="form-control" id="value_proposition" aria-describedby="value_proposition" defaultValue={ideaInfo ? ideaInfo.value_proposition : ''} />
-                  </div>
-                  <div className="mb-5">
-                    <label className="form-label" htmlFor="website">External website URL:</label>
-                    <input name="website" type="url" className="form-control" id="website" defaultValue={ideaInfo ? ideaInfo.website : ''}/>
-                  </div>
-                  <div className="mb-5">
-                    <label className="form-label" htmlFor="picture_url">Idea image file path:</label>
-                    <input name="picture_url" type="url" className="form-control" id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
-                  </div>
-                  {ideaInfo ? 
-                    renderPhasesInput()
-                    : 
-                    <div className="mb-5">
-                      <label className="form-label" htmlFor="amount1">Phase 1 goal:</label>
-                      <input name="amount1" type="number" className="form-control" id="amount1" />
+                <div className="col col-wrap">
+                  <form onSubmit={submitIdea}>
+                    <div className="input-wrap">
+                      <label htmlFor="title" className="form-label">Title</label>
+                      <input type="text" name="title" className="form-control" id="title" aria-describedby="title" defaultValue={ideaInfo ? ideaInfo.title : ''}/>
                     </div>
-                }
-                  <div className="mb-3 d-flex justify-content-between align-items-center">
-                    <button className="btn btn-danger" onClick={(e) => props.setOpenIdeaForm(false)}>CANCEL</button>
-                    <button type="submit" className="btn btn-primary">SUBMIT</button>
-                  </div>
-                </form>
+                    <div className="input-wrap textarea-wrap">
+                      <label className="form-label" htmlFor="excerpt">Excerpt</label>
+                      <textarea name="excerpt" className="form-control" id="excerpt" rows="3" defaultValue={ideaInfo ? ideaInfo.excerpt : ''}></textarea>
+                    </div>
+                    <div className="input-wrap textarea-wrap">
+                      <label className="form-label" htmlFor="description">Description</label>
+                      <textarea name="description" className="form-control" id="description" rows="3" defaultValue={ideaInfo ? ideaInfo.description : ''}></textarea>
+                    </div>
+                    {/* <div className="input-wrap">
+                      <label htmlFor="investment_goal" className="form-label">Investment goal:</label>
+                      <input name="investment_goal" type="number" className="form-control" id="investment_goal" aria-describedby="investment_goal" />
+                    </div> */}
+                    <div className="input-wrap">
+                      <label htmlFor="team" className="form-label">Team</label>
+                      <input name="team" type="text" className="form-control" id="team" aria-describedby="team" defaultValue={ideaInfo ? ideaInfo.team : ''} />
+                    </div>
+                    <div className="input-wrap">
+                      <label htmlFor="tags" className="form-label">Tags <span>(divide by comma)</span></label>
+                      <input name="tags" type="text" className="form-control" id="tags" aria-describedby="tags" defaultValue={ideaInfo ? ideaInfo.tags.join(',') : ''} />
+                    </div>
+                    <div className="input-wrap">
+                      <label htmlFor="competitors" className="form-label">Competitors</label>
+                      <input name="competitors" type="text" className="form-control" id="competitors" aria-describedby="competitors" defaultValue={ideaInfo ? ideaInfo.competitors.join(',') : ''} />
+                    </div>
+                    <div className="input-wrap">
+                      <label htmlFor="value_proposition" className="form-label">Value proposition</label>
+                      <input name="value_proposition" type="text" className="form-control" id="value_proposition" aria-describedby="value_proposition" defaultValue={ideaInfo ? ideaInfo.value_proposition : ''} />
+                    </div>
+                    <div className="input-wrap">
+                      <label className="form-label" htmlFor="website">External website URL</label>
+                      <input name="website" type="url" className="form-control" id="website" defaultValue={ideaInfo ? ideaInfo.website : ''}/>
+                    </div>
+                    <div className="input-wrap">
+                      <label className="form-label" htmlFor="picture_url">Idea image file path</label>
+                      <input name="picture_url" type="url" className="form-control" id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
+                    </div>
+                    <h3 className="form-header">Phases</h3>
+                    <div className="phases-wrap">
+                    {ideaInfo ? 
+                      renderPhasesInput()
+                      : 
+                      <div className="phase-wrap">
+                        <div className="input-wrap">
+                          <label className="form-label" htmlFor="amount1">Phase 1 goal</label>
+                          <input name="amount1" type="number" className="form-control" id="amount1" />
+                        </div>
+                      </div> 
+                    }
+                    </div>
+                    <div className="d-flex justify-content-start align-items-center submit-wrap">
+                      <button type="submit" className="submit-idea-btn">SUBMIT</button>
+                      <button className="close-btn" onClick={(e) => props.setOpenIdeaForm(false)}>CANCEL</button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
