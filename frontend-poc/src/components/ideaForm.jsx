@@ -252,16 +252,16 @@ function IdeaForm(props) {
                 <div className="col col-wrap">
                   <form onSubmit={submitIdea}>
                     <div className="input-wrap">
-                      <label htmlFor="title" className="form-label">Title</label>
-                      <input type="text" name="title" className="form-control" id="title" aria-describedby="title" defaultValue={ideaInfo ? ideaInfo.title : ''}/>
+                      <label htmlFor="title" className="form-label">Title* <span>(max 140 characters)</span></label>
+                      <input type="text" name="title" required className="form-control" id="title" aria-describedby="title" maxLength={140} defaultValue={ideaInfo ? ideaInfo.title : ''}/>
                     </div>
                     <div className="input-wrap textarea-wrap">
-                      <label className="form-label" htmlFor="excerpt">Excerpt</label>
-                      <textarea name="excerpt" className="form-control" id="excerpt" rows="3" defaultValue={ideaInfo ? ideaInfo.excerpt : ''}></textarea>
+                      <label className="form-label" htmlFor="excerpt">Excerpt* <span>(max 210 characters)</span></label>
+                      <textarea name="excerpt" className="form-control" required id="excerpt" rows="3" maxLength={210} defaultValue={ideaInfo ? ideaInfo.excerpt : ''}></textarea>
                     </div>
                     <div className="input-wrap textarea-wrap">
-                      <label className="form-label" htmlFor="description">Description</label>
-                      <textarea name="description" className="form-control" id="description" rows="3" defaultValue={ideaInfo ? ideaInfo.description : ''}></textarea>
+                      <label className="form-label" htmlFor="description">Description*</label>
+                      <textarea name="description" className="form-control" required id="description" rows="3" defaultValue={ideaInfo ? ideaInfo.description : ''}></textarea>
                     </div>
                     {/* <div className="input-wrap">
                       <label htmlFor="investment_goal" className="form-label">Investment goal:</label>
@@ -298,8 +298,8 @@ function IdeaForm(props) {
                       : 
                       <div className="phase-wrap">
                         <div className="input-wrap">
-                          <label className="form-label" htmlFor="amount1">Phase 1 goal</label>
-                          <input name="amount1" type="number" className="form-control" id="amount1" />
+                          <label className="form-label" htmlFor="amount1">Phase 1 goal*</label>
+                          <input name="amount1" type="number" required className="form-control" id="amount1" />
                         </div>
                       </div> 
                     }
