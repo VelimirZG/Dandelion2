@@ -1,0 +1,46 @@
+version: '3.5'
+
+services:
+    dandelion-server:
+        container_name: dandelion-server
+        image: dandelion-server:0.1
+        build: 
+            context: ./server
+            dockerfile: Dockerfile
+        expose:
+            - "9999"
+            - "443"
+        networks: 
+            dandelion-network:
+                aliases:
+                    - dandelion-server
+        volumes:
+            - dandelion-server-volume:/app/public
+    dandelion-database:
+        container_name: dandelion-database
+        build: ./database
+        image: dandelion-database:0.1
+        environment:
+            POSTGRES_PASSWORD: dandelion#654
+            POSTGRES_DB: dandelion
+        expose:
+            - "5432"
+        ports:
+            - "5432:5432"
+        volumes:
+            - dandelion-database-volume:/var/lib/postgresql/data
+            - dandelion-database-backups:/backup/files
+        networks:
+            dandelion-network:
+                aliases:
+                    - dandelion-database
+networks:
+    dandelion-network:
+        name: dandelion-network
+        driver: bridge
+        attachable: true
+
+volumes:
+    dandelion-database-volume:
+    dandelion-database-backups:
+    dandelion-server-volume:
