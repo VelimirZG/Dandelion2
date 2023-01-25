@@ -10,6 +10,8 @@ import Button from 'react-bootstrap/Button';
 import Navbar from "../components/navbar";
 import Popup from '../pages/popup';
 
+import * as math from 'mathjs'
+
 import '../stylesheets/single.scss';
 import Footer from "../components/footer";
 
@@ -21,7 +23,7 @@ const Single = (props) => {
   const ideaId = props.match.params.ideaId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
 
-  let ONE_NEAR= 1000000000000000000000000;
+  const ONE_NEAR= 1000000000000000000000000;
 
   useEffect(() => { 
     getIdea(ideaId).then( idea => {
@@ -51,11 +53,9 @@ const Single = (props) => {
       setCurrentInvValue(parseFloat(currentInvValue).toFixed(2));
       setPopupInfo({open: true, msg: 'Maximum decimal places is 2'});
     }else {
-      // if (currentInvValue.toString().split(".").length > 1){
-      // console.log ('currentInvValue: ', currentInvValue);
-      // console.log('SUM', (currentInvValue * ONE_NEAR));
-      // }
-      invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: parseInt(ideaId)});  
+      let sum = math.chain(currentInvValue).multiply(ONE_NEAR);
+      sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
+      invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});  
     }
   }
 
