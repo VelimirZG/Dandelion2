@@ -24,7 +24,7 @@ const IdeaCard = (props) => {
       let sum;
       if(currentInvValue.toString().split(".").length > 1) {
         sum = ((currentInvValue * 100) * (ONE_NEAR / 100));
-        sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
+        sum = sum.toLocaleString('fullwide', {useGrouping:false})
       }else{
         ONE_NEAR = 1000000000000000000000000n;
         sum = BigInt(currentInvValue) * ONE_NEAR;
