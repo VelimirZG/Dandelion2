@@ -206,11 +206,16 @@ function IdeaForm(props) {
       if(inv.goal_reached) {
         disabled = true;
       }else {
-        if(ideaInfo.investments[i-1].goal_reached) {
-          disabled = false
+        if (i > 0){
+          if(ideaInfo.investments[i-1].goal_reached) {
+            disabled = false
+          }else {
+            disabled = true;
+          } 
         }else {
-          disabled = true;
+          disabled = false;
         }
+        
       }
       
       if(i == 2) {

@@ -7,7 +7,7 @@ import Footer from "../components/footer";
 
 
 
-const Page = () => {
+const Page = () => {//zamijeniti sa imenom stranice Page
 
   return (
     <React.Fragment>
@@ -64,4 +64,4 @@ const Page = () => {
 
 };
 
-export default withRouter(Page);
+export default withRouter(Page);//zamijeniti sa imenom stranice

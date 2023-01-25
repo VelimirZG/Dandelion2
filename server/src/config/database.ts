@@ -7,7 +7,7 @@ import { User } from '../models/userModel';
 export const dbConnection = new DataSource({
   "type": "postgres",
   "host": "127.0.0.1",
-  "port": 5432,
+  "port": 5435,
   "username": "postgres",
   "password": "dandelion#654",
   "database": "dandelion",

@@ -1,6 +1,7 @@
 import { connect, Contract, keyStores, WalletConnection } from 'near-api-js'
 import getConfig from './config'
 
+
 const nearConfig = getConfig('development');
 console.log('CONFIG: ', nearConfig);
 
@@ -92,17 +93,29 @@ export async function get_investment_goal(ideaId){
 export async function invest(data){
   console.log('DATA: ', data);
   let gas = 300000000000000;
-  const invested = await window.contract.invest_in_idea({account_id: data.acc, idea_id: data.ideaId}, gas.toLocaleString('fullwide', {useGrouping:false}) , data.value.toLocaleString('fullwide', {useGrouping:false}));
-  // const invested = await window.contract.invest_in_idea({
-  //     args: {
-  //       account_id: data.acc, 
-  //       idea_id: data.ideaId
-  //     },
-  //     amount: data.value.toLocaleString('fullwide', {useGrouping:false})
-  //   }
-  // );
+  // const invested = await window.contract.invest_in_idea({account_id: data.acc, idea_id: data.ideaId}, gas.toLocaleString('fullwide', {useGrouping:false}) , data.value.toLocaleString('fullwide', {useGrouping:false}));
+  const invested = await window.contract.invest_in_idea({
+      args: {
+        account_id: data.acc, 
+        idea_id: data.ideaId
+      },
+      amount: String(data.value)
+    }
+  );
   return invested;
 }
+
+// export async function invest(data){
+
+//   const invested = await window.contract.invest_in_idea({
+//     account_id: data.acc, 
+//     idea_id: data.ideaId
+//   }, undefined, "10000000000000000000000000");
+//   return invested;
+// }
+
+
+
 
 export async function add_like_to_idea(data){
   console.log('LIKE DATA: ', data);

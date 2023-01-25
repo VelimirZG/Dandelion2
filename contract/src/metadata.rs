@@ -37,8 +37,9 @@ pub struct ProjectPhaseGoals{
     pub amount: Balance,
     pub goal_reached: bool,
     pub phase_start: u64,
-    pub phase_closed: bool,
+    pub phase_closed: bool, //paid
     pub collect_enabled: bool,
+ 
 }
 
 //struct

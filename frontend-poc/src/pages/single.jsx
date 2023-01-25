@@ -21,7 +21,7 @@ const Single = (props) => {
   const ideaId = props.match.params.ideaId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
 
-  const ONE_NEAR= 1000000000000000000000001;
+  let ONE_NEAR= 1000000000000000000000000;
 
   useEffect(() => { 
     getIdea(ideaId).then( idea => {
@@ -47,10 +47,14 @@ const Single = (props) => {
     if(currentInvValue > (idea.goal - idea.sum)) {
       setCurrentInvValue(idea.goal - idea.sum);
       setPopupInfo({open: true, msg: 'You cannot invest more than needed for current phase'});
-    }else if(currentInvValue.toString().split(".")[1].length > 2) {
+    }else if(currentInvValue.toString().split(".").length > 1 && currentInvValue.toString().split(".")[1].length > 2) {
       setCurrentInvValue(parseFloat(currentInvValue).toFixed(2));
       setPopupInfo({open: true, msg: 'Maximum decimal places is 2'});
     }else {
+      // if (currentInvValue.toString().split(".").length > 1){
+      // console.log ('currentInvValue: ', currentInvValue);
+      // console.log('SUM', (currentInvValue * ONE_NEAR));
+      // }
       invest({value: (currentInvValue * ONE_NEAR), acc: accountId, ideaId: parseInt(ideaId)});  
     }
   }
@@ -207,8 +211,8 @@ const Single = (props) => {
                         <p dangerouslySetInnerHTML={{__html: idea.value_proposition.replace(/\n/g, "<br />")}} />
                       </Tab>
                       <Tab eventKey="team" title="Team">
-                        {/* <p>{idea.team}</p> */}
-                        <p>dummy tekst</p>
+                        <p>{idea.team}</p>
+                
                       </Tab>
                     </Tabs>
                   </div>

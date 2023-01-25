@@ -68,19 +68,6 @@ pub(crate) fn transfer_funds(&mut self, idea_id: IdeaId, project_phase: u8) {
 
 
 
-//get all ideas and project phases and return them as a vector
-pub fn get_all_ideas_and_phases(&self) -> Vec<(IdeaId, u8)>{
-    let mut ideas_phases = Vec::new();
-    let ideas = self.ideas.keys_as_vector();
-    for idea_id in ideas.iter(){
-        let idea = self.ideas.get(&idea_id).unwrap();
-        let project_phases = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
-        for goal in project_phases.iter(){
-            ideas_phases.push((idea_id, goal.project_phase));
-        }
-    }
-    ideas_phases
-}
 
 //get time passed
 pub fn time_passed(&self, idea_id: IdeaId, project_phase: u8) -> u64{

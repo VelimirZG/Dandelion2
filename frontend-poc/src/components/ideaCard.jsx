@@ -4,12 +4,13 @@ import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Popup from '../pages/popup';
 
+
 import { invest, add_like_to_idea, ideasCount } from "../assets/near/utils";
 
 const IdeaCard = (props) => {
 
   const [currentInvValue, setCurrentInvValue] = useState(0.2);
-  const ONE_NEAR= 1000000000000000000000001;
+  const ONE_NEAR= 1000000000000000000000000n;
   const accountId = window.accountId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
   const investOptions = [0.1,0.2,0.5,1,2,3,5,10,15,20];
@@ -19,7 +20,7 @@ const IdeaCard = (props) => {
     
     if(accountId) {
       const ideaId = event.target.getAttribute('data-idea');
-      invest({value: currentInvValue * ONE_NEAR, acc: accountId, ideaId: parseInt(ideaId)});
+      invest({value: BigInt(currentInvValue) * ONE_NEAR, acc: accountId, ideaId: parseInt(ideaId)});
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to invest into the idea'});
     }

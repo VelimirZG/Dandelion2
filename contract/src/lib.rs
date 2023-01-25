@@ -34,6 +34,7 @@ pub struct Contract {
     pub ideas: UnorderedMap<IdeaId, IdeaMetadata>,
     pub investment: UnorderedMap<InvestmentId, InvestmentMetadata>,
     pub goals:UnorderedMap<IdeaId,Vec<ProjectPhaseGoals>>,   
+
 }
 
 
@@ -132,22 +133,42 @@ pub fn get_amount_by_project_phase(&self, idea_id: IdeaId, project_phase: u8) ->
 
 
 
+// //this is used to regularly check if the goal has expried
+// pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
+//     let ideas_phases = self.get_all_ideas_and_phases();
+//     for idea_phase in ideas_phases.iter().skip(from_index).take(limit) {
+        
+//         let time_passed = self.time_passed(idea_phase.0, idea_phase.1);
+//     let goal_reached = self.get_goal_reached(idea_phase.0, idea_phase.1);
+//     let phase_closed = self.get_phase_closed(idea_phase.0, idea_phase.1);
+//     if time_passed > 259200000000 && goal_reached == true && phase_closed == false{
+//         log!("time passed and goal reached and phase not closed");
+//         self.transfer_funds(idea_phase.0, idea_phase.1);
+//         self.set_phase_closed(idea_phase.0, idea_phase.1);
+        
+//     }
+//     else if time_passed > 259200000000 && goal_reached == false{
+//         log!("time passed and goal not reached");
+//         self.return_to_investors(idea_phase.0, idea_phase.1);
+//         self.set_phase_closed(idea_phase.0, idea_phase.1);
+        
+//     }else if time_passed < 259200000000{
+//         log!("time not passed");
+//     }
+//     }
+// }
+
 //this is used to regularly check if the goal has expried
 pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
     let ideas_phases = self.get_all_ideas_and_phases();
     for idea_phase in ideas_phases.iter().skip(from_index).take(limit) {
         
-        let time_passed = self.time_passed(idea_phase.0, idea_phase.1);
+    let time_passed = self.time_passed(idea_phase.0, idea_phase.1);
     let goal_reached = self.get_goal_reached(idea_phase.0, idea_phase.1);
     let phase_closed = self.get_phase_closed(idea_phase.0, idea_phase.1);
-    if time_passed > 259200000000 && goal_reached == true && phase_closed == false{
-        log!("time passed and goal reached and phase not closed");
-        self.transfer_funds(idea_phase.0, idea_phase.1);
-        self.set_phase_closed(idea_phase.0, idea_phase.1);
-        
-    }
-    else if time_passed > 259200000000 && goal_reached == false{
+    if time_passed > 259200000000 && goal_reached == false{
         log!("time passed and goal not reached");
+        log!("idea id: {} and phase: {} has been closed wihtout reaching goal", idea_phase.0, idea_phase.1);
         self.return_to_investors(idea_phase.0, idea_phase.1);
         self.set_phase_closed(idea_phase.0, idea_phase.1);
         
@@ -156,6 +177,42 @@ pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
     }
     }
 }
+
+//refactor upper function without pagination
+pub fn check_date_all(&mut self) {
+    let ideas_phases = self.get_all_ideas_and_phases();
+    for idea_phase in ideas_phases.iter() {
+        
+    let time_passed = self.time_passed(idea_phase.0, idea_phase.1);
+    let goal_reached = self.get_goal_reached(idea_phase.0, idea_phase.1);
+    //let phase_closed = self.get_phase_closed(idea_phase.0, idea_phase.1);
+    if time_passed > 259200000000 && goal_reached == false{
+        log!("time passed and goal not reached");
+        log!("idea id: {} and phase: {} has been closed wihtout reaching goal", idea_phase.0, idea_phase.1);
+        self.return_to_investors(idea_phase.0, idea_phase.1);
+        self.set_phase_closed(idea_phase.0, idea_phase.1);
+        
+    }else if time_passed < 259200000000{
+        log!("time not passed");
+    }
+    }
+}
+
+//get all ideas and project phases and return them as a vector
+pub fn get_all_ideas_and_phases(&self) -> Vec<(IdeaId, u8)>{
+    let mut ideas_phases = Vec::new();
+    let ideas = self.ideas.keys_as_vector();
+    for idea_id in ideas.iter(){
+        let idea = self.ideas.get(&idea_id).unwrap();
+        let project_phases = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+        for goal in project_phases.iter(){
+            ideas_phases.push((idea_id, goal.project_phase));
+        }
+    }
+    ideas_phases
+}
+
+
 
     // //get all the ideas for owner id and call get_sum_of_amount for each idea - use pagination
     // pub fn get_sum_of_amount_for_owner(&self, owner_id: AccountId, from_index: u64, limit: u64) -> u128{

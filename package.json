@@ -16,5 +16,7 @@
   "devDependencies": {
     "near-cli": "^3.3.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bignumber.js": "^9.1.1"
+  }
 }
