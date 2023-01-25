@@ -79,6 +79,12 @@ impl Contract {
 
     }
 
+    //convert near to yocto
+    pub fn near_to_yocto(&self, near: f64) -> u128 {
+        let near = near as u128;
+        near * ONE_NEAR
+    }
+
 
 
 

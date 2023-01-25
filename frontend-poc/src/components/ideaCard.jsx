@@ -33,7 +33,7 @@ const IdeaCard = (props) => {
       console.log(ONE_NEAR);
       console.log(currentInvValue);
       console.log(sum);
-      // invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});
+      invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to invest into the idea'});
     }
