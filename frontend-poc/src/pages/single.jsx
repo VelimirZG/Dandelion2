@@ -23,7 +23,7 @@ const Single = (props) => {
   const ideaId = props.match.params.ideaId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
 
-  const ONE_NEAR= 1000000000000000000000000;
+  let ONE_NEAR= 1000000000000000000000000;
 
   useEffect(() => { 
     getIdea(ideaId).then( idea => {
@@ -53,8 +53,15 @@ const Single = (props) => {
       setCurrentInvValue(parseFloat(currentInvValue).toFixed(2));
       setPopupInfo({open: true, msg: 'Maximum decimal places is 2'});
     }else {
-      let sum = math.chain(currentInvValue).multiply(ONE_NEAR);
-      sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
+      let sum;
+      if(currentInvValue.toString().split(".").length > 1) {
+        sum = ((currentInvValue * 100) * (ONE_NEAR / 100));
+        sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
+      }else{
+        ONE_NEAR = 1000000000000000000000000n;
+        sum = BigInt(currentInvValue) * ONE_NEAR;
+        sum = sum.toLocaleString('fullwide', {useGrouping:false})
+      }
       invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});  
     }
   }

@@ -9,20 +9,31 @@ import * as math from 'mathjs';
 
 const IdeaCard = (props) => {
 
-  const [currentInvValue, setCurrentInvValue] = useState(0.2);
-  const ONE_NEAR= 1000000000000000000000000n;
+  const [currentInvValue, setCurrentInvValue] = useState(0.1);
   const accountId = window.accountId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
   const investOptions = [0.1,0.2,0.5,1,2,3,5,10,15,20];
   const isOnProfile = props.onProfile;
 
+  let ONE_NEAR= 1000000000000000000000000;
+
   function investInIdea(event) {
     
     if(accountId) {
       const ideaId = event.target.getAttribute('data-idea');
-      let sum = math.chain(currentInvValue).multiply(ONE_NEAR);
-      sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
-      invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});
+      let sum;
+      if(currentInvValue.toString().split(".").length > 1) {
+        sum = ((currentInvValue * 100) * (ONE_NEAR / 100));
+        sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
+      }else{
+        ONE_NEAR = 1000000000000000000000000n;
+        sum = BigInt(currentInvValue) * ONE_NEAR;
+        sum = sum.toLocaleString('fullwide', {useGrouping:false})
+      }
+      console.log(ONE_NEAR);
+      console.log(currentInvValue);
+      console.log(sum);
+      // invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to invest into the idea'});
     }
