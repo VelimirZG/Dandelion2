@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Popup from '../pages/popup';
-
-
 import { invest, add_like_to_idea, ideasCount } from "../assets/near/utils";
+
+import * as math from 'mathjs';
 
 const IdeaCard = (props) => {
 
@@ -20,7 +20,9 @@ const IdeaCard = (props) => {
     
     if(accountId) {
       const ideaId = event.target.getAttribute('data-idea');
-      invest({value: BigInt(currentInvValue) * ONE_NEAR, acc: accountId, ideaId: parseInt(ideaId)});
+      let sum = math.chain(currentInvValue).multiply(ONE_NEAR);
+      sum = sum.value.toLocaleString('fullwide', {useGrouping:false})
+      invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to invest into the idea'});
     }
