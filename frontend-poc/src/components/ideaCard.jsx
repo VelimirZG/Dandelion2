@@ -92,11 +92,11 @@ const IdeaCard = (props) => {
                           <div className="info-raised-text">
                             <p className="">Raised</p>
                             <div className="stat-wrap">
-                              <span className="out-of ms-1">{item.sum} /</span> <span className="out-of-total">{item.amount}</span>
+                              <span className="out-of ms-1">{item.sum} /</span> <span className="out-of-total">{item.goal_amount}</span>
                             </div>
                           </div>
                           <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width: ((100 * item.sum) / item.amount ) + '%', background: "linear-gradient(142.91deg, #F9ED32 -54.28%, #E8A523 -12.42%, #CE225B 48.56%, #693E98 100%)" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div className="progress-bar" style={{ width: ((100 * item.sum) / item.goal_amount ) + '%', background: "linear-gradient(142.91deg, #F9ED32 -54.28%, #E8A523 -12.42%, #CE225B 48.56%, #693E98 100%)" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                           </div>
                         </div>
                         {
@@ -106,7 +106,7 @@ const IdeaCard = (props) => {
                               <select className="form-select" defaultValue={0.1} style={{width: '30%'}} aria-label="Default select example" onChange={(e) => setCurrentInvValue(e.target.value)}>
                                 {
                                   investOptions.map((option) => {
-                                    if(option < (item.amount - item.sum)) {
+                                    if(option < (item.goal_amount - item.sum)) {
                                       return (
                                         <option value={option}>{option}</option>
                                       )

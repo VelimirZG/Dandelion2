@@ -56,7 +56,7 @@ const Profile = (props) => {
     })
 
     count_phases_and_ideas_by_investor_id(accountId).then((phases) => {
-      setInvPhases(phases);
+      setInvPhases(phases.join('/'));
     })
     investorIdeas();
   }, [] )
@@ -162,7 +162,7 @@ const Profile = (props) => {
                   <div className="card">
                     <div className="card-content">
                       <h3 className="card-title near-collected">{investment}</h3>
-                      <p  className="card-subtitle">NEAR COLLECTED</p>
+                      <p  className="card-subtitle">NEAR INVESTED</p>
                     </div>
                   </div>
                 </div>
@@ -170,7 +170,7 @@ const Profile = (props) => {
                   <div className="card">
                     <div className="card-content">
                       <h3 className="card-title supporters">{ideaNumber}</h3>
-                      <p className="card-subtitle">TOTAL SUPPORTERS</p>
+                      <p className="card-subtitle">TOTAL SUPPORTED</p>
                     </div>
                   </div>
                 </div>

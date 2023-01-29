@@ -5,11 +5,11 @@ use crate::*;
 #[serde(crate = "near_sdk::serde")]
 #[derive(Debug, Clone)]
 pub struct IdeaMetadata {
-    pub title: Option<String>, // ex. "Teleportal" or "Future bank"
+    pub title: Option<String>, 
     pub excerpt: Option<String>,
-    pub description: Option<String>, // free-form description
+    pub description: Option<String>, 
     pub competitors: Option<Vec<String>>,
-    pub value_proposition: Option<String>, // unique value proposition
+    pub value_proposition: Option<String>, 
     pub tags:Option<Vec<String>>,
     pub team:Option<String>, 
     pub picture_url: Option<String>,
@@ -34,12 +34,12 @@ pub struct Team {
 pub struct ProjectPhaseGoals{
     pub idea_id: IdeaId,
     pub project_phase: u8,
-    pub amount: Balance,
+    pub goal_amount: Balance,
     pub goal_reached: bool,
     pub phase_start: u64,
-    pub phase_closed: bool, //paid
+    pub phase_paid: bool, //paid
     pub collect_enabled: bool,
- 
+    pub active: bool,
 }
 
 //struct
@@ -61,7 +61,7 @@ pub struct InvestmentMetadata{
 #[derive(Debug)]
 pub struct JsonIdea {
     pub idea_id: IdeaId,
-    pub title: Option<String>, // ex. "Teleportal" or "Future bank"
+    pub title: Option<String>, 
     pub excerpt: Option<String>,
     pub description: Option<String>, // free-form description
     pub competitors: Option<Vec<String>>,
@@ -72,7 +72,7 @@ pub struct JsonIdea {
     pub owner_id: AccountId,
     pub website: Option<String>,
     pub project_phase: u8,
-    pub amount: Balance,
+    pub goal_amount: Balance,
     pub sum: f64,
     pub goal_reached: bool,
     pub phase_start: u64,
@@ -81,13 +81,13 @@ pub struct JsonIdea {
     
 }
 
-//The Json idea with all the data from goals that will be returned from view calls, goals should be reurned as a vector
+//The Json idea with all the data from goals that will be returned from view calls, goals should be returned as a vector
 #[derive(Serialize, Deserialize)]
 #[serde(crate="near_sdk::serde")]
 #[derive(Debug)]
 pub struct JsonIdeaWithGoals{
     pub idea_id: IdeaId,
-    pub title: Option<String>, // ex. "Teleportal" or "Future bank"
+    pub title: Option<String>, 
     pub excerpt: Option<String>,
     pub description: Option<String>, // free-form description
     pub competitors: Option<Vec<String>>,
@@ -101,14 +101,14 @@ pub struct JsonIdeaWithGoals{
    
 }
 
-//The Json idea with all the data from investments that will be returned from view calls, investments should be reurned as a sum for each phase
+//The Json idea with all the data from investments that will be returned from view calls, investments should be returned as a sum for each phase
 #[derive(Serialize, Deserialize)]
 #[serde(crate="near_sdk::serde")]
 #[derive(Debug)]
 
 pub struct JsonIdeaWithInvestments{
     pub idea_id: IdeaId,
-    pub title: Option<String>, // ex. "Teleportal" or "Future bank"
+    pub title: Option<String>, 
     pub excerpt: Option<String>,
     pub description: Option<String>, // free-form description
     pub competitors: Option<Vec<String>>,
@@ -120,6 +120,7 @@ pub struct JsonIdeaWithInvestments{
     pub website: Option<String>,
     pub investments: Vec<Investment>,
     pub investors_count: u64,
+    pub active_phase: Option<u8>
    
 }
 

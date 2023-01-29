@@ -5,6 +5,7 @@ import './index.css';
 import Homepage from "./pages/homepage";
 import Profile from "./pages/profile";
 import Page from "./pages/page";
+import About from "./pages/about";
 
 
 const Main = () => {
@@ -37,6 +38,7 @@ const Main = () => {
       <Route exact path="/:ideaId"  render={() => <Single/> } />
       <Route exact path="/profile"  render={() => <Profile/> } />
       <Route exact path="/page"  render={() => <Page/> } /> 
+      <Route exact path="/about"  render={() => <About/> } /> 
       {/* skopirati liniju i promijeniti page  */}
     </BrowserRouter>
   );

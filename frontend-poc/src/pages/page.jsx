@@ -16,7 +16,7 @@ const Page = () => {//zamijeniti sa imenom stranice Page
       <div className="container page-wrap">
         <div className="row">
           <h1 className="page-title">Pravila privatnosti</h1>
-          <div className="col-12 content-wrap">
+          <div className="col-12 content-wrap">//ubaciti content poslije ovoga
                 <h1>Header 1</h1>
                 <h2>Header 2</h2>
                 <h3>Header 3</h3>
