@@ -138,15 +138,15 @@ const Single = (props) => {
                             let iconPath;
 
                             if (i==0){
-                              title="Idea";
+                              title="Idea validation";
                               color="#F9ED32";
                               iconPath = process.env.PUBLIC_URL + '/phase_1.png';
                             } else if (i==1){
-                              title="Prototype";
+                              title="Proof of concept";
                               color="#EEA91E";
                               iconPath = process.env.PUBLIC_URL + '/phase_2.png';
                             } else if (i==2){
-                              title="MVP";
+                              title="Delivery plan";
                               color="#693E98";
                               iconPath = process.env.PUBLIC_URL + '/phase_3.png';
                             }else{
@@ -165,12 +165,12 @@ const Single = (props) => {
                                     <div className="col-4 col-lg-3 p-0">
                                       <p className="goal-title">{title}</p>
                                       <div className="mobile-goal-wrap">
-                                        <p className="goal-goal">{investment.goal} st</p>
+                                        <p className="goal-goal">{investment.goal} </p>
                                         <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
                                       </div>
                                     </div>
                                     <div className="col-8 col-lg-9 list-item-wrap p-0">
-                                      <p className="goal-goal">{investment.goal} st</p>
+                                      <p className="goal-goal">{investment.goal} </p>
                                       <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
                                       {
                                         investment.sum == investment.goal ? <Button className="status-btn me-2" >COMPLETED</Button> : <Button className="status-btn me-2" >IN PROGRESS</Button>

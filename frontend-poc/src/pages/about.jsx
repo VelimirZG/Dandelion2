@@ -25,7 +25,7 @@ const About = () => {//zamijeniti sa imenom stranice Page
 
 <h2>THE NEXT BIG THING IN THE BLOCKCHAIN SPACE!</h2>
 
-<p>We are certain that this unique &ldquo;idea-only-based&rdquo; approach will foster immense creativity and encourage investment that will nurture fragile ideas and bring them to life.</p>
+<p>We are certain that this unique &ldquo;idea-based&rdquo; approach will foster immense creativity and encourage investment that will nurture fragile ideas and bring them to life.</p>
 
 <p>As a result, we can hardly wait to see the impact of funded ideas</p>
 

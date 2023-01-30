@@ -6,6 +6,7 @@ import Homepage from "./pages/homepage";
 import Profile from "./pages/profile";
 import Page from "./pages/page";
 import About from "./pages/about";
+import How from "./pages/how_it_works";
 
 
 const Main = () => {
@@ -39,6 +40,7 @@ const Main = () => {
       <Route exact path="/profile"  render={() => <Profile/> } />
       <Route exact path="/page"  render={() => <Page/> } /> 
       <Route exact path="/about"  render={() => <About/> } /> 
+      <Route exact path="/how"  render={() => <How/> } />
       {/* skopirati liniju i promijeniti page  */}
     </BrowserRouter>
   );

@@ -179,25 +179,7 @@ pub fn set_phase_paid(&mut self, idea_id: IdeaId, project_phase: u8){
 }
 
 
-// //this is used to regularly check if the goal has expried -TODO DODATI AKO JE ACTIVE
-// pub fn check_date_all_pagination(&mut self, from_index: usize, limit: usize) {
-//     let ideas_phases = self.get_all_ideas_and_phases();
-//     for idea_phase in ideas_phases.iter().skip(from_index).take(limit) {
-        
-//     let time_passed = self.time_passed(idea_phase.0, idea_phase.1);
-//     let goal_reached = self.get_goal_reached(idea_phase.0, idea_phase.1);
-//     let phase_closed = self.get_phase_closed(idea_phase.0, idea_phase.1);
-//     if time_passed > 259200000000 && goal_reached == false && active == true{
-//         log!("time passed and goal not reached");
-//         log!("idea id: {} and phase: {} has been closed wihtout reaching goal", idea_phase.0, idea_phase.1);
-//         self.return_to_investors(idea_phase.0, idea_phase.1);
-//         self.set_phase_closed(idea_phase.0, idea_phase.1);
-        
-//     }else if time_passed < 259200000000{
-//         log!("time not passed");
-//     }
-//     }
-// }
+
 
 //refactor upper function without pagination
 pub fn check_date_all(&mut self) {
@@ -221,8 +203,6 @@ pub fn check_date_all(&mut self) {
 }
 
 
-
-
 //return money to investors
 pub fn return_to_investors(&mut self, idea_id: IdeaId, project_phase: u8){
     //assert that caller of this function is contract owner
@@ -239,10 +219,87 @@ pub fn return_to_investors(&mut self, idea_id: IdeaId, project_phase: u8){
 
 
 
-
-
-
+//get all the investors and how much they invested by each phase in idea
+pub fn get_investors(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(AccountId, u128)>{
+    let mut investors: Vec<(AccountId, u128)> = Vec::new();
+    let investments = self.investment.keys_as_vector();
+    for investment_id in investments.iter(){
+        let investment = self.investment.get(&investment_id).unwrap();
+        if investment.idea_id == idea_id && investment.project_phase == project_phase{
+            investors.push((investment.investor_id, (investment.amount) as u128));
+        }
     }
+    investors
+}
+
+//get all the investors and how much they invested by each phase in idea
+pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(AccountId, u128)>{
+    let mut investors: Vec<(AccountId, u128)> = Vec::new();
+    let investments = self.investment.keys_as_vector();
+    for investment_id in investments.iter(){
+        let investment = self.investment.get(&investment_id).unwrap();
+        if investment.idea_id == idea_id && investment.project_phase == project_phase{
+            let mut found = false;
+            for investor in investors.iter_mut(){
+                if investor.0 == investment.investor_id{
+                    investor.1 += investment.amount;
+                    found = true;
+                }
+            }
+            if !found{
+                investors.push((investment.investor_id, (investment.amount) as u128));
+            }
+        }
+    }
+    investors
+
+        }
+
+        //get amount for each investor(from get investor sum) and calculate his share
+        pub fn get_investors_share(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(AccountId, u128)>{
+            let mut investors: Vec<(AccountId, u128)> = Vec::new();
+            let investments = self.investment.keys_as_vector();
+            for investment_id in investments.iter(){
+                let investment = self.investment.get(&investment_id).unwrap();
+                if investment.idea_id == idea_id && investment.project_phase == project_phase{
+                    let mut found = false;
+                    for investor in investors.iter_mut(){
+                        log!("investor: {:?} amount: {}", investor, investment.amount);
+                        if investor.0 == investment.investor_id{
+                            investor.1 += investment.amount;
+                            found = true;
+                        }
+                    }
+                    if !found{
+                        log!("Ušao je, investor: {:?} amount: {}", investment.investor_id, investment.amount);
+                        investors.push((investment.investor_id, (investment.amount) as u128));
+                        // log!("investor: {:?} amount: {}", investors, investment.amount)
+                    }
+                }
+            }
+            let mut investors_share: Vec<(AccountId, u128)> = Vec::new();
+            let goal = self.get_goal(idea_id, project_phase);
+            for investor in investors.iter(){
+                let share = (investor.1 * 100) / goal;
+                log!("investor: {} share: {}", investor.0, share);
+                investors_share.push((investor.0.clone(), share));
+            }
+            investors_share
+        }
+
+        pub fn get_goal(&self, idea_id: IdeaId, project_phase: u8) -> u128{
+            let goals = self.goals.get(&idea_id).unwrap();
+            for goal in goals.iter(){
+                if goal.idea_id == idea_id && goal.project_phase == project_phase{
+                    return goal.goal_amount;
+                }
+            }
+            0
+        }
+    }
+
+
+    
     
 
    
