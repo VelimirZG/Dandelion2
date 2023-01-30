@@ -52,7 +52,7 @@ const Homepage = () => {
       }
       console.log(ideas);
     });
-    get_all_ideas_homepage_sorted(index, 1000).then( res => {
+    get_all_ideas_homepage_sorted(0, 6).then( res => {
       console.log('featured ideas: ', res);
       setFeaturedIdeas(res);
     });

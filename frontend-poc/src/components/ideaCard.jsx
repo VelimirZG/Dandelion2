@@ -12,7 +12,7 @@ const IdeaCard = (props) => {
   const [currentInvValue, setCurrentInvValue] = useState(0.1);
   const accountId = window.accountId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
-  const investOptions = [0.1,0.2,0.5,1,2,3,5,10,15,20];
+  const investOptions = [0.1,0.2,0.5,1,2,3,4,5];
   const isOnProfile = props.onProfile;
 
   let ONE_NEAR= 1000000000000000000000000;
@@ -106,7 +106,7 @@ const IdeaCard = (props) => {
                               <select className="form-select" defaultValue={0.1} style={{width: '30%'}} aria-label="Default select example" onChange={(e) => setCurrentInvValue(e.target.value)}>
                                 {
                                   investOptions.map((option) => {
-                                    if(option < (item.goal_amount - item.sum)) {
+                                    if(option <= (item.goal_amount - item.sum)) {
                                       return (
                                         <option value={option}>{option}</option>
                                       )
@@ -125,7 +125,7 @@ const IdeaCard = (props) => {
                               </div>
                               {
                                 !item.goal_reached && 
-                                <Button variant="outline-primary ms-auto tag-btn collect-btn" data-idea={item.idea_id} onClick={(e) => props.collectFunds(e)}>
+                                <Button variant="outline-primary ms-auto tag-btn collect-btn" data-idea={item.idea_id} onClick={(e) => props.collectFunds(item.idea_id)}>
                                   COLLECT
                                 </Button>
                               }

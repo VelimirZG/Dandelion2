@@ -273,28 +273,28 @@ function IdeaForm(props) {
                       <input name="investment_goal" type="number" className="form-control" id="investment_goal" aria-describedby="investment_goal" />
                     </div> */}
                     <div className="input-wrap">
-                      <label htmlFor="team" className="form-label">Team</label>
-                      <input name="team" type="text" className="form-control" id="team" aria-describedby="team" defaultValue={ideaInfo ? ideaInfo.team : ''} />
+                      <label htmlFor="team" className="form-label">Team*</label>
+                      <input name="team" type="text" className="form-control" required id="team" aria-describedby="team" defaultValue={ideaInfo ? ideaInfo.team : ''} />
                     </div>
                     <div className="input-wrap">
-                      <label htmlFor="tags" className="form-label">Tags <span>(divide by comma)</span></label>
-                      <input name="tags" type="text" className="form-control" id="tags" aria-describedby="tags" defaultValue={ideaInfo ? ideaInfo.tags.join(',') : ''} />
+                      <label htmlFor="tags" className="form-label">Tags <span>(divide by comma)*</span></label>
+                      <input name="tags" type="text" className="form-control" id="tags" required aria-describedby="tags" defaultValue={ideaInfo ? ideaInfo.tags.join(',') : ''} />
                     </div>
                     <div className="input-wrap">
                       <label htmlFor="competitors" className="form-label">Competitors</label>
                       <input name="competitors" type="text" className="form-control" id="competitors" aria-describedby="competitors" defaultValue={ideaInfo ? ideaInfo.competitors.join(',') : ''} />
                     </div>
                     <div className="input-wrap">
-                      <label htmlFor="value_proposition" className="form-label">Value proposition</label>
-                      <input name="value_proposition" type="text" className="form-control" id="value_proposition" aria-describedby="value_proposition" defaultValue={ideaInfo ? ideaInfo.value_proposition : ''} />
+                      <label htmlFor="value_proposition" className="form-label">Value proposition*</label>
+                      <input name="value_proposition" type="text" className="form-control" required id="value_proposition" aria-describedby="value_proposition" defaultValue={ideaInfo ? ideaInfo.value_proposition : ''} />
                     </div>
                     <div className="input-wrap">
                       <label className="form-label" htmlFor="website">External website URL</label>
                       <input name="website" type="url" className="form-control" id="website" defaultValue={ideaInfo ? ideaInfo.website : ''}/>
                     </div>
                     <div className="input-wrap">
-                      <label className="form-label" htmlFor="picture_url">Idea image file path</label>
-                      <input name="picture_url" type="url" className="form-control" id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
+                      <label className="form-label" htmlFor="picture_url">Idea image file path*</label>
+                      <input name="picture_url" type="url" className="form-control" required id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
                     </div>
                     <h3 className="form-header">Phases</h3>
                     <div className="phases-wrap">

@@ -22,7 +22,7 @@ export async function initContract() {
     // View methods are read only. They don't modify the state, but usually return some value.
     viewMethods: ['count_all_ideas', 'get_all_ideas_homepage_by_investor_id2', 'get_invested_ideas_count', 'count_phases_and_ideas_by_investor_id', 'get_sum_of_amount_for_investor', 'get_all_ideas_homepage_sorted', 'count_phases_and_ideas_by_owner_id', 'get_investor_count_for_owner', 'get_sum_of_amount_for_owner', 'get_all_ideas_homepage_by_owner_id', 'ideas_for_owner', 'get_idea_for_single', 'get_investments', 'total_investments', 'get_all_ideas_homepage', 'get_investment_goal', 'get_investment_for_idea'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['edit_idea', 'create_idea', 'invest_in_idea', 'add_like_to_idea'],
+    changeMethods: ['edit_idea', 'create_idea', 'invest_in_idea', 'add_like_to_idea', 'collect_funds_for_all_phases'],
   })
 }
 
@@ -113,7 +113,10 @@ export async function invest(data){
 //   }, undefined, "10000000000000000000000000");
 //   return invested;
 // }
-
+export async function collect_funds_for_all_phases(data) {
+  const response = await window.contract.collect_funds_for_all_phases({accountId: data.accountId, idea_id: data.ideaId});
+  return response;
+}
 
 
 

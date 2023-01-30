@@ -65,12 +65,12 @@ const FeaturedIdeaCard = (props) => {
                       <p className="card-text">{item.excerpt}</p>
                       <div className="progress-wrap-card mt-3">
                         <div className="progress" style={{backgroundColor: "#313131"}}>
-                            <div className="progress-bar" style={{ width:  ((100 * item.sum) / item.amount ) + '%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div className="progress-bar" style={{ width:  ((100 * item.sum) / item.goal_amount ) + '%', backgroundColor: "#EEA91E" }} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                           </div>
                       </div>
                       <div className="progress-text mt-3">
                         <span className="raised">Raised </span>
-                        <span className="out-of ms-1">{item.sum} /</span> <span className="out-of-total">{item.amount}</span>
+                        <span className="out-of ms-1">{item.sum} /</span> <span className="out-of-total">{item.goal_amount}</span>
                       </div>
                     </div>
                   </div>

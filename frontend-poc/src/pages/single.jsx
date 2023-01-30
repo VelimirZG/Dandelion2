@@ -162,18 +162,21 @@ const Single = (props) => {
                                 </div>
                                 <div className="p-0 info-wrap">
                                   <div className="row m-0 w-100 status-first-part">
-                                    <div className="col-4 col-lg-3 p-0">
+                                    <div className="col-4 col-lg-5 p-0 d-flex justify-content-start align-items-center">
                                       <p className="goal-title">{title}</p>
                                       <div className="mobile-goal-wrap">
                                         <p className="goal-goal">{investment.goal} </p>
                                         <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
                                       </div>
                                     </div>
-                                    <div className="col-8 col-lg-9 list-item-wrap p-0">
+                                    <div className="col-8 col-lg-7 list-item-wrap p-0">
                                       <p className="goal-goal">{investment.goal} </p>
                                       <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
                                       {
-                                        investment.sum == investment.goal ? <Button className="status-btn me-2" >COMPLETED</Button> : <Button className="status-btn me-2" >IN PROGRESS</Button>
+                                        investment.goal == 0  ?
+                                          <Button className="status-btn me-2" >NOT STARTED</Button>
+                                          :
+                                          investment.sum == investment.goal ? <Button className="status-btn me-2" >COMPLETED</Button> : <Button className="status-btn me-2" >IN PROGRESS</Button>
                                       }
                                       <p className="percentage">{percentage} %</p>
                                     </div>
