@@ -17,7 +17,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 const Profile = (props) => {
 
-  const [ideas, setIdeas] = useState(null);
+  const [ideas, setIdeas] = useState([]);
   const accountId = window.accountId;
   const [openIdeaForm, setOpenIdeaForm] = useState(false);
   const [ideaId, setIdeaId] = useState(false);
@@ -28,7 +28,7 @@ const Profile = (props) => {
   const [investment, setInvestment] = useState(0);
   const [ideaNumber, setIdeaNumber] = useState(0);
   const [invPhases, setInvPhases] = useState(0);
-  const [invIdeas, setInvIdeas] = useState(null);
+  const [invIdeas, setInvIdeas] = useState([]);
 
   const [index, setIndex] = useState(0);
   const limit = 20;
@@ -153,7 +153,7 @@ const Profile = (props) => {
               <section className="container-lg projects-wrap pt-5" >
                 <div className="mt-5 d-flex flex-column">
                   {
-                    ideas.length > 1 ?
+                    ideas.length > 0 ?
                       <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                     :
                     <React.Fragment>
@@ -181,7 +181,7 @@ const Profile = (props) => {
                   <div className="card">
                     <div className="card-content">
                       <h3 className="card-title supporters">{ideaNumber}</h3>
-                      <p className="card-subtitle">TOTAL SUPPORTED</p>
+                      <p className="card-subtitle">NUMBER OF INVESTMENTS</p>
                     </div>
                   </div>
                 </div>
@@ -196,7 +196,7 @@ const Profile = (props) => {
               </section>
               <section className="container-lg projects-wrap pt-5" >
                 <div className="mt-5 d-flex flex-column">
-                  {invIdeas.length > 1 ?
+                  {invIdeas.length > 0 ?
                     <IdeaCard ideas={invIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                     : 
                     <React.Fragment>

@@ -14,7 +14,7 @@ const Footer = () => {
             <div className="col-6 col-lg-6 f-menu-1">
               <h6 className="footer-menu-title">About</h6>
               <ul className="footer-menu-ul">
-                <li><a href="#">About us</a></li>
+                <li><a href="./about">About us</a></li>
                 <li><a href="#">Careers</a></li>
                 <li><a href="#">Press</a></li>
                 <li><a href="#">Contacts</a></li>
@@ -44,7 +44,7 @@ const Footer = () => {
         <div className="footer-2">
             <div className="row second-footer">
               <div className="col-12 col-lg-6">
-                <p>Dandelion, 2022. All rights reserved.</p>
+                <p>Dandelion, 2023. All rights reserved.</p>
               </div>
               <div className="col-12 col-lg-6 footer-links">
                 <a href="#">Privacy policy</a>

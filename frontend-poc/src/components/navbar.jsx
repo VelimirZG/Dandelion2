@@ -54,9 +54,9 @@ const Navbar = () => {
         </div>
         <div className="col-sm-12 col-lg-9 header-menu">
           <ul>
-            <li><a href="#">How it works</a></li>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">About</a></li>
+            <li><a href="./how">How it works</a></li>
+            <li><a href="./profile">Dashboard</a></li>
+            <li><a href="./about">About</a></li>
           </ul>
           {
             accountId && 

@@ -62,6 +62,7 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
                     let idea_metadata = idea.clone();
                     let goals_metadata = goal.clone();
                     let near = self.yocto_to_near(investment_amount_sum);
+                    let active= self.has_active_goals(key);
                     ideas_with_active_goals.push(JsonIdea {
                         idea_id: key,
                         title: idea_metadata.title,
@@ -82,6 +83,7 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
                         goal_reached: goals_metadata.goal_reached,
                         phase_start: goals_metadata.phase_start,
                         investors_count: investors_count,
+                        active: active,
                     });
                 }
                 index += 1;
@@ -107,6 +109,7 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
                         let idea_metadata = idea.clone();
                         let goals_metadata = goal.clone();
                         let near = self.yocto_to_near(investment_amount_sum);
+                        let active= self.has_active_goals(key);
                         let new_idea = JsonIdea {
                             idea_id: key,
                             title: idea_metadata.title,
@@ -126,6 +129,7 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
                             goal_reached: goals_metadata.goal_reached,
                             phase_start: goals_metadata.phase_start,
                             investors_count: investors_count,
+                            active: active,
                         };
                         if !ideas_with_active_goals.iter().any(|json_idea| json_idea.idea_id == new_idea.idea_id) {
                             ideas_with_active_goals.push(new_idea);
@@ -148,10 +152,12 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
             if index >= from_index && index < from_index + limit {
                 let idea = self.get_idea_by_id(*idea_id);
                 let goals = self.get_goals_from_idea_id(idea_id.clone()).expect("No goals found for given idea_id");
+                log!("goals: {:?}", goals);
                 let investors_count = self.get_investors_count_by_idea_id(*idea_id);
                 let investment_amount_sum: u128 = self.get_investments_by_idea_id(*idea_id).iter().map(|(_, investment)| investment.amount).sum();
                 let sum_amount = self.get_total_amount_by_idea(idea_id.clone());
                 let near = self.yocto_to_near(investment_amount_sum);
+                let active= self.has_active_goals(*idea_id);
                 ideas.push(JsonIdea{
                     idea_id: *idea_id,
                     title: idea.title,
@@ -171,11 +177,23 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
                     phase_start: goals.phase_start,
                     investors_count: investors_count,
                     collect_enabled: goals.collect_enabled,
+                    active: active,
                 });
             }
             index += 1;
         }
         ideas
+    }
+
+    //check does idea has active goals
+    pub fn has_active_goals(&self, idea_id: u64)->bool{
+        let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
+        for goal in goals.iter(){
+            if goal.active == true{
+                return true;
+            }
+        }
+        false
     }
 
     pub fn get_total_amount_by_idea(&self, idea_id: IdeaId) -> Balance {
@@ -236,7 +254,14 @@ pub fn get_all_ideas_homepage(&self, from_index: usize, limit: usize)->Vec<JsonI
         for (key, goal) in self.goals.iter(){
             if key == idea_id {
                 for goal in goal.iter(){
-                    goals = goal.clone();
+                    if goal.collect_enabled == true{
+                        log!("goal.collect_enabled == true");
+                        goals = goal.clone();
+                        break;
+                    }else{
+                        log!("goal.collect_enabled == false");
+                        goals = goal.clone();
+                    }
                 }
             }
         }
@@ -507,6 +532,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
 
                 let investors_count = self.get_investors_count_by_idea_id(key);
                 let idea_metadata = idea.clone();
+                let active= self.has_active_goals(key.clone());
                 if let Some(goals_metadata) = goals {
                     if index >= from_index && index < from_index + limit {
                         ideas_with_active_goals.push(JsonIdea {
@@ -528,6 +554,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
                             phase_start: goals_metadata.phase_start,
                             investors_count: investors_count,
                             collect_enabled: goals_metadata.collect_enabled,
+                            active: active,
                         });
                     }
                     index += 1;
