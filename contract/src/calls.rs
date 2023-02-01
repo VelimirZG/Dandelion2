@@ -255,37 +255,35 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
 
         }
 
-        //get amount for each investor(from get investor sum) and calculate his share
-        pub fn get_investors_share(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(AccountId, u128)>{
-            let mut investors: Vec<(AccountId, u128)> = Vec::new();
-            let investments = self.investment.keys_as_vector();
-            for investment_id in investments.iter(){
-                let investment = self.investment.get(&investment_id).unwrap();
-                if investment.idea_id == idea_id && investment.project_phase == project_phase{
-                    let mut found = false;
-                    for investor in investors.iter_mut(){
-                        log!("investor: {:?} amount: {}", investor, investment.amount);
-                        if investor.0 == investment.investor_id{
-                            investor.1 += investment.amount;
-                            found = true;
-                        }
-                    }
-                    if !found{
-                        log!("Ušao je, investor: {:?} amount: {}", investment.investor_id, investment.amount);
-                        investors.push((investment.investor_id, (investment.amount) as u128));
-                        // log!("investor: {:?} amount: {}", investors, investment.amount)
-                    }
-                }
+  //get sum of investemnts for idea and phase for one investor
+    pub fn get_investor_sum(&self, idea_id: IdeaId, project_phase: u8, investor_id: AccountId) -> u128{
+        let mut sum: u128 = 0;
+        let investments = self.investment.keys_as_vector();
+        for investment_id in investments.iter(){
+            let investment = self.investment.get(&investment_id).unwrap();
+            if investment.idea_id == idea_id && investment.project_phase == project_phase && investment.investor_id == investor_id{
+                sum += investment.amount;
             }
-            let mut investors_share: Vec<(AccountId, u128)> = Vec::new();
-            let goal = self.get_goal(idea_id, project_phase);
-            for investor in investors.iter(){
-                let share = (investor.1 * 100) / goal;
-                log!("investor: {} share: {}", investor.0, share);
-                investors_share.push((investor.0.clone(), share));
-            }
-            investors_share
         }
+        sum
+
+    }
+
+
+
+//calculate which percentage is result from get_investor_sum and get_goal, retun percentage from 0-100
+    pub fn get_investor_percentage(&self, idea_id: IdeaId, project_phase: u8, investor_id: AccountId) -> f32{
+        let goal = self.get_goal(idea_id, project_phase);
+        let investor_sum = self.get_investor_sum(idea_id, project_phase, investor_id) as f32;
+        let percentage = (investor_sum * 100.00) / ((goal*ONE_NEAR) as f32);
+        percentage
+    }
+
+
+
+        
+
+      
 
         pub fn get_goal(&self, idea_id: IdeaId, project_phase: u8) -> u128{
             let goals = self.goals.get(&idea_id).unwrap();

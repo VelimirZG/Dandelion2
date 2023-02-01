@@ -71,16 +71,18 @@ const Homepage = () => {
           <div className="container">
             <div className="row">
               <div className="col-12 col-lg-6">
-                <h1 className="hero-title"><b className="bold-glow">Invest early</b> in world-class creators solving real problems using <b className="bold-glow">blockchain technology</b></h1>
-                <h2 className="hero-subtitle">Invest in the projects at the earliest stage possible where the opportunities for value creation are highest. Start investing from as low as 0,1        (~0,5$)</h2>
+                {/* <h1 className="hero-title"><b className="bold-glow">Invest early</b> in world-class creators solving real problems using <b className="bold-glow">blockchain technology</b></h1> */}
+                <h1 className="hero-title">Unleash your <b className="bold-glow">Vision,</b>  <b className="bold-glow">Invest</b> in Future: Join the Blockchain Revolution Now!</h1>
+
+                <h2 className="hero-subtitle">Dandelion is home to blockchain and web3 IDEA creators and IDEA investors who together shape the future and change the world!</h2>
               </div>
               <div className="col-12 col-lg-6">
                 <div className="list-wrap list-first-section">
-                  <h3 className="info-title">For <b className="bold-glow">Idea Generators</b></h3>
+                  <h3 className="info-title">For <b className="bold-glow">Creators</b></h3>
                   <ul className="info-list">
-                    <li><p>Receive feedback and financials support at a very early stage - from the idea creation</p></li>
-                    <li><p>Gain attraction and recognition very fast</p></li>
-                    <li><p>Fail proof multiple ideas in short time</p></li>
+                    <li><p>Get the resources you need to bring your ideas to life</p></li>
+                    <li><p>Rapid exposure & recognition of your work</p></li>
+                    <li><p>Discover the potential of multiple ideas with speed and ease</p></li>
                   </ul>
                 </div>
               </div>
@@ -92,9 +94,9 @@ const Homepage = () => {
                 <div className="list-wrap">
                   <h3 className="info-title">For <b className="bold-glow">Investors</b></h3>
                   <ul className="info-list">
-                    <li><p>Receive feedback and financials support at a very early stage - from the idea creation</p></li>
-                    <li><p>Gain attraction and recognition very fast</p></li>
-                    <li><p>Fail proof multiple ideas in short time</p></li>
+                    <li><p>Access a pipeline of cutting-edge ideas and innovations before they take off</p></li>
+                    <li><p>Quickly reap the rewards of your investment</p></li>
+                    <li><p>Diversify investment portfolio by quickly evaluating multiple ideas</p></li>
                   </ul>
                 </div>
               </div>

@@ -402,7 +402,6 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
     let mut ideas:Vec<IdeaId> = Vec::new();
     for (key, goal) in self.goals.iter(){
         for goal in goal.iter(){
-            log!("Checking goal: {:?}", goal);
             if goal.goal_reached == true {
                 let idea = self.ideas.get(&key).expect("Idea not found for given idea_id");
                 log!("Found idea: {:?} for goal: {:?}", idea, goal);
@@ -419,7 +418,6 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         .iter()
         .filter(|(_, investment)| investment.idea_id == *idea_id)
         .collect::<Vec<(u64, InvestmentMetadata)>>();
-        log!("Investments for idea: {:?} are: {:?}", idea_id, investments);
         let mut found_match = false;
         for (_, investment) in investments.iter(){
             if investment.investor_id == investor_id {
@@ -600,6 +598,33 @@ pub fn get_active_phase(&self, idea_id: IdeaId, project_phase: u8) -> bool{
     }
     false
 
+}
+pub fn insert_metadata(&mut self, idea_id: IdeaId, contract_id: AccountId, account_id:AccountId){
+    self.metadata(contract_id.clone(), idea_id);
+    self.total_supply(contract_id.clone(), idea_id);
+    self.balance_of(contract_id, account_id, idea_id);
+
+    
+
+}
+
+//get FTMetadata for idea_id
+pub fn get_ft_metadata(&self, idea_id: IdeaId) -> FTmetadata{
+    let ft_metadata = self.token.get(&idea_id).unwrap();
+    ft_metadata
+}
+
+//insert string into FTmetadata.contract_supply for idea_id
+pub fn insert_contract_supply(&mut self, idea_id: IdeaId, contract_supply: near_sdk::json_types::U128){
+    let mut ft_metadata = self.token.get(&idea_id).unwrap();
+    ft_metadata.contract_supply = Some(u128::from(contract_supply));
+    self.token.insert(&idea_id, &ft_metadata);
+}
+
+pub fn insert_total_supply(&mut self, idea_id: IdeaId, total_supply: near_sdk::json_types::U128){
+    let mut ft_metadata = self.token.get(&idea_id).unwrap();
+    ft_metadata.total_supply = Some(u128::from(total_supply));
+    self.token.insert(&idea_id, &ft_metadata);
 }
 
 }

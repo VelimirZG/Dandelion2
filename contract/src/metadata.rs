@@ -134,3 +134,20 @@ pub struct Investment {
     pub sum: f64,
     pub goal_reached: bool,
 }
+
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+#[derive(Debug, Clone)]
+pub struct FTmetadata{
+    pub name: Option<String>,
+    pub symbol: Option<String>,
+    pub decimals: Option<u8>,
+    pub icon: Option<String>,
+    pub reference: Option<String>,
+    pub reference_hash: Option<String>,
+    pub contract_spec: Option<String>,
+    pub total_supply: Option<u128>,
+    pub contract_supply: Option<u128>,
+}
+
+

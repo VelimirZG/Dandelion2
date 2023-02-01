@@ -37,7 +37,9 @@ pub struct Contract {
     pub ideas: UnorderedMap<IdeaId, IdeaMetadata>,
     pub investment: UnorderedMap<InvestmentId, InvestmentMetadata>,
     pub goals:UnorderedMap<IdeaId,Vec<ProjectPhaseGoals>>,   
+    pub token: UnorderedMap<IdeaId, FTmetadata>, //empty map
     pub other: UnorderedMap<IdeaId, String>, //empty map
+
 
 }
 
@@ -51,6 +53,9 @@ impl Default for Contract{
             investment: UnorderedMap::new(b"i".to_vec()),
             goals: UnorderedMap::new(b"g".to_vec()),
             other: UnorderedMap::new(b"o".to_vec()),
+            token: UnorderedMap::new(b"t".to_vec()),
+        
+
           
         }
     }

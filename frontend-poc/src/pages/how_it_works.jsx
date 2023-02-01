@@ -17,7 +17,7 @@ const How = () => {//zamijeniti sa imenom stranice Page
         <div className="row">
           <h1 className="page-title">How it works?</h1>
           <div className="col-12 content-wrap">
-          <h3>Dandelion is a revolutionary new funding platform that empowers creators and investors to turn their ideas into reality.</h3>
+     
 
 <p><strong>With Dandelion, you can validate your ideas, prove their feasibility, create a detailed delivery plan, and raise the funds you need to bring your project to life.</strong></p>
 
