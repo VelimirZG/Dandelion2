@@ -158,7 +158,7 @@ function IdeaForm(props) {
     formData.append('owner_id', window.accountId);
     console.log('FROM DATA: ', formData.entries());
     
-    let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id'];
+    let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id', 'token_contract'];
     let data = {};
     for (let [key, value] of formData.entries()) {
       if(metadata.includes(key)) {
@@ -297,8 +297,8 @@ function IdeaForm(props) {
                       <input name="picture_url" type="url" className="form-control" required id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
                     </div>
                     <div className="input-wrap">
-                      <label htmlFor="value_proposition" className="form-label">Token contract address*<span>(mandatory before 3. goal)*</span></label>
-                      <input name="value_proposition" type="text" className="form-control" required id="contract" aria-describedby="contract"  />
+                      <label htmlFor="token_contract" className="form-label">Token contract address*<span>(mandatory before 3. goal)*</span></label>
+                      <input name="token_contract" type="text" className="form-control" required id="token_contract" aria-describedby="token_contract" defaultValue={ideaInfo ? ideaInfo.token_contract : ''} />
                     </div>
                     <h3 className="form-header">Phases</h3>
                     <div className="phases-wrap">

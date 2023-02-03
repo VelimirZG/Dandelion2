@@ -129,7 +129,7 @@ impl Contract {
   }
 
   //callback method for total supply
-  pub fn total_supply_callback(&mut self, idea_id:IdeaId) -> U128 {
+  pub fn total_supply_callback(&mut self, idea_id:IdeaId) -> (U128, U128) {
       assert_eq!(
           env::promise_results_count(),
           1,
@@ -138,13 +138,17 @@ impl Contract {
 
       match env::promise_result(0) {
           PromiseResult::NotReady => unreachable!(),
-          PromiseResult::Failed => near_sdk::json_types::U128(0),//"oops!".to_string(),
+          PromiseResult::Failed => (near_sdk::json_types::U128(0),near_sdk::json_types::U128(0)),//"oops!".to_string(),
           PromiseResult::Successful(result) => {
-            let balance:U128=serde_json::from_slice(&result).unwrap();
+            let mut balance:U128=serde_json::from_slice(&result).unwrap();
             log!("balance_json: {:?}", balance);
             self.insert_total_supply(idea_id, balance);
              //let balance=String::from_utf8(result).unwrap();
-             balance
+           //calculate 11% from balance
+              let mut eleven_percent:U128=balance.clone();
+                eleven_percent.0=eleven_percent.0/9;
+                balance.0=balance.0-eleven_percent.0;
+                (balance, eleven_percent)
           }
       }
   }

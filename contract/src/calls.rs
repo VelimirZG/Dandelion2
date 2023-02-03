@@ -55,6 +55,7 @@ impl Contract {
             project_phase,
             investor_id,
             amount,
+            token_received: false,
         };
         self.investment.insert(&investment_id, &investment);
     
@@ -261,7 +262,7 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
         let investments = self.investment.keys_as_vector();
         for investment_id in investments.iter(){
             let investment = self.investment.get(&investment_id).unwrap();
-            if investment.idea_id == idea_id && investment.project_phase == project_phase && investment.investor_id == investor_id{
+            if investment.idea_id == idea_id && investment.project_phase == project_phase && investment.investor_id == investor_id && investment.token_received == false{
                 sum += investment.amount;
             }
         }
@@ -279,7 +280,108 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
         percentage
     }
 
+    // //collect token from only one investor
+    // pub fn collect_token(&mut self, idea_id: IdeaId, project_phase: u8, investor_id: AccountId){
+    //     //assert that caller of this function is contract owner
+    //     assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Only contract owner can call this function.");
+    //     let percentage = self.get_investor_percentage(idea_id, project_phase, investor_id.clone());
+    //     let tokens = (percentage * (self.get_goal(idea_id, project_phase) as f32)) as u128;
+    //     //set all investments from this investor to token_received = true
+    //     let investments = self.investment.keys_as_vector();
+    //     for investment_id in investments.iter(){
+    //         let mut investment = self.investment.get(&investment_id).unwrap();
+    //         if investment.idea_id == idea_id && investment.project_phase == project_phase && investment.investor_id == investor_id{
+    //             investment.token_received = true;
+    //             self.investment.insert(&investment_id, &investment);
+    //         }
+    //     }
+    //     Promise::new(investor_id).transfer(tokens);
+    //     log!("Tokens collected from investor");
+    // }
 
+    pub fn collect_token(&mut self, idea_id: IdeaId, project_phase: u8, investor_id: AccountId){
+        //assert that caller of this function is contract owner
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Only contract owner can call this function.");
+        let percentage = self.get_investor_percentage(idea_id, project_phase, investor_id.clone());
+        let tokens = (percentage * (self.get_goal(idea_id, project_phase) as f32)) as u128;
+        // Collect investments that need to be updated
+        let mut investments_to_update = Vec::new();
+        for investment_id in self.investment.keys_as_vector().iter() {
+            let investment = self.investment.get(&investment_id).unwrap();
+            if investment.idea_id == idea_id && investment.project_phase == project_phase && investment.investor_id == investor_id && investment.token_received == false {
+                let mut investment = investment.clone();
+                investment.token_received = true;
+                investments_to_update.push((investment_id, investment));
+            }
+        }
+        // Update investments
+        for (investment_id, investment) in investments_to_update.iter() {
+            self.investment.insert(investment_id, investment);
+        }
+        //get ft metadata and transfer tokens to investor
+        let contract_id = self.get_token_contract(idea_id).unwrap();
+    
+        let receiver_id = investor_id;
+        let amount = tokens;
+        log!("contract_id: {}, receiver_id{}, amount{}", contract_id, receiver_id, amount);
+        // self.transfer(contract_id, receiver_id, near_sdk::json_types::U128(amount));
+        // log!("Tokens collected from investor");
+    }
+
+  //get token_contract for idea
+    pub fn get_token_contract(&self, idea_id: IdeaId) -> Option<AccountId>{
+        let idea = self.ideas.get(&idea_id).unwrap();
+        idea.token_contract
+       
+    }
+
+
+
+    //refactor upper function to collect token for all phases
+    pub fn collect_token_all_phases(&mut self, idea_id: IdeaId, investor_id: AccountId){
+        //assert that caller of this function is contract owner
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Only contract owner can call this function.");
+        let mut tokens: u128 = 0;
+        for phase in 1..=3{
+            let percentage = self.get_investor_percentage(idea_id, phase, investor_id.clone());
+            tokens += (percentage * (self.get_goal(idea_id, phase) as f32)) as u128;
+            // Collect investments that need to be updated
+            let mut investments_to_update = Vec::new();
+            for investment_id in self.investment.keys_as_vector().iter() {
+                let investment = self.investment.get(&investment_id).unwrap();
+                if investment.idea_id == idea_id && investment.project_phase == phase && investment.investor_id == investor_id && investment.token_received == false {
+                    let mut investment = investment.clone();
+                    investment.token_received = true;
+                    investments_to_update.push((investment_id, investment));
+                }
+            }
+            // Update investments
+            for (investment_id, investment) in investments_to_update.iter() {
+                self.investment.insert(investment_id, investment);
+            }
+        }
+        let contract_id = self.get_token_contract(idea_id).unwrap();
+    
+        let receiver_id = investor_id;
+        let amount = tokens;
+        log!("contract_id: {}, receiver_id{}, amount{}", contract_id, receiver_id, amount);
+        // self.transfer(contract_id, receiver_id, near_sdk::json_types::U128(amount));
+        // log!("Tokens collected from investor");
+    }
+    
+
+// //collect tokens from investors
+//     pub fn collect_tokens(&mut self, idea_id: IdeaId, project_phase: u8){
+//         //assert that caller of this function is contract owner
+//         assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Only contract owner can call this function.");
+//         let investors = self.get_investors(idea_id, project_phase);
+//         for investor in investors.iter(){
+//             let percentage = self.get_investor_percentage(idea_id, project_phase, investor.0);
+//             let tokens = (percentage * (self.get_goal(idea_id, project_phase) as f32)) as u128;
+//             Promise::new(investor.0).transfer(tokens);
+//             log!("Tokens collected from investor");
+//         }
+//     }
 
         
 

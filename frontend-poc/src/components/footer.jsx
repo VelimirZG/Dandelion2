@@ -25,7 +25,7 @@ const Footer = () => {
               <ul className="footer-menu-ul">
                 <li><a href="#">Help center</a></li>
                 <li><a href="#">Our Rules</a></li>
-                <li><a href="#">Forward Funds</a></li>
+                <li><a href="./faq">FAQ</a></li>
                 <li><a href="#">Brand Assets</a></li>
               </ul>
             </div>
