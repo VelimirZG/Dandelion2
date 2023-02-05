@@ -77,6 +77,7 @@
         letter-spacing: 2px;
         color: #FFFFFF;
         text-align: center;
+        min-height: 54px;
       }
     }
   }
@@ -130,6 +131,15 @@
 
   .projects-wrap {
     margin-bottom: 135px;
+    padding-left: 0;
+    padding-right: 0;
+
+    .projects-headline {
+      font-size: 45px;
+    }
+    .projects-description {
+      font-size: 20px;
+    }
   }
 
   .card-content {

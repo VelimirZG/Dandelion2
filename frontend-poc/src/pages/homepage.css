@@ -1,5 +1,5 @@
 .first-section {
-  background-image: url('../../public/background.png');
+  background-image: url('../assets/images/background.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
@@ -50,7 +50,7 @@
 }
 
 .info-list {
-  list-style-image: url('../../public/list-bullet.png');
+  list-style-image: url('../assets/images/list-bullet.png');
   padding-left: 1.2rem;
   margin: 0;
   margin-top: 26px;
@@ -92,7 +92,7 @@
   height: 100%;
 }
 .part-2 {
-  background-image: url('../../public/background-2.png');
+  background-image: url('../assets/images/background-2.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;
@@ -212,7 +212,7 @@
   position: relative;
 }
 .part-2 .projects-wrap::before {
-  background-image: url('../../public/projects.png');
+  background-image: url('../assets/images/projects.png');
   background-size: 100% 100%;
   display: inline-block;
   width: 120%; 
@@ -254,7 +254,7 @@
   position: relative;
 }
 .projects-wrap .card-title::before {
-  background-image: url('../../public/icon-bulb.png');
+  background-image: url('../assets/images/icon-bulb.png');
   content: "";
   display: inline-block;
   cursor: pointer;

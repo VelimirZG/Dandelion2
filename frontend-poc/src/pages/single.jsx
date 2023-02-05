@@ -10,10 +10,11 @@ import Button from 'react-bootstrap/Button';
 import Navbar from "../components/navbar";
 import Popup from '../pages/popup';
 
-import * as math from 'mathjs'
+import * as nearAPI from "near-api-js";
 
 import '../stylesheets/single.scss';
 import Footer from "../components/footer";
+import IdeaForm from "../components/ideaForm";
 
 const Single = (props) => {
 
@@ -22,8 +23,9 @@ const Single = (props) => {
   const [currentInvValue, setCurrentInvValue] = useState(0);
   const ideaId = props.match.params.ideaId;
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
-
-  let ONE_NEAR= 1000000000000000000000000;
+  const { utils } = nearAPI;
+  const [openIdeaForm, setOpenIdeaForm] = useState(false);
+  
 
   useEffect(() => { 
     getIdea(ideaId).then( idea => {
@@ -32,6 +34,10 @@ const Single = (props) => {
       
     });
   }, [] )
+
+  function editIdea(event) {
+    setOpenIdeaForm(true);
+  }
   
   function calculateIdeaStatus(idea) {
     let sum =0, goal =0;
@@ -53,16 +59,8 @@ const Single = (props) => {
       setCurrentInvValue(parseFloat(currentInvValue).toFixed(2));
       setPopupInfo({open: true, msg: 'Maximum decimal places is 2'});
     }else {
-      let sum;
-      if(currentInvValue.toString().split(".").length > 1) {
-        sum = ((currentInvValue * 100) * (ONE_NEAR / 100));
-        sum = sum.toLocaleString('fullwide', {useGrouping:false})
-      }else{
-        ONE_NEAR = 1000000000000000000000000n;
-        sum = BigInt(currentInvValue) * ONE_NEAR;
-        sum = sum.toLocaleString('fullwide', {useGrouping:false})
-      }
-      invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});  
+      const amountInYocto = utils.format.parseNearAmount(currentInvValue);
+      invest({value: amountInYocto, acc: accountId, ideaId: parseInt(ideaId)});  
     }
   }
 
@@ -75,13 +73,20 @@ const Single = (props) => {
         <Navbar />
         <div className="container main-wrap">
           <div className="row mt-5 first-part-wrap">
-            {/* <div className="col-12 col-lg-7 d-flex flex-column "> */}
               <div className="row title-wrap">
                 <div className="col-12 col-lg-7 d-flex flex-column">
                   <div className="row text-wrap w-100 m-0 mobile-padding">
                     <div className="col-12 col-lg-8">
                       <h1 className="idea-title">{idea.title}</h1>
                     </div>
+                    {
+                      idea.owner_id === accountId && 
+                      <div className="col-12 col-lg-4">
+                        <Button variant="outline-primary ms-auto tag-btn edit-btn" data-idea={idea.idea_id} onClick={(e) => editIdea(e)}>
+                          EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
+                        </Button>
+                      </div>
+                    }
                   </div>
                   <div className="row d-flex justify-content-center align-items-center w-100 m-0">
                     <div className="col-12 col-lg-9 tag-wrap">
@@ -107,16 +112,11 @@ const Single = (props) => {
                     <div className="card-body">
                       <h6 className="card-subtitle">TOTAL DEPOSITED</h6>
                       <h3 className="current-status">{idea.sum} <img src={`${process.env.PUBLIC_URL}/near-logo-single.png`} /></h3>
-                      {/* <p className="cash-amount">~ $842,996.247 USD</p> */}
                       <div className="row info-wrap">
                         <div className="col">
                           <h4 className="status-title">SUPPORTERS</h4>
                           <h5 className="status-text mobile-align-left"><b>{idea.investors_count}</b></h5>
                         </div>
-                        {/* <div className="col">
-                          <p className="text-muted">SUPPORTERS</p>
-                          <h4 className="fw-bold">86</h4>
-                        </div> */}
                         <div className="col">
                           <h4 className="status-title mobile-align-right">STATUS</h4>
                           <h5 className="status-text light-text">
@@ -162,7 +162,7 @@ const Single = (props) => {
                                 </div>
                                 <div className="p-0 info-wrap">
                                   <div className="row m-0 w-100 status-first-part">
-                                    <div className="col-4 col-lg-5 p-0 d-flex justify-content-start align-items-center">
+                                    <div className="col-4 col-lg-5 p-0 d-flex justify-content-between align-items-center">
                                       <p className="goal-title">{title}</p>
                                       <div className="mobile-goal-wrap">
                                         <p className="goal-goal">{investment.goal} </p>
@@ -174,9 +174,9 @@ const Single = (props) => {
                                       <img className="w-100 idea-img" src={`${process.env.PUBLIC_URL}/near-logo-small.png`} alt="" />
                                       {
                                         investment.goal == 0  ?
-                                          <Button className="status-btn me-2" >NOT STARTED</Button>
+                                          <Button disabled className="status-btn me-2" >NOT STARTED</Button>
                                           :
-                                          investment.sum == investment.goal ? <Button className="status-btn me-2" >COMPLETED</Button> : <Button className="status-btn me-2" >IN PROGRESS</Button>
+                                          investment.sum == investment.goal ? <Button disabled className="status-btn me-2" >COMPLETED</Button> : <Button disabled className="status-btn me-2" >IN PROGRESS</Button>
                                       }
                                       <p className="percentage">{percentage} %</p>
                                     </div>
@@ -267,6 +267,7 @@ const Single = (props) => {
       popupInfo.open &&
         <Popup msg={popupInfo.msg} setPopupInfo={setPopupInfo} />
       }
+      { openIdeaForm && <IdeaForm setOpenIdeaForm={setOpenIdeaForm} ideaId={ideaId} /> }
       <Footer />
     </React.Fragment>
     );
