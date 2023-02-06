@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { get_all_ideas_homepage_by_investor_id2, get_invested_ideas_count, count_phases_and_ideas_by_investor_id, get_sum_of_amount_for_investor, get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner, collect_funds_for_all_phases } from "../assets/near/utils";
+import { get_all_active_ideas_homepage_by_owner_id, count_ideas_by_owner_id, get_all_ideas_homepage_by_investor_id2, get_invested_ideas_count, count_phases_and_ideas_by_investor_id, get_sum_of_amount_for_investor, get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner, collect_funds_for_all_phases } from "../assets/near/utils";
 
 import '../stylesheets/profile.scss';
 import IdeaForm from "../components/ideaForm";
@@ -14,6 +14,7 @@ import IdeaCard from "../components/ideaCard";
 
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Popup from "./popup";
 
 const Profile = (props) => {
 
@@ -32,11 +33,23 @@ const Profile = (props) => {
   const [invPhases, setInvPhases] = useState(0);
   const [invIdeas, setInvIdeas] = useState([]);
 
+  const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
+
+  const [activeIdeasIndex, setActiveIdeasIndex] = useState(0);
+  const [inactiveIdeasIndex, setInactiveIdeasIndex] = useState(0);
+  const [activeIdeasCount, setActiveIdeasCount] = useState(0);
+  const [inactiveIdeasCount, setInactiveIdeasCount] = useState(0);
+
   const [index, setIndex] = useState(0);
-  const limit = 20;
+  const limit = 4;
 
   
-  useEffect(() => { 
+  useEffect(() => {
+
+    count_ideas_by_owner_id(accountId).then((result) => {
+      setActiveIdeasCount(result[0]);
+      setInactiveIdeasCount(result[1]);
+    });
    
     count_phases_and_ideas_by_owner_id(accountId).then((phases) => {
       setPhases(phases.join('/'))
@@ -47,6 +60,8 @@ const Profile = (props) => {
     get_sum_of_amount_for_owner(accountId).then((amount) => {
       setAmount(amount);
     })
+    listActiveIdeas();
+    listInactiveIdeas();
     listIdeas();
 
     get_sum_of_amount_for_investor(accountId).then((inv) => {
@@ -64,7 +79,7 @@ const Profile = (props) => {
   }, [] )
 
   function investorIdeas(nextPage = false) {
-    get_all_ideas_homepage_by_investor_id2(accountId).then( res => {
+    get_all_ideas_homepage_by_investor_id2(accountId, index, limit).then( res => {
       console.log('idea profile inv: ', res);
       if(nextPage) {
         setInvIdeas([...ideas, ...res])
@@ -74,18 +89,43 @@ const Profile = (props) => {
     });
   }
 
-  
+  function listActiveIdeas(nextPage = false) {
+    get_all_active_ideas_homepage_by_owner_id(accountId, activeIdeasIndex, limit).then( res => {
+      setActiveIdeas(res);
+      if(nextPage) {
+        setActiveIdeas([...activeIdeas, ...res])
+      }else {
+        setActiveIdeas(res);
+      }
+    });
+  }
+
+  function listInactiveIdeas(nextPage = false) {
+    get_all_inactive_ideas_homepage_by_owner_id(accountId, inactiveIdeasIndex, limit).then( res => {
+      setInactiveIdeas(res);
+      if(nextPage) {
+        setInactiveIdeas([...inactiveIdeas, ...res])
+      }else {
+        setInactiveIdeas(res);
+      }
+    });
+  }
 
   function listIdeas(nextPage = false) {
     get_all_ideas_homepage_by_owner_id(accountId).then( res => {
       console.log('idea profile owner: ', res);
+      let tempActiveIdeas = [];
+      let tempInactiveIdeas = [];
       res.map(idea => {
         if(idea.active) {
-          setActiveIdeas([...activeIdeas, idea]);
+          tempActiveIdeas.push(idea);
         }else {
-          setInactiveIdeas([...inactiveIdeas, idea]);
+          tempInactiveIdeas.push(idea);
         }
       })
+      setActiveIdeas(tempActiveIdeas);
+      setInactiveIdeas(tempInactiveIdeas);
+
       if(nextPage) {
         setIdeas([...ideas, ...res])
       }else {
@@ -94,9 +134,9 @@ const Profile = (props) => {
     });
   }
 
-  function loadMoreIdeas() {
-    setIndex(index + limit);
-    listIdeas(true);
+  function loadMoreActiveIdeas() {
+    setActiveIdeasIndex(activeIdeasIndex + limit);
+    listActiveIdeas(true);
   }
 
   function editIdea(event) {
@@ -110,8 +150,10 @@ const Profile = (props) => {
     console.log(event.target);
     if(accountId) {
       const ideaId = event.currentTarget.getAttribute('data-idea');
-      const likedIdea = await add_like_to_idea({ideaId: ideaId, accountId: accountId});
-      console.log('LIKED IDEA: ', likedIdea);
+      // const likedIdea = await add_like_to_idea({ideaId: ideaId, accountId: accountId});
+      // console.log('LIKED IDEA: ', likedIdea);
+    }else {
+      setPopupInfo({open: true, msg: 'Please connect wallet to like the idea'});
     }
   }
 
@@ -168,14 +210,13 @@ const Profile = (props) => {
                         <h6 className="projects-description">Ovo je neki tekst za aktivne ideje</h6>
                       { activeIdeas.length > 0 && 
                         <React.Fragment>
-                          <IdeaCard ideas={activeIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                          <IdeaCard ideas={activeIdeas} loadMoreIdeas={loadMoreActiveIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                         </React.Fragment>
                       }
                       <h5 className="projects-headline">Inactive Ideas</h5>
                       <h6 className="projects-description">Ovo je neki tekst za neaktivne ideje</h6>
                       { inactiveIdeas.length > 0 && 
                         <React.Fragment>
-                        
                           <IdeaCard ideas={inactiveIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                         </React.Fragment>
                       }
@@ -232,6 +273,10 @@ const Profile = (props) => {
     </div>
     <Footer />
     { openIdeaForm && <IdeaForm setOpenIdeaForm={setOpenIdeaForm} ideaId={ideaId} /> }
+    {
+      popupInfo.open &&
+        <Popup msg={popupInfo.msg} setPopupInfo={setPopupInfo} />
+    }
   </React.Fragment>
 
     
