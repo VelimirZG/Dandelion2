@@ -7,7 +7,7 @@ export class Like extends Model {
   @Column()
   projectId: string;
 
-  @ManyToOne(() => User, (user) => user.comments)
-  @JoinColumn()
-  user!: User;
+  
+  @Column()
+  user: string;
 }

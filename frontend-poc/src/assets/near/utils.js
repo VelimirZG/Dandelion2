@@ -37,7 +37,12 @@ export function login() {
   // user's behalf.
   // This works by creating a new access key for the user's account and storing
   // the private key in localStorage.
-  window.walletConnection.requestSignIn(nearConfig.contractName)
+  console.log(window.location + '?loggedIn=true');
+  window.walletConnection.requestSignIn(
+    nearConfig.contractName,
+    // "Dandelion",
+    // encodeURI(window.location + '?loggedIn=true')
+  );
 }
 
 export async function create_idea(data){

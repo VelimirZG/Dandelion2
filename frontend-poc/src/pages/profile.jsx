@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { get_all_inactive_ideas_homepage_by_owner_id, get_all_active_ideas_homepage_by_owner_id, count_ideas_by_owner_id, get_all_ideas_homepage_by_investor_id2, get_invested_ideas_count, count_phases_and_ideas_by_investor_id, get_sum_of_amount_for_investor, get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner, collect_funds_for_all_phases } from "../assets/near/utils";
+import { get_all_inactive_ideas_homepage_by_owner_id, get_all_active_ideas_homepage_by_owner_id, count_ideas_by_owner_id, get_all_ideas_homepage_by_investor_id2, get_invested_ideas_count, count_phases_and_ideas_by_investor_id, get_sum_of_amount_for_investor, get_all_ideas_homepage_by_owner_id, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner, collect_funds_for_all_phases } from "../assets/near/utils";
 
 import '../stylesheets/profile.scss';
 import IdeaForm from "../components/ideaForm";
@@ -151,18 +151,6 @@ const Profile = (props) => {
     const ideaId = event.target.getAttribute('data-idea');
     setIdeaId(ideaId);
     setOpenIdeaForm(true);
-  }
-
-
-  async function likeIdea(event) {
-    console.log(event.target);
-    if(accountId) {
-      const ideaId = event.currentTarget.getAttribute('data-idea');
-      // const likedIdea = await add_like_to_idea({ideaId: ideaId, accountId: accountId});
-      // console.log('LIKED IDEA: ', likedIdea);
-    }else {
-      setPopupInfo({open: true, msg: 'Please connect wallet to like the idea'});
-    }
   }
 
   function collectFunds(event) {

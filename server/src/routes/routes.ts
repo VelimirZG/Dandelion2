@@ -1,7 +1,7 @@
 import express from 'express';
 import { Response } from 'express';
 import { createComment } from '../services/commentService';
-import { createLike } from '../services/likeService';
+import { checkIfLikeExists, createLike, deleteLike, getAllUserLikes } from '../services/likeService';
 import { createProject, findProjectById } from '../services/projectService';
 import { createUser, findUserById } from '../services/userService';
 
@@ -65,29 +65,58 @@ router.post('/like', async (req: any, res: any) => {
   const projectId: string = req.body.projectId;
   const id = uuid.v4();
 
+  console.log('like', walletId, projectId);
+
   if(!walletId || !projectId) {
     res.sendStatus(500);
   }
 
-  const user: any = await findUserById(walletId);
+  let user: any = await findUserById(walletId);
 
   if(!user) {
-    res.sendStatus(500);
+    const user = await createUser({
+      id: walletId
+    });
+    if(!user) {
+      res.sendStatus(500);
+    }
   }
 
   const like = {
     id: id,
     projectId: projectId
   };
+  const isLiked = await checkIfLikeExists(projectId, walletId);
 
-  const response = await createLike(like, user);
+  if(isLiked) {
+    deleteLike(isLiked.id);
+    res.send({status: 0, like: isLiked.id, likeDeleted: true});
+    return;
+  }
+
+  const response = await createLike(like, walletId);
 
   if(!response) {
     res.sendStatus(500);
   }
 
-  res.sendStatus(200);
+  res.send({status: 1, like: response, likeDeleted: false});
+  return;
 });
+
+
+router.post('/likes', async (req: any, res: any) => {
+  const walletId: string = req.body.walletId;
+  
+  if(!walletId) {
+    res.sendStatus(500);
+  }
+  const allLikes = await getAllUserLikes(walletId);
+
+  res.send({status: 0, likes: [...allLikes]});
+
+});
+
 
 router.post('/comment', async (req: any, res: any) => {
   const walletId: string = req.body.walletId;

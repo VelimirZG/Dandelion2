@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Popup from '../pages/popup';
-import { invest, add_like_to_idea, ideasCount } from "../assets/near/utils";
+import { invest, ideasCount } from "../assets/near/utils";
 
 import * as nearAPI from "near-api-js";
 
@@ -15,6 +15,27 @@ const IdeaCard = (props) => {
   const investOptions = [0.1,0.2,0.5,1,2,3,4,5];
   const isOnProfile = props.onProfile;
   const { utils } = nearAPI;
+  const [allLikes, setAllLikes] = useState([]);
+
+
+  useEffect(() => {
+    getAllLikes();
+  }, []);
+
+
+  async function getAllLikes() {
+    const rawResponse = await fetch('http://localhost:9999/api/likes', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({walletId: accountId})
+    })
+    const content = await rawResponse.json();
+    console.log(content);
+    setAllLikes(content.likes);
+  }
 
 
   function investInIdea(event) {
@@ -30,16 +51,27 @@ const IdeaCard = (props) => {
 
 
   async function likeIdea(event) {
-    console.log(event.target);
-    
     if(accountId) {
       const ideaId = event.currentTarget.getAttribute('data-idea');
-      const likedIdea = await add_like_to_idea({ideaId: ideaId, accountId: accountId});
-      console.log('LIKED IDEA: ', likedIdea);
+      const rawResponse = await fetch('http://localhost:9999/api/like', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({walletId: accountId, projectId: ideaId})
+      });
+      const content = await rawResponse.json();
+      console.log(content);
+      if(content.likeDeleted) {
+       const updatedLikes = allLikes.filter(like => like.id != content.like);
+       setAllLikes(updatedLikes);
+      }else {
+        setAllLikes([...allLikes, content.like]);
+      }
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to like the idea'});
     }
-    
   }
 
   const ideas = props.ideas;
@@ -48,6 +80,13 @@ const IdeaCard = (props) => {
     {
     ideas &&
       ideas.map((item, id) => {
+        let isLiked = allLikes.find(like => like.projectId == item.idea_id);
+        let favColor;
+        if(isLiked) {
+          favColor="#F9ED32";
+        }else {
+          favColor="#FFF";
+        }
         return (
           <div className="project-card-wrap" key={id}>
             <div className="col-12 mt-3 card-wrap">
@@ -74,7 +113,7 @@ const IdeaCard = (props) => {
                     </a>
                     <div className="card-info col-xs-12 col-sm-12 col-lg-3 mt-4 mt-md-0 mt-lg-0">
                       <button className="ms-auto favorite-icon" style={{height: '35px'}} data-idea={item.idea_id} onClick={(e) => likeIdea(e)} >
-                        <HeartFill color="#C6C6C6" size='30px'/>
+                        <HeartFill color={favColor} size={25} />;
                       </button>
                       <div className="project-info-wrap">
                         <div className="raised-wrap progress-wrap-card">
