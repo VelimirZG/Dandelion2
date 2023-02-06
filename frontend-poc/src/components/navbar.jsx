@@ -8,12 +8,14 @@ import { colors } from "@material-ui/core";
 
 
 import '../stylesheets/navbar.scss';
+import Popup from "../pages/popup";
 
 const Navbar = () => {
   
   const [openIdeaForm, setOpenIdeaForm] = useState(false);
   const accountId = window.accountId;
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
 
   function mobileMenu() {
     console.log(document.querySelector("#menu"));
@@ -30,6 +32,13 @@ const Navbar = () => {
   function walletLogout() {
     logout();
     console.log('AFTER LOGUT: ', accountId)
+  }
+  function checkIfLoggedIn() {
+    if(accountId) {
+      setOpenIdeaForm(true);
+    }else {
+      setPopupInfo({open: true, msg: 'Please connect wallet to create an idea'});
+    }
   }
   return (
     <div className="container-fluid">
@@ -58,14 +67,11 @@ const Navbar = () => {
             <li><a href="./profile">Dashboard</a></li>
             <li><a href="./about">About</a></li>
           </ul>
-          {
-            accountId && 
-              <button className="btn header-button create-idea-btn" onClick={()=> setOpenIdeaForm(true)}>
-                  Create idea
-              </button>
-          }
+          <button className="btn header-button create-idea-btn" onClick={()=> checkIfLoggedIn()}>
+            Create idea
+          </button>
           {accountId ? 
-            <button className="btn btn-danger" onClick={()=> walletLogout()}>Disconnect wallet</button>
+            <button className="btn header-button connect-wallet" onClick={()=> walletLogout()}>Disconnect wallet</button>
               :
             <button className="btn header-button connect-wallet" onClick={()=>login()}>Connect wallet</button>
           }
@@ -90,15 +96,12 @@ const Navbar = () => {
             </div>
             <div className="mobile-buttons">
 
-              {
-                accountId && 
-                  <button className="btn header-button mb-3 create-idea-btn" onClick={()=> setOpenIdeaForm(true)}>
-                      Create idea
-                  </button>
-              }
+              <button className="btn header-button mb-3 create-idea-btn" onClick={()=> checkIfLoggedIn()}>
+                Create idea
+              </button>
               {
               accountId ? 
-                <button className="btn btn-danger" onClick={()=> walletLogout()}>Disconnect wallet</button>
+                <button className="btn header-button connect-wallet" onClick={()=> walletLogout()}>Disconnect wallet</button>
                   :
                 <button className="btn header-button connect-wallet" onClick={()=>login()}>Connect wallet</button>
               }
@@ -106,7 +109,12 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
+      {
+      popupInfo.open &&
+        <Popup msg={popupInfo.msg} setPopupInfo={setPopupInfo} />
+      }
     </div>
+    
   );
 
 };

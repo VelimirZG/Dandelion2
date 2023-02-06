@@ -18,6 +18,8 @@ import Tabs from 'react-bootstrap/Tabs';
 const Profile = (props) => {
 
   const [ideas, setIdeas] = useState([]);
+  const [activeIdeas, setActiveIdeas] = useState([]);
+  const [inactiveIdeas, setInactiveIdeas] = useState([]);
   const accountId = window.accountId;
   const [openIdeaForm, setOpenIdeaForm] = useState(false);
   const [ideaId, setIdeaId] = useState(false);
@@ -64,6 +66,13 @@ const Profile = (props) => {
   function investorIdeas(nextPage = false) {
     get_all_ideas_homepage_by_investor_id2(accountId).then( res => {
       console.log('idea profile: ', res);
+      res.map(idea => {
+        if(idea.active) {
+          setActiveIdeas([...activeIdeas, idea]);
+        }else {
+          setInactiveIdeas([...inactiveIdeas, idea]);
+        }
+      })
       if(nextPage) {
         setInvIdeas([...ideas, ...res])
       }else {
@@ -117,7 +126,7 @@ const Profile = (props) => {
       <Navbar />
       <div className="container main-wrap">
         <section className="row">
-          <div className="col-12 col-lg-5 title-wrap">
+          <div className="col-12 col-lg-6 title-wrap">
             <h1>Welcome to the <br/> <b>the web3 revolution!</b></h1>
           </div>
         </section>
@@ -154,7 +163,24 @@ const Profile = (props) => {
                 <div className="mt-5 d-flex flex-column">
                   {
                     ideas.length > 0 ?
-                      <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                      <React.Fragment>
+                        <h5 className="projects-headline">Active Ideas</h5>
+                        <h6 className="projects-description">Ovo je neki tekst za aktivne ideje</h6>
+                      { activeIdeas.length > 0 && 
+                        <React.Fragment>
+                          <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                        </React.Fragment>
+                      }
+                      <h5 className="projects-headline">Inactive Ideas</h5>
+                      <h6 className="projects-description">Ovo je neki tekst za neaktivne ideje</h6>
+                      { inactiveIdeas.length > 0 && 
+                        <React.Fragment>
+                        
+                          <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                        </React.Fragment>
+                      }
+                      
+                      </React.Fragment>
                     :
                     <React.Fragment>
                       <p>We are thrilled that you are considering sharing your breakthrough blockchain-based idea or ideas within our vibrant and engaged community.</p>
@@ -196,15 +222,7 @@ const Profile = (props) => {
               </section>
               <section className="container-lg projects-wrap pt-5" >
                 <div className="mt-5 d-flex flex-column">
-                  {invIdeas.length > 0 ?
-                    <IdeaCard ideas={invIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
-                    : 
-                    <React.Fragment>
-                      <p>We are thrilled that you are considering investing in breakthrough blockchain-based ideas within our community.</p>
-                      <p>The potential to change the world and WIN BIG here is huge and all with a very small investment - can there be anything more exciting&hellip; we think not J</p>
-                      <p>So get in early, as an idea investor of blockchain projects before they blast off!</p>
-                    </React.Fragment>
-                  }
+                  <IdeaCard ideas={invIdeas} isInvestment={true} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                 </div>
               </section>
             </Tab>

@@ -2,6 +2,8 @@ import React from "react";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
+import '../stylesheets/featuredIdeaCard.scss';
+
 const FeaturedIdeaCard = (props) => {
 
 
@@ -22,6 +24,7 @@ const FeaturedIdeaCard = (props) => {
           modules={[Navigation, Pagination]}
           spaceBetween={10}
           slidesPerView={1}
+          className="featured-idea-card"
           navigation={{
             nextEl: '.next-btn',
             prevEl: '.prev-btn'
@@ -54,7 +57,18 @@ const FeaturedIdeaCard = (props) => {
           ideas &&
             ideas.map((item, id) => {
 
-              let style = SetCardHover({"border": "none", "opacity": "0.8", "borderRadius": "5px", "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('" + item.picture_url + "')"}, {"borderRadius": "5px", "border": "none", "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("` + item.picture_url + `")`});
+              let style = SetCardHover({
+                "border": "none",
+                "opacity": "0.8",
+                "borderRadius": "5px",
+                "backgroundImage": "linear-gradient(180deg, rgba(249,237,50,0.80) 0%, rgba(232,165,35,0.80) 27%, rgba(206,34,91,0.80) 67%, rgba(105,62,152,0.80) 100%), url('" + item.picture_url + "')",
+                "backgroundSize": "cover"
+              }, {
+                "borderRadius": "5px",
+                "border":"none",
+                "backgroundImage": `linear-gradient(180deg, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.01) 3%, #000000 74%), url("` + item.picture_url + `")`,
+                "backgroundSize": "cover"
+              });
               return (
                 <SwiperSlide onClick={() => { window.location.href= process.env.PUBLIC_URL + '/' + item.idea_id}} style={{cursor: 'pointer'}}>
                   <div className="card swiper-card-wrap p-1" {...style}>

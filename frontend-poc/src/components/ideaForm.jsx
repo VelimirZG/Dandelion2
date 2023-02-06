@@ -43,7 +43,6 @@ const ModalBody = styled.div`
       align-items: start;
     }
 
-
     &.textarea-wrap {
       align-items: start;
     }
@@ -84,6 +83,11 @@ const ModalBody = styled.div`
       line-height: 27px;
 
       color: #FFFFFF;
+
+      &:focus {
+        border: 1px solid #CE225B;
+        box-shadow: 0px 0px 35px -5px #CE225B;
+      }
     }
   }
 
@@ -98,6 +102,7 @@ const ModalBody = styled.div`
       width: 50%;
       display: flex;
       justify-content: space-between;
+
 
       @media (max-width: 860px) {
         width: 100%;
@@ -117,6 +122,11 @@ const ModalBody = styled.div`
 
       input {
         width: 60%;
+
+        &.active {
+          border: 1px solid #CE225B;
+          box-shadow: 0px 0px 35px -5px #CE225B;
+        }
 
         @media (max-width: 860px) {
           width: 100%;
@@ -189,9 +199,10 @@ function IdeaForm(props) {
       data['amount2'] = 0;
       data['amount3'] = 0;
       data['amount4'] = 0;
-      create_idea(data).then((response)=>
-        console.log('response from create idea: ', response)
-      )
+      create_idea(data).then((response)=> {
+        console.log('response from create idea: ', response);
+        window.location.href = '/profile';
+      })
     }
   }
 
@@ -224,7 +235,7 @@ function IdeaForm(props) {
       content.push(
         <div className="input-wrap">
           <label className="form-label" htmlFor={"amount" + (i+1)}>Phase {i +1} goal:</label>
-          <input name={"amount" + (i+1)} type="number" className="form-control" id={"amount" + (i+1)} readOnly={disabled} defaultValue={ inv.goal } />
+          <input name={"amount" + (i+1)} type="number" className={!disabled ? 'form-control active' : 'form-control'} id={"amount" + (i+1)} readOnly={disabled} defaultValue={ inv.goal } />
         </div>
       );    
 

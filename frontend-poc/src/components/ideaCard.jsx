@@ -5,7 +5,7 @@ import { HeartFill } from 'react-bootstrap-icons';
 import Popup from '../pages/popup';
 import { invest, add_like_to_idea, ideasCount } from "../assets/near/utils";
 
-import * as math from 'mathjs';
+import * as nearAPI from "near-api-js";
 
 const IdeaCard = (props) => {
 
@@ -14,26 +14,15 @@ const IdeaCard = (props) => {
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
   const investOptions = [0.1,0.2,0.5,1,2,3,4,5];
   const isOnProfile = props.onProfile;
+  const { utils } = nearAPI;
 
-  let ONE_NEAR= 1000000000000000000000000;
 
   function investInIdea(event) {
     
     if(accountId) {
       const ideaId = event.target.getAttribute('data-idea');
-      let sum;
-      if(currentInvValue.toString().split(".").length > 1) {
-        sum = ((currentInvValue * 100) * (ONE_NEAR / 100));
-        sum = sum.toLocaleString('fullwide', {useGrouping:false})
-      }else{
-        ONE_NEAR = 1000000000000000000000000n;
-        sum = BigInt(currentInvValue) * ONE_NEAR;
-        sum = sum.toLocaleString('fullwide', {useGrouping:false})
-      }
-      console.log(ONE_NEAR);
-      console.log(currentInvValue);
-      console.log(sum);
-      invest({value: sum, acc: accountId, ideaId: parseInt(ideaId)});
+      const amountInYocto = utils.format.parseNearAmount(currentInvValue.toString());
+      invest({value: amountInYocto, acc: accountId, ideaId: parseInt(ideaId)});
     }else {
       setPopupInfo({open: true, msg: 'Please connect wallet to invest into the idea'});
     }
@@ -124,15 +113,18 @@ const IdeaCard = (props) => {
                                 <p className="supporters"><b>{item.investors_count}</b> supportes</p>
                               </div>
                               {
-                                item.collect_enabled && 
-                                <Button variant="outline-primary ms-auto tag-btn collect-btn" data-idea={item.idea_id} onClick={(e) => props.collectFunds(item.idea_id)}>
+                                !item.goal_reached && !props.isInvestment && 
+                                <Button variant="outline-primary ms-auto tag-btn collect-btn" data-idea={item.idea_id} onClick={(e) => props.collectFunds(e)}>
                                   COLLECT
                                 </Button>
                               }
+                              {
+                                !props.isInvestment &&
+                                <Button variant="outline-primary ms-auto tag-btn edit-btn" data-idea={item.idea_id} onClick={(e) => props.editIdea(e)}>
+                                  EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
+                                </Button>
+                              }
                               
-                              <Button variant="outline-primary ms-auto tag-btn edit-btn" data-idea={item.idea_id} onClick={(e) => props.editIdea(e)}>
-                                EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
-                              </Button>
                             </div>
                         }
                        

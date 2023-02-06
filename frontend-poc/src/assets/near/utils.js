@@ -43,7 +43,8 @@ export function login() {
 export async function create_idea(data){
   let response = await window.contract.create_idea({
     args: data,
-    contractId: window.contract.contractId
+    contractId: window.contract.contractId,
+    callbackUrl: window.location.origin + '/profile'
   })
   return response
 }

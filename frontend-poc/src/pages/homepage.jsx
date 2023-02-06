@@ -7,7 +7,7 @@ import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { ideasCount, get_all_ideas, get_all_ideas_homepage_sorted } from "../assets/near/utils";
 
 // Import Swiper styles
-import 'swiper/css';
+import 'swiper/swiper.min.css'
 
 import './homepage.css';
 import '../stylesheets/homepage.scss';
