@@ -628,7 +628,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
                 let idea_metadata = idea.clone();
                 let active= self.has_active_goals(key.clone());
                 if let Some(goals_metadata) = goals {
-                    if index >= from_index && index < from_index + limit && active == true {
+                    if index >= from_index && index < (from_index + limit) && active == true {
                         ideas_with_active_goals.push(JsonIdea {
                             idea_id: key,
                             title: idea_metadata.title,
@@ -673,7 +673,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
                 let idea_metadata = idea.clone();
                 let active= self.has_active_goals(key.clone());
                 if let Some(goals_metadata) = goals {
-                    if index >= from_index && index < from_index + limit && active == false {
+                    if index >= from_index && index < (from_index + limit) && active == false {
                         ideas_with_active_goals.push(JsonIdea {
                             idea_id: key,
                             title: idea_metadata.title,

@@ -115,7 +115,7 @@ export async function invest(data){
 //   return invested;
 // }
 export async function collect_funds_for_all_phases(data) {
-  const response = await window.contract.collect_funds_for_all_phases({accountId: data.accountId, idea_id: data.ideaId});
+  const response = await window.contract.collect_funds_for_all_phases({accountId: data.accountId, idea_id: parseInt(data.ideaId)});
   return response;
 }
 
@@ -157,6 +157,8 @@ export async function get_all_ideas_homepage_by_investor_id2(accountId, index, l
   return invested;
 }
 export async function get_all_active_ideas_homepage_by_owner_id(accountId, index, limit){
+  console.log('INDEX: ', index);
+  console.log('LIMIT: ', limit);
   const invested = await window.contract.get_all_active_ideas_homepage_by_owner_id({owner_id: accountId, from_index: index, limit: limit});
   return invested;
 }

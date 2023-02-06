@@ -97,6 +97,7 @@ const Profile = (props) => {
     get_all_active_ideas_homepage_by_owner_id(accountId, currentIndex, limit).then( res => {
       console.log('active ideas: ', res);
       setActiveIdeas(res);
+      setActiveIdeasIndex(res.length);
       if(nextPage) {
         setActiveIdeas([...activeIdeas, ...res])
       }else {
@@ -132,7 +133,7 @@ const Profile = (props) => {
   }
 
   function loadMoreActiveIdeas() {
-    setActiveIdeasIndex(activeIdeasIndex + limit);
+    setActiveIdeasIndex((activeIdeasIndex) => activeIdeasIndex + limit);
     listActiveIdeas(true);
   }
 
@@ -164,7 +165,8 @@ const Profile = (props) => {
     }
   }
 
-  function collectFunds(ideaId) {
+  function collectFunds(event) {
+    const ideaId = event.currentTarget.getAttribute('data-idea');
     collect_funds_for_all_phases({accountId: accountId, ideaId: ideaId})
   }
   
