@@ -90,7 +90,11 @@ const Profile = (props) => {
   }
 
   function listActiveIdeas(nextPage = false) {
-    get_all_active_ideas_homepage_by_owner_id(accountId, activeIdeasIndex, limit).then( res => {
+    let currentIndex = activeIdeasIndex;
+    if(!nextPage) {
+      currentIndex = 0;
+    }
+    get_all_active_ideas_homepage_by_owner_id(accountId, currentIndex, limit).then( res => {
       console.log('active ideas: ', res);
       setActiveIdeas(res);
       if(nextPage) {
@@ -102,7 +106,11 @@ const Profile = (props) => {
   }
 
   function listInactiveIdeas(nextPage = false) {
-    get_all_inactive_ideas_homepage_by_owner_id(accountId, inactiveIdeasIndex, limit).then( res => {
+    let currentIndex = inactiveIdeasIndex;
+    if(!nextPage) {
+      currentIndex = 0;
+    }
+    get_all_inactive_ideas_homepage_by_owner_id(accountId, currentIndex, limit).then( res => {
       console.log('inactive ideas: ', res);
       setInactiveIdeas(res);
       if(nextPage) {
