@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import { HeartFill } from 'react-bootstrap-icons';
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import { get_all_active_ideas_homepage_by_owner_id, count_ideas_by_owner_id, get_all_ideas_homepage_by_investor_id2, get_invested_ideas_count, count_phases_and_ideas_by_investor_id, get_sum_of_amount_for_investor, get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner, collect_funds_for_all_phases } from "../assets/near/utils";
+import { get_all_inactive_ideas_homepage_by_owner_id, get_all_active_ideas_homepage_by_owner_id, count_ideas_by_owner_id, get_all_ideas_homepage_by_investor_id2, get_invested_ideas_count, count_phases_and_ideas_by_investor_id, get_sum_of_amount_for_investor, get_all_ideas_homepage_by_owner_id, add_like_to_idea, count_phases_and_ideas_by_owner_id, get_investor_count_for_owner, get_sum_of_amount_for_owner, collect_funds_for_all_phases } from "../assets/near/utils";
 
 import '../stylesheets/profile.scss';
 import IdeaForm from "../components/ideaForm";
@@ -91,6 +91,7 @@ const Profile = (props) => {
 
   function listActiveIdeas(nextPage = false) {
     get_all_active_ideas_homepage_by_owner_id(accountId, activeIdeasIndex, limit).then( res => {
+      console.log('active ideas: ', res);
       setActiveIdeas(res);
       if(nextPage) {
         setActiveIdeas([...activeIdeas, ...res])
@@ -102,6 +103,7 @@ const Profile = (props) => {
 
   function listInactiveIdeas(nextPage = false) {
     get_all_inactive_ideas_homepage_by_owner_id(accountId, inactiveIdeasIndex, limit).then( res => {
+      console.log('inactive ideas: ', res);
       setInactiveIdeas(res);
       if(nextPage) {
         setInactiveIdeas([...inactiveIdeas, ...res])
@@ -113,20 +115,6 @@ const Profile = (props) => {
 
   function listIdeas(nextPage = false) {
     get_all_ideas_homepage_by_owner_id(accountId).then( res => {
-      console.log('idea profile owner: ', res);
-      let tempActiveIdeas = [];
-      let tempInactiveIdeas = [];
-      res.map(idea => {
-        console.log(idea);
-        if(idea.active) {
-          tempActiveIdeas.push(idea);
-        }else {
-          tempInactiveIdeas.push(idea);
-        }
-      })
-      setActiveIdeas(tempActiveIdeas);
-      setInactiveIdeas(tempInactiveIdeas);
-
       if(nextPage) {
         setIdeas([...ideas, ...res])
       }else {
@@ -138,6 +126,16 @@ const Profile = (props) => {
   function loadMoreActiveIdeas() {
     setActiveIdeasIndex(activeIdeasIndex + limit);
     listActiveIdeas(true);
+  }
+
+  function loadMoreInactiveIdeas() {
+    setInactiveIdeasIndex(inactiveIdeasIndex + limit);
+    listInactiveIdeas(true);
+  }
+
+  function loadMoreIdeas() {
+    setIndex(index + limit);
+    investorIdeas(true);
   }
 
   function editIdea(event) {
@@ -211,14 +209,14 @@ const Profile = (props) => {
                         <h6 className="projects-description">Ovo je neki tekst za aktivne ideje</h6>
                       { activeIdeas.length > 0 && 
                         <React.Fragment>
-                          <IdeaCard ideas={activeIdeas} loadMoreIdeas={loadMoreActiveIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                          <IdeaCard ideas={activeIdeas} loadMoreIdeas={loadMoreActiveIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} ideaIndex={activeIdeasIndex} ideasCount={activeIdeasCount} />
                         </React.Fragment>
                       }
                       <h5 className="projects-headline">Inactive Ideas</h5>
                       <h6 className="projects-description">Ovo je neki tekst za neaktivne ideje</h6>
                       { inactiveIdeas.length > 0 && 
                         <React.Fragment>
-                          <IdeaCard ideas={inactiveIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                          <IdeaCard ideas={inactiveIdeas} loadMoreIdeas={loadMoreInactiveIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} ideaIndex={inactiveIdeasCount} ideasCount={inactiveIdeasCount} />
                         </React.Fragment>
                       }
                       
