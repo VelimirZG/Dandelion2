@@ -168,7 +168,7 @@ const Profile = (props) => {
                         <h6 className="projects-description">Ovo je neki tekst za aktivne ideje</h6>
                       { activeIdeas.length > 0 && 
                         <React.Fragment>
-                          <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                          <IdeaCard ideas={activeIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                         </React.Fragment>
                       }
                       <h5 className="projects-headline">Inactive Ideas</h5>
@@ -176,7 +176,7 @@ const Profile = (props) => {
                       { inactiveIdeas.length > 0 && 
                         <React.Fragment>
                         
-                          <IdeaCard ideas={ideas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                          <IdeaCard ideas={inactiveIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                         </React.Fragment>
                       }
                       
