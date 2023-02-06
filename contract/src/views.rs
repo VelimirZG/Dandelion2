@@ -626,6 +626,24 @@ pub fn get_all_ideas_and_phases(&self) -> Vec<(IdeaId, u8)>{
     ideas_phases
 }
 
+//count active and inactive ideas by owner_id
+pub fn count_ideas_by_owner_id(&self, owner_id: AccountId) -> (u64, u64){
+    let mut active_ideas = 0;
+    let mut inactive_ideas = 0;
+    let ideas = self.ideas.keys_as_vector();
+    for idea_id in ideas.iter(){
+        let idea = self.ideas.get(&idea_id).unwrap();
+        if idea.owner_id == owner_id{
+            if self.has_active_goals(idea_id.clone()){
+                active_ideas += 1;
+            }else{
+                inactive_ideas += 1;
+            }
+        }
+    }
+    (active_ideas, inactive_ideas)
+}
+
 //get time passed
 pub fn time_passed(&self, idea_id: IdeaId, project_phase: u8) -> u64{
     let goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
