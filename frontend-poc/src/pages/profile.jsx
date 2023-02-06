@@ -117,6 +117,7 @@ const Profile = (props) => {
       let tempActiveIdeas = [];
       let tempInactiveIdeas = [];
       res.map(idea => {
+        console.log(idea);
         if(idea.active) {
           tempActiveIdeas.push(idea);
         }else {

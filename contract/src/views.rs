@@ -233,6 +233,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
         }
         ideas
     }
+    
 
     //check does idea has active goals
     pub fn has_active_goals(&self, idea_id: u64)->bool{
@@ -611,6 +612,96 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         }
         ideas_with_active_goals
     } 
+
+    //refactor upper function to return only active ideas
+    pub fn get_all_active_ideas_homepage_by_owner_id(&self, owner_id: AccountId, from_index: usize, limit: usize) -> Vec<JsonIdea> {
+        let mut ideas_with_active_goals: Vec<JsonIdea> = Vec::new();
+        let mut index = 0;
+    
+        for (key, idea) in self.ideas.iter() {
+            if idea.owner_id == owner_id {
+                let goals = self.get_goals_from_idea_id(key.clone());
+                let investment_amount_sum: u128 = self.get_investments_by_idea_id(key).iter().map(|(_, investment)| investment.amount).sum();
+                let sum_amount = self.get_total_amount_by_idea(key);
+
+                let investors_count = self.get_investors_count_by_idea_id(key);
+                let idea_metadata = idea.clone();
+                let active= self.has_active_goals(key.clone());
+                if let Some(goals_metadata) = goals {
+                    if index >= from_index && index < from_index + limit && active == true {
+                        ideas_with_active_goals.push(JsonIdea {
+                            idea_id: key,
+                            title: idea_metadata.title,
+                            excerpt: idea_metadata.excerpt,
+                            description: idea_metadata.description,
+                            competitors: idea_metadata.competitors,
+                            value_proposition: idea_metadata.value_proposition,
+                            tags: idea_metadata.tags,
+                            team: idea_metadata.team,
+                            picture_url: idea_metadata.picture_url,
+                            owner_id: idea_metadata.owner_id,
+                            website: idea_metadata.website,
+                            project_phase: goals_metadata.project_phase,
+                            goal_amount: sum_amount,
+                            sum: self.yocto_to_near(investment_amount_sum),
+                            goal_reached: goals_metadata.goal_reached,
+                            phase_start: goals_metadata.phase_start,
+                            investors_count: investors_count,
+                            collect_enabled: goals_metadata.collect_enabled,
+                            active: active,
+                        });
+                    }
+                    index += 1;
+                }
+            }
+        }
+        ideas_with_active_goals
+    }
+
+    //refactor upper function to return only inactive ideas
+    pub fn get_all_inactive_ideas_homepage_by_owner_id(&self, owner_id: AccountId, from_index: usize, limit: usize) -> Vec<JsonIdea> {
+        let mut ideas_with_active_goals: Vec<JsonIdea> = Vec::new();
+        let mut index = 0;
+    
+        for (key, idea) in self.ideas.iter() {
+            if idea.owner_id == owner_id {
+                let goals = self.get_goals_from_idea_id(key.clone());
+                let investment_amount_sum: u128 = self.get_investments_by_idea_id(key).iter().map(|(_, investment)| investment.amount).sum();
+                let sum_amount = self.get_total_amount_by_idea(key);
+
+                let investors_count = self.get_investors_count_by_idea_id(key);
+                let idea_metadata = idea.clone();
+                let active= self.has_active_goals(key.clone());
+                if let Some(goals_metadata) = goals {
+                    if index >= from_index && index < from_index + limit && active == false {
+                        ideas_with_active_goals.push(JsonIdea {
+                            idea_id: key,
+                            title: idea_metadata.title,
+                            excerpt: idea_metadata.excerpt,
+                            description: idea_metadata.description,
+                            competitors: idea_metadata.competitors,
+                            value_proposition: idea_metadata.value_proposition,
+                            tags: idea_metadata.tags,
+                            team: idea_metadata.team,
+                            picture_url: idea_metadata.picture_url,
+                            owner_id: idea_metadata.owner_id,
+                            website: idea_metadata.website,
+                            project_phase: goals_metadata.project_phase,
+                            goal_amount: sum_amount,
+                            sum: self.yocto_to_near(investment_amount_sum),
+                            goal_reached: goals_metadata.goal_reached,
+                            phase_start: goals_metadata.phase_start,
+                            investors_count: investors_count,
+                            collect_enabled: goals_metadata.collect_enabled,
+                            active: active,
+                        });
+                    }
+                    index += 1;
+                }
+            }
+        }
+        ideas_with_active_goals
+    }
 
     //get all ideas and project phases and return them as a vector
 pub fn get_all_ideas_and_phases(&self) -> Vec<(IdeaId, u8)>{
