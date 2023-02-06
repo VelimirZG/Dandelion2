@@ -65,14 +65,7 @@ const Profile = (props) => {
 
   function investorIdeas(nextPage = false) {
     get_all_ideas_homepage_by_investor_id2(accountId).then( res => {
-      console.log('idea profile: ', res);
-      res.map(idea => {
-        if(idea.active) {
-          setActiveIdeas([...activeIdeas, idea]);
-        }else {
-          setInactiveIdeas([...inactiveIdeas, idea]);
-        }
-      })
+      console.log('idea profile inv: ', res);
       if(nextPage) {
         setInvIdeas([...ideas, ...res])
       }else {
@@ -85,7 +78,14 @@ const Profile = (props) => {
 
   function listIdeas(nextPage = false) {
     get_all_ideas_homepage_by_owner_id(accountId).then( res => {
-      console.log('idea profile: ', res);
+      console.log('idea profile owner: ', res);
+      res.map(idea => {
+        if(idea.active) {
+          setActiveIdeas([...activeIdeas, idea]);
+        }else {
+          setInactiveIdeas([...inactiveIdeas, idea]);
+        }
+      })
       if(nextPage) {
         setIdeas([...ideas, ...res])
       }else {
