@@ -79,6 +79,10 @@ TODO:
 13. **Return investment if not realized**\
 ```near view $NEARID get_all_ideas```
 
+**EXTERNAL TOKENS:**\
+1. **Get the balance of the token sent to contract and connect it to idea**\
+```near call $NEARID balance_of '{"contract_id":"dev-1674124791270-69359585766364","account_id": "'$NEARID'", "idea_id":3}'```
+
 
 
 ### FRONTEND

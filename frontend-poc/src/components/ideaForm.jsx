@@ -257,12 +257,12 @@ function IdeaForm(props) {
                 <div className="col col-wrap">
                   <form onSubmit={submitIdea}>
                     <div className="input-wrap">
-                      <label htmlFor="title" className="form-label">Title* <span>(max 140 characters)</span></label>
-                      <input type="text" name="title" required className="form-control" id="title" aria-describedby="title" maxLength={140} defaultValue={ideaInfo ? ideaInfo.title : ''}/>
+                      <label htmlFor="title" className="form-label">Title* <span>(max 100 characters)</span></label>
+                      <input type="text" name="title" required className="form-control" id="title" aria-describedby="title" maxLength={100} defaultValue={ideaInfo ? ideaInfo.title : ''}/>
                     </div>
                     <div className="input-wrap textarea-wrap">
-                      <label className="form-label" htmlFor="excerpt">Excerpt* <span>(max 210 characters)</span></label>
-                      <textarea name="excerpt" className="form-control" required id="excerpt" rows="3" maxLength={210} defaultValue={ideaInfo ? ideaInfo.excerpt : ''}></textarea>
+                      <label className="form-label" htmlFor="excerpt">Excerpt* <span>(max 200 characters)</span></label>
+                      <textarea name="excerpt" className="form-control" required id="excerpt" rows="3" maxLength={200} defaultValue={ideaInfo ? ideaInfo.excerpt : ''}></textarea>
                     </div>
                     <div className="input-wrap textarea-wrap">
                       <label className="form-label" htmlFor="description">Description*</label>

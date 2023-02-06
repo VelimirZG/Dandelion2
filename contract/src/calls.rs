@@ -131,6 +131,7 @@ pub fn edit_idea(&mut self, idea_id: IdeaId, metadata: IdeaMetadata, amount1:u12
     self.goals.insert(&idea_id, &goals);
 }
 
+
 pub fn collect_funds_for_all_phases(&mut self, idea_id: IdeaId) {
     for project_phase in 1..=4 {
         log!("Collecting funds for phase {} and idea_id {}", project_phase, idea_id);
@@ -154,6 +155,9 @@ pub fn collect_funds(&mut self, idea_id: IdeaId, project_phase: u8) -> Vec<u8>{
     let goal_reached = self.get_goal_reached(idea_id, project_phase);
     if !goal_reached {
         return "Goal not reached".as_bytes().to_vec();
+    }
+    if project_phase==3{
+
     }
     let owner_id = env::predecessor_account_id();
     let idea = self.ideas.get(&idea_id).unwrap();
