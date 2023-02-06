@@ -80,6 +80,7 @@ const Profile = (props) => {
     get_all_ideas_homepage_by_owner_id(accountId).then( res => {
       console.log('idea profile owner: ', res);
       res.map(idea => {
+        console.log(idea);
         if(idea.active) {
           setActiveIdeas([...activeIdeas, idea]);
         }else {
