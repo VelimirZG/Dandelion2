@@ -181,8 +181,12 @@ function IdeaForm(props) {
 
     let ideaId =  parseInt(new Date().getTime());
 
-    const pictureURL = await uploadImage(ideaId);
-    formData.append('picture_url', 'http://localhost:9999' + pictureURL);
+    if(!ideaInfo) {
+      const pictureURL = await uploadImage(ideaId);
+      formData.append('picture_url', 'http://localhost:9999' + pictureURL);
+    }else {
+      formData.append('picture_url', ideaInfo.picture_url);
+    }
 
     if(ideaInfo) {
       formData.append('idea_id', parseInt(props.ideaId));

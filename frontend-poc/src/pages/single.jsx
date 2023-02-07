@@ -274,12 +274,18 @@ const Single = (props) => {
                       <Tab eventKey="comments" title="Comments">
                         {
                           ideaComments.map((comment, i) => {
+
+                            let date = new Date(comment.created_at);
+                            let month = date.getMonth() + 1;
+                            let day = date.getDate();
+                            let year = date.getFullYear();
+                            let finalDate = month + '.' + day + '.' + year;
                             return (
                               <div className="row comment-wrap">
                                 <div className="col-12 content-wrap">
                                   <div className="author-wrap">
                                     <p className="author">{comment.user}</p>
-                                    <p className="date">{comment.created_at}</p>
+                                    <p className="date">{finalDate}</p>
                                   </div>
                                   <p className="content">{comment.content}</p>
                                 </div>
