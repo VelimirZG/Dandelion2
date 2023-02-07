@@ -204,14 +204,14 @@ const Profile = (props) => {
                     ideas.length > 0 ?
                       <React.Fragment>
                         <h5 className="projects-headline">Active Ideas</h5>
-                        <h6 className="projects-description">Ovo je neki tekst za aktivne ideje</h6>
+                        <h6 className="projects-description">Projects that are currently open for funding and actively accepting contributions from supporters.</h6>
                       { activeIdeas.length > 0 && 
                         <React.Fragment>
                           <IdeaCard ideas={activeIdeas} loadMoreIdeas={loadMoreActiveIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} ideaIndex={activeIdeasIndex} ideasCount={activeIdeasCount} />
                         </React.Fragment>
                       }
                       <h5 className="projects-headline">Inactive Ideas</h5>
-                      <h6 className="projects-description">Ovo je neki tekst za neaktivne ideje</h6>
+                      <h6 className="projects-description">Projects that have completed their current funding phase but are still ongoing and may have future funding phases. You can re-activate your project by clicking "Edit" and updating the information with a new goal. </h6>
                       { inactiveIdeas.length > 0 && 
                         <React.Fragment>
                           <IdeaCard ideas={inactiveIdeas} loadMoreIdeas={loadMoreInactiveIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} ideaIndex={inactiveIdeasCount} ideasCount={inactiveIdeasCount} />

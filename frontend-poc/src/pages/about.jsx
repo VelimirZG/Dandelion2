@@ -17,9 +17,9 @@ const About = () => {//zamijeniti sa imenom stranice Page
         <div className="row">
           <h1 className="page-title">About</h1>
           <div className="col-12 content-wrap">
-          <h3>We are a community of web3 innovators, early adopters and investors where creators can validate their innovative ideas, get them funded and turn them into:</h3>
+          <p>We are a community of web3 innovators, early adopters and investors where creators can validate their innovative ideas, get them funded and turn them into:</p>
 
-<h1>THE NEXT BIG THING IN THE BLOCKCHAIN SPACE!</h1>
+<h3>THE NEXT BIG THING IN THE BLOCKCHAIN SPACE!</h3>
 
 <p>We are certain that this unique &ldquo;idea-based&rdquo; approach will foster immense creativity and encourage investment that will nurture fragile ideas and bring them to life.</p>
 
