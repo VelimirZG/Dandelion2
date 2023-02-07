@@ -77,7 +77,7 @@ h1 {
   padding: 10px !important;
 }
 
-input:read-only {
+input:not([type='file']):read-only {
   background-color: #e9ecef;
   opacity: 1;
   pointer-events: none;

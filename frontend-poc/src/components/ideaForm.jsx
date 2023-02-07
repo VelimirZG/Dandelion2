@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 
+import {useDropzone} from 'react-dropzone';
 import { create_idea, editIdea, getIdea } from "../assets/near/utils";
 import { useEffect, useState } from "react";
 
@@ -146,6 +147,7 @@ const DialogContent = withStyles((theme) => ({
 function IdeaForm(props) {
 
   const [ideaInfo, setIdeaInfo] = useState(false);
+  const accountId = window.accountId;
 
   useEffect(() => {
     if(props.ideaId) {
@@ -156,18 +158,41 @@ function IdeaForm(props) {
     }
   },[]);
 
-  function submitIdea(event) {
+  async function uploadImage(ideaId) {
+    let formData = new FormData();
+         
+    formData.append('image', document.getElementById("image-file").files[0]); 
+    formData.append("walletId", accountId);
+    formData.append("projectId", ideaId);
+
+    const rawResponse = await fetch('http://localhost:9999/api/upload', {
+      method: 'POST',
+
+      body: formData
+    })
+    const response = await rawResponse.json();
+    console.log(response);
+    return response.imageURL;
+  }
+
+  async function submitIdea(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
+
+    let ideaId =  parseInt(new Date().getTime());
+
+    const pictureURL = await uploadImage(ideaId);
+    formData.append('picture_url', 'http://localhost:9999' + pictureURL);
+
     if(ideaInfo) {
       formData.append('idea_id', parseInt(props.ideaId));
     }else {
-      formData.append('idea_id', parseInt(new Date().getTime()))
+      formData.append('idea_id', parseInt(ideaId))
     }
     
     formData.append('owner_id', window.accountId);
     console.log('FROM DATA: ', formData.entries());
-    
+   
     let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id', 'token_contract'];
     let data = {};
     for (let [key, value] of formData.entries()) {
@@ -304,8 +329,10 @@ function IdeaForm(props) {
                       <input name="website" type="url" className="form-control" id="website" defaultValue={ideaInfo ? ideaInfo.website : ''}/>
                     </div>
                     <div className="input-wrap">
+                      {/* <label className="form-label" htmlFor="picture_url">Idea image file path*</label>
+                      <input name="picture_url" type="url" className="form-control" required id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/> */}
                       <label className="form-label" htmlFor="picture_url">Idea image file path*</label>
-                      <input name="picture_url" type="url" className="form-control" required id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/>
+                      <input type="file" accept="image/*" name="image" className="form-control" id="image-file" />
                     </div>
                     <div className="input-wrap">
                       <label htmlFor="token_contract" className="form-label">Token contract address*<span>(mandatory before 3. goal)*</span></label>

@@ -33,7 +33,6 @@ const IdeaCard = (props) => {
       body: JSON.stringify({walletId: accountId})
     })
     const content = await rawResponse.json();
-    console.log(content);
     setAllLikes(content.likes);
   }
 
@@ -62,7 +61,6 @@ const IdeaCard = (props) => {
         body: JSON.stringify({walletId: accountId, projectId: ideaId})
       });
       const content = await rawResponse.json();
-      console.log(content);
       if(content.likeDeleted) {
        const updatedLikes = allLikes.filter(like => like.id != content.like);
        setAllLikes(updatedLikes);
@@ -87,6 +85,17 @@ const IdeaCard = (props) => {
         }else {
           favColor="#FFF";
         }
+        let iconPath;
+        if (item.project_phase == 0){
+          iconPath = process.env.PUBLIC_URL + '/phase_1.png';
+        } else if (item.project_phase == 1){
+          iconPath = process.env.PUBLIC_URL + '/phase_2.png';
+        } else if (item.project_phase == 2){
+          iconPath = process.env.PUBLIC_URL + '/phase_3.png';
+        }else{
+          iconPath = process.env.PUBLIC_URL + '/phase_4.png';
+        }
+
         return (
           <div className="project-card-wrap" key={id}>
             <div className="col-12 mt-3 card-wrap">
@@ -95,7 +104,7 @@ const IdeaCard = (props) => {
                     <div className="col-xs-12 col-sm-12 col-lg-4 d-flex justify-content-center align-items-center p-0 img-container" style={{backgroundImage: 'url(' + item.picture_url + ')'}}>
                     </div>
                     <a href={process.env.PUBLIC_URL + '/' + item.idea_id} className="card-content d-flex mb-lg-auto flex-column justify-content-between  col-xs-12 col-sm-12 col-md-12 col-lg-5" style={{textDecoration: 'none'}}>
-                      <h4 className="card-title text-center text-md-start text-lg-start" style={{cursor: 'pointer'}} >{item.title}</h4>
+                      <h4 className="card-title text-center text-md-start text-lg-start" data-image={iconPath} style={{cursor: 'pointer'}} >{item.title}</h4>
                       <p className="card-text">
                         {item.excerpt}
                       </p>

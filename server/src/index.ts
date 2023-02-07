@@ -8,6 +8,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+const path = require("path");
 
 
 let http: {
@@ -16,7 +17,8 @@ let http: {
 
 app.set('port', process.env.PORT || 3000);
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use('/upload', express.static('upload'));
+
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
     // res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,13 +32,14 @@ app.use(function (req, res, next) {
     // );
     next();
 });
+
 app.use(
   fileUpload({
       limits: {
           fileSize: 10000000, // Around 10MB
       },
       abortOnLimit: true,
-      // createParentPath: true
+      createParentPath: true
   })
 );
 
@@ -46,7 +49,6 @@ app.use('/api/', router);
 app.options('*', function (req, res) {
     res.send(200);
 });
-app.use(express.static('public'));
 
 async function init() {
   dbConnection.initialize().then(() => {
