@@ -1,6 +1,6 @@
 import express from 'express';
 import { Response } from 'express';
-import { createComment } from '../services/commentService';
+import { createComment, getAllProjectComments } from '../services/commentService';
 import { checkIfLikeExists, createLike, deleteLike, getAllUserLikes } from '../services/likeService';
 import { createProject, findProjectById } from '../services/projectService';
 import { createUser, findUserById } from '../services/userService';
@@ -113,7 +113,6 @@ router.post('/like', async (req: any, res: any) => {
   return;
 });
 
-
 router.post('/likes', async (req: any, res: any) => {
   const walletId: string = req.body.walletId;
   
@@ -126,6 +125,18 @@ router.post('/likes', async (req: any, res: any) => {
 
 });
 
+router.post('/comments', async (req: any, res: any) => {
+  const projectId: string = req.body.projectId;
+  
+  if(!projectId) {
+    res.send({status: 0, comments: null});
+  }
+  const allComments = await getAllProjectComments(projectId);
+
+  res.send({status: 1, comments: [...allComments]});
+
+});
+
 
 router.post('/comment', async (req: any, res: any) => {
   const walletId: string = req.body.walletId;
@@ -134,35 +145,37 @@ router.post('/comment', async (req: any, res: any) => {
   
 
   if(!walletId || !projectId) {
-    res.sendStatus(500);
+    res.sendStatus({status: 0, comment: null});
   }
 
   const user: any = await findUserById(walletId);
 
   if(!user) {
-    res.sendStatus(500);
-  }
-
-  const project: any = await findProjectById(projectId);
-
-  if(!project) {
-    res.sendStatus(500);
+    const user = await createUser({
+      id: walletId
+    });
+    if(!user) {
+      res.sendStatus({status: 0, comment: null});
+    }
   }
 
   const id = uuid.v4();
-  const like = {
+  const comment:any = {
     id: id,
-    projectId: project.id,
-    content: content
+    projectId: projectId,
+    content: content,
+    user: walletId
   };
 
-  const response = await createComment(like, user);
+  const response = await createComment(comment);
 
   if(!response) {
     res.sendStatus(500);
+    return;
   }
 
-  res.sendStatus(200);
+  res.send({status: 1, comment: response});
+  return;
 });
 
 

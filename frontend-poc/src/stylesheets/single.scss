@@ -11,12 +11,28 @@
       margin-left: 0 !important;
     }
   }
+
+  .edit-btn {
+    margin-top: 20px !important;
+    padding: 10px 26px !important; 
+  }
   
   .main-wrap {
     padding: 0;
 
     .first-part-wrap {
       margin: 0;
+
+      .edit-button-wrap {
+        color: #FFFFFF !important;
+        padding: 9px 12px 10px 12px;
+        cursor: pointer;
+        padding: 10px 35px;
+        background: #EAAD25 !important;
+
+      
+      }
+
 
       .description-wrap {
         padding: 0;
@@ -322,16 +338,23 @@
     }
 
     .comment-wrap {
-      margin-bottom: 5px;
+      margin: 0;
+      padding: 0;
 
       @media (max-width: 568px) {
         margin-bottom: 20px;
+      }
+
+      .content-wrap {
+        padding-bottom: 30px;
+        border-bottom: 1px solid #A39A9A;
+        margin-top: 30px;
       }
     }
 
     .nav-tabs {
       border-bottom-color: #A39A9A;
-      margin-bottom: 37px;
+      // margin-bottom: 37px;
       display: flex;
       justify-content: space-between;
 
@@ -377,7 +400,7 @@
       .content-wrap {
 
         .author-wrap {
-          margin-left: 16px;
+          // margin-left: 16px;
 
           @media (max-width: 568px) {
            margin-left: 0;
@@ -412,6 +435,48 @@
           }
       }
     }
+    .connect-wallet {
+      background: linear-gradient(142.91deg, #F9ED32 -54.28%, #E8A523 -12.42%, #CE225B 48.56%, #693E98 100%) !important;
+      border: none !important;
+      border-radius: 2px;
+      color: #FFFFFF;
+      margin-top: 30px;
+      padding: 10px 27px !important;
+    }
+
+    .comment-form-wrap {
+      padding: 0;
+      margin-top: 30px;
+
+      .form-control {
+        background: #000000;
+        border: 1px solid #4D4949;
+        border-radius: 2px;
+        font-family: 'Titillium Web';
+        font-style: normal;
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 27px;
+        color: #FFFFFF;
+      }
+
+      .submit-idea-btn {
+        background: linear-gradient(142.91deg, #F9ED32 -54.28%, #E8A523 -12.42%, #CE225B 48.56%, #693E98 100%) !important;
+        border: none !important;
+        border-radius: 2px;
+        font-family: 'Titillium Web';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 27px;
+        text-align: center;
+        color: #FFFFFF;
+        padding: 12px 60px;
+        margin-top: 20px;
+      }
+    }
+
+   
   }
   .current-status-wrap {
 

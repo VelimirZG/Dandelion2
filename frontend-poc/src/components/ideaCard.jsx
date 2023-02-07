@@ -172,7 +172,6 @@ const IdeaCard = (props) => {
                                   EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
                                 </Button>
                               }
-                              
                             </div>
                         }
                        

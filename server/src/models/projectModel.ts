@@ -13,7 +13,6 @@ export class Project extends Model {
   @OneToMany(() => Comment, (comment) => comment.projectId)
   comments: Comment[];
 
-  @ManyToOne(() => User, (user) => user.projects)
-  @JoinColumn()
-  user!: User;
+  @Column()
+  user: string;
 }

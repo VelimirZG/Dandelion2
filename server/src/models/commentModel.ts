@@ -8,11 +8,9 @@ export class Comment extends Model {
   @Column()
   content: string;
 
-  @ManyToOne(() => Project, (project) => project.comments)
-  @JoinColumn()
-  projectId!: Project;
+  @Column()
+  projectId: string;
 
-  @ManyToOne(() => User, (user) => user.comments)
-  @JoinColumn()
-  user!: User;
+  @Column()
+  user: string;
 }

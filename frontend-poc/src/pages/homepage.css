@@ -254,7 +254,7 @@
   position: relative;
 }
 .projects-wrap .card-title::before {
-  background-image: attr(data-count);
+  background-image: url('../assets/images/icon-bulb.png');
   content: "";
   display: inline-block;
   cursor: pointer;

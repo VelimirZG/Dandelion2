@@ -15,6 +15,7 @@ import * as nearAPI from "near-api-js";
 import '../stylesheets/single.scss';
 import Footer from "../components/footer";
 import IdeaForm from "../components/ideaForm";
+import CommentForm from "../components/commentForm";
 
 const Single = (props) => {
 
@@ -25,15 +26,32 @@ const Single = (props) => {
   const [popupInfo, setPopupInfo] = useState({open: false, msg: ''});
   const { utils } = nearAPI;
   const [openIdeaForm, setOpenIdeaForm] = useState(false);
+  const [ideaComments, setIdeaComments] = useState([]);
+  const [commentValue, setCommentValue] = useState('');
   
 
-  useEffect(() => { 
+  useEffect(() => {
+    getIdeaComments();
     getIdea(ideaId).then( idea => {
       console.log(idea);
       calculateIdeaStatus(idea);
       
     });
   }, [] )
+
+  async function getIdeaComments() {
+    let formData = new FormData();
+    formData.append("projectId", ideaId);
+    
+    const rawResponse = await fetch('http://localhost:9999/api/comments', {
+      method: 'POST',
+      body: formData
+    })
+    const response = await rawResponse.json();
+    console.log('RES: ', response);
+    setIdeaComments(response.comments);
+    return response;
+  }
 
   function editIdea(event) {
     setOpenIdeaForm(true);
@@ -64,7 +82,28 @@ const Single = (props) => {
     }
   }
 
-  
+  async function submitComment(event) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    formData.append('walletId', accountId);
+    formData.append('projectId', ideaId);
+
+    const rawResponse = await fetch('http://localhost:9999/api/comment', {
+      method: 'POST',
+
+      body: formData
+    })
+    const response = await rawResponse.json();
+    console.log(response);
+
+    if(response.status === 1) {
+      setIdeaComments((prev) => [...prev, response.comment]);
+      setCommentValue('');
+
+    }else {
+      alert('Something went wrong, please try again later.');
+    }
+  }
   
   if(idea) {
     return (
@@ -79,14 +118,6 @@ const Single = (props) => {
                     <div className="col-12 col-lg-8">
                       <h1 className="idea-title">{idea.title}</h1>
                     </div>
-                    {
-                      idea.owner_id === accountId && 
-                      <div className="col-12 col-lg-4">
-                        <Button variant="outline-primary ms-auto tag-btn edit-btn" data-idea={idea.idea_id} onClick={(e) => editIdea(e)}>
-                          EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
-                        </Button>
-                      </div>
-                    }
                   </div>
                   <div className="row d-flex justify-content-center align-items-center w-100 m-0">
                     <div className="col-12 col-lg-9 tag-wrap">
@@ -204,6 +235,17 @@ const Single = (props) => {
                         <Button variant="outline-primary ms-auto" className="btn btn-outline-primary ms-auto tag-btn" onClick={(e) => investInIdea(e)}>INVEST</Button>
                       </div>
                     }
+                  
+                      {
+                        idea.owner_id === accountId && 
+                       
+                        <div className="col-12">
+                          <Button variant="outline-primary ms-auto tag-btn edit-btn" data-idea={idea.idea_id} onClick={(e) => editIdea(e)}>
+                            EDIT <img src={`${process.env.PUBLIC_URL}/pen.png`} />
+                          </Button>
+                        </div>
+                      }
+                    
                   </div>
                 </div>
               </div>
@@ -230,11 +272,38 @@ const Single = (props) => {
                   <div className="comments-wrap">
                     <Tabs defaultActiveKey="comments" id="uncontrolled-tab-example" >
                       <Tab eventKey="comments" title="Comments">
-                        <div className="row comment-wrap">
-                          <div className="col-2 image-wrap">
-                            <img src={`${process.env.PUBLIC_URL}/profile.png`}/>
+                        {
+                          ideaComments.map((comment, i) => {
+                            return (
+                              <div className="row comment-wrap">
+                                <div className="col-12 content-wrap">
+                                  <div className="author-wrap">
+                                    <p className="author">{comment.user}</p>
+                                    <p className="date">{comment.created_at}</p>
+                                  </div>
+                                  <p className="content">{comment.content}</p>
+                                </div>
+                              </div>
+                            )
+                          })
+                        }
+                        <div className="container-fluid">
+                          <div className="row">
+                            <div className="col col-wrap comment-form-wrap">
+                              <form onSubmit={submitComment}>
+                                <div className="input-wrap textarea-wrap">
+                                  <label className="form-label" htmlFor="content">Add new Comment</label>
+                                  <textarea name="content" className="form-control comment-text-area" required id="content" rows="3" defaultValue={commentValue}></textarea>
+                                </div>
+                                <div className="d-flex justify-content-start align-items-center submit-wrap">
+                                  <button type="submit" className="submit-idea-btn">SUBMIT</button>
+                                </div>
+                              </form>
+                            </div>
                           </div>
-                          <div className="col-10 content-wrap">
+                        </div>
+                        {/* <div className="row comment-wrap">
+                          <div className="col-12 content-wrap">
                             <div className="author-wrap">
                               <p className="author">John Doe Johnson</p>
                               <p className="date">3w ago</p>
@@ -243,17 +312,14 @@ const Single = (props) => {
                           </div>
                         </div>
                         <div className="row">
-                          <div className="col-2 image-wrap">
-                            <img src={`${process.env.PUBLIC_URL}/profile.png`}/>
-                          </div>
-                          <div className="col-10 content-wrap">
+                          <div className="col-12 content-wrap">
                             <div className="author-wrap">
                               <p className="author">John Doe Johnson</p>
                               <p className="date">3w ago</p>
                             </div>
                             <p className="content">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen.</p>
                           </div>
-                        </div>
+                        </div> */}
                       </Tab>
                     </Tabs>
                   </div>
