@@ -16,27 +16,25 @@ const Footer = () => {
               <ul className="footer-menu-ul">
                 <li><a href="./about">About us</a></li>
                 <li><a href="#">Careers</a></li>
-                <li><a href="#">Press</a></li>
-                <li><a href="#">Contacts</a></li>
+              
               </ul>
             </div>
             <div className="col-6 col-lg-6">
               <h6 className="footer-menu-title">Support</h6>
               <ul className="footer-menu-ul">
-                <li><a href="#">Help center</a></li>
-                <li><a href="#">Our Rules</a></li>
+                <li><a href="./how">How it works</a></li>
+             
                 <li><a href="./faq">FAQ</a></li>
-                <li><a href="#">Brand Assets</a></li>
+                
               </ul>
             </div>
           </div> 
           <div className="col-12 col-lg-3 f-menu-2">
             <h6 className="footer-menu-title">More from us</h6>
             <ul className="footer-menu-ul">
-              <li><a href="#">Newsletter</a></li>
-              <li><a href="#">Project updates</a></li>
-              <li><a href="#">Mobile apps</a></li>
-              <li><a href="#">Research</a></li>
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Medium</a></li>
+              <li><a href="#">Discord</a></li>
             </ul>
           </div>
         </div>

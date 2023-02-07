@@ -15,44 +15,43 @@ const faq = () => {//zamijeniti sa imenom stranice Page
       <Navbar />
       <div className="container page-wrap">
         <div className="row">
-          <h1 className="page-title">Pravila privatnosti</h1>
-          <div className="col-12 content-wrap">//ubaciti content poslije ovoga
-                <h1>Header 1</h1>
-                <h2>Header 2</h2>
-                <h3>Header 3</h3>
-              <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-              <ul>
-              <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-              <li>Aenean semper neque ac nibh semper luctus.</li>
-              </ul>
-              <p></p>
-              <p>
-              </p><ul>
-              <li>Cras non metus quis arcu tincidunt suscipit elementum nec orci.</li>
-              </ul>
-              <p></p>
-              <p>
-              </p><ul>
-              <li>Nunc hendrerit libero et ante dictum, sed convallis nisi tristique.</li>
-              </ul>
-              <p></p>
-              <p>
-              </p><ul>
-              <li>Nulla et ex quis dolor volutpat interdum id at felis.</li>
-              <li>Nam pharetra felis eget purus varius auctor.</li>
-              <li>Curabitur in risus iaculis, dictum quam at, finibus lacus.</li>
-              <li>Phasellus a massa ut mi ullamcorper porttitor.</li>
-              <li>Nunc aliquam diam vitae ligula placerat, quis venenatis sapien vestibulum.</li>
-              </ul>
-              <p></p>
-              <p>
-              </p><ul>
-              <li>Phasellus aliquet nibh sodales tellus ullamcorper euismod.</li>
-              <li>Duis maximus sem a quam eleifend, luctus elementum massa convallis.</li>
-              </ul>
-              <p></p>
+          <h1 className="page-title">Frequently asked questions</h1>
+          <div className="col-12 content-wrap"><p>Q: What is Dandelion?</p>
+
+                <p>A: Dandelion is a decentralized platform that utilizes blockchain technology to connect creators and investors. It allows creators to receive financial support and feedback for their ideas, while investors can discover and invest in innovative projects.</p>
+
+                <p>Q: What makes a Dandelion platform different from traditional investment platforms?</p>
+
+                <p>A: Dandelion provide opportunities for creators to receive early stage support and feedback for their ideas, which can help them bring their projects to market faster.</p>
+
+                <p>Q: Who can participate?</p>
+
+                <p>A: Both creators and investors can participate in a web3 investment platform. Creators can submit their ideas for funding and feedback, while investors can discover and invest in innovative projects.</p>
+
+                <p>Q: What kind of projects can I find on Dandelion?</p>
+
+                <p>A: You can find a wide range of projects, including blockchain-based applications, web3 technologies, and decentralized systems. These projects are focused on solving real problems and improving the way we live, work, and interact with the world.</p>
+
+                <p>Q: Is it safe to invest in a web3 projects?</p>
+
+                <p>A: As with any investment, there is always risk involved. However, web3 investment platforms utilize blockchain technology to provide a more secure and transparent investment process. Additionally, by investing in an idea, you have the opportunity to diversify your portfolio and invest in a range of innovative projects.</p>
+
+                <p>Q: How do I submit an idea for investment on the platform?</p>
+
+                <p>A: To submit an idea, you must first connect your wallet. Once your wallet is connected, you can submit your idea by filling out the required information. If you have completed your submission successfully it will be visible immediately. Idea should be submitted according to guideline in terms and policies, othervise it will be removed.</p>
+
+                <p>Q: How do I invest in an idea on the platform?</p>
+
+                <p>A: You can search for ideas that interest you and review their details. If you decide to support the idea, you can select the amount you would like to invest and complete the transaction through your Near wallet.</p>
+
+                <p>Q: What types of ideas are accepted on the platform?</p>
+
+                <p>A: The platform is focused on innovative and impactful ideas in the blockchain and web3 space. We are looking for ideas that have the potential to solve real problems and create positive change in the world.</p>
+
+                <p>Q: What happens after I invest in an idea?</p>
+
+                <p>A: After you invest in an idea, you will become eligible for the airdrop in the percentage of the investment amount for that phase. Under the dashboard you will be able to track its progress and get regular update.</p>
+
             </div>
         </div>
       </div>

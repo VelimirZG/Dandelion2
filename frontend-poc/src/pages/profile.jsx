@@ -221,11 +221,13 @@ const Profile = (props) => {
                       </React.Fragment>
                     :
                     <React.Fragment>
+                      <h4>
                       <p>We are thrilled that you are considering sharing your breakthrough blockchain-based idea or ideas within our vibrant and engaged community.</p>
                       <p>Dandelion will allow your idea to get visibility, feedback and validation, requests for collaboration and most importantly funding.</p>
-                      <p>So, bring your ideas to life - submit today!</p>
+                      <p>So, bring your ideas to life - submit today!</p><br></br>
+                      <p>Here are some tips to help you get started:</p>
                       <p>You can submit one IDEA at a time and the process is very simple - just click &ldquo;Create Idea&rdquo; and fill in the blanks!&nbsp;</p>
-                      <p>If you have completed your submission successfully it will be visible immediately</p>
+                      <p>If you have completed your submission successfully it will be visible immediately</p></h4>
                     </React.Fragment>
                   }
                 </div>
@@ -259,8 +261,17 @@ const Profile = (props) => {
                 </div>
               </section>
               <section className="container-lg projects-wrap pt-5" >
-                <div className="mt-5 d-flex flex-column">
-                  <IdeaCard ideas={invIdeas} isInvestment={true} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+              <div className="mt-5 d-flex flex-column">
+                  {invIdeas.length > 0 ?
+                    <IdeaCard ideas={invIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                    : 
+                    <React.Fragment>
+                      <h4>
+                      <p>We are thrilled that you are considering investing in breakthrough blockchain-based ideas within our community.</p>
+                      <p>The potential to change the world and WIN BIG here is huge and all with a very small investment - can there be anything more exciting&hellip; we think not!</p><br></br>
+                      <p>So get in early, as an idea investor of web3 projects before they blast off!</p></h4>
+                    </React.Fragment>
+                  }
                 </div>
               </section>
             </Tab>

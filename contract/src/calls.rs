@@ -400,6 +400,18 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
             }
             0
         }
+
+        //delete idea and all related data but only if you are owner of idea
+        pub fn delete_idea(&mut self, idea_id: IdeaId){
+            //assert that caller of this function is contract owner
+            //assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Only contract owner can call this function.");
+            let idea = self.ideas.get(&idea_id).unwrap();
+            assert_eq!(env::predecessor_account_id(), idea.owner_id, "Only owner of idea can delete idea.");
+            self.ideas.remove(&idea_id);
+            self.goals.remove(&idea_id);
+            self.investment.remove(&idea_id);
+            log!("Idea deleted");
+        }
     }
 
 
