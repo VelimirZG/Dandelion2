@@ -166,7 +166,7 @@ const Profile = (props) => {
       <div className="container main-wrap">
         <section className="row">
           <div className="col-12 col-lg-6 title-wrap">
-            <h1>Welcome to the <br/> <b>the web3 revolution!</b></h1>
+            <h1>Welcome to the <br/> <b> web3 revolution!</b></h1>
           </div>
         </section>
         <div className="tab-wrap">
