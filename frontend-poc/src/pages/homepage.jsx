@@ -194,11 +194,11 @@ const Homepage = () => {
                   <div className="card swiper-card-wrap p-1">
                     <div className="card-body">
                       <div className="card-title">
-                        <span className="news-date">12/10/2022    Admin Administrator</span>
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
+                        <span className="news-date">12/01/2023    McKinsey</span>
+                        <h5 className="card-title-text">Web3 beyond the hype, understanding the disruptive potential</h5>
                       </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <a href="#" className="read-more-btn">Read more</a>
+                      <p className="card-text">Applications for the next generation of the internet continue to spring up</p>
+                      <a href="https://www.mckinsey.com/industries/financial-services/our-insights/web3-beyond-the-hype" className="read-more-btn">Read more</a>
                     </div>
                   </div>
                 </SwiperSlide>
@@ -206,11 +206,11 @@ const Homepage = () => {
                   <div className="card swiper-card-wrap p-1">
                     <div className="card-body">
                       <div className="card-title">
-                        <span className="news-date">12/10/2022    Admin Administrator</span>
-                        <h5 className="card-title-text">The Input Technology</h5>
+                        <span className="news-date">12/10/2022    Cointelegraph</span>
+                        <h5 className="card-title-text">Near Protocol partners with Google Cloud </h5>
                       </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <a href="#" className="read-more-btn">Read more</a>
+                      <p className="card-text">Under a partnership with Near Protocol, Google Cloud will support Near developers</p>
+                      <a href="https://cointelegraph.com/news/near-protocol-partners-with-google-cloud-to-support-web3-devs" className="read-more-btn">Read more</a>
                     </div>
                   </div>
                 </SwiperSlide>
@@ -218,11 +218,11 @@ const Homepage = () => {
                   <div className="card swiper-card-wrap p-1">
                     <div className="card-body">
                       <div className="card-title">
-                        <span className="news-date">12/10/2022    Admin Administrator</span>
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
+                        <span className="news-date">09/01/2023    CoinDesk</span>
+                        <h5 className="card-title-text">NEAR Protocol: Optimized for Disruptive Developers</h5>
                       </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <a href="#" className="read-more-btn">Read more</a>
+                      <p className="card-text">Built by developers, for developers, NEAR makes it easy to build Web3 for the masses</p>
+                      <a href="https://www.coindesk.com/sponsored-content/near-protocol-optimized-for-disruptive-developers/" className="read-more-btn">Read more</a>
                     </div>
                   </div>
                 </SwiperSlide>
@@ -230,11 +230,11 @@ const Homepage = () => {
                   <div className="card swiper-card-wrap p-1">
                     <div className="card-body">
                       <div className="card-title">
-                        <span className="news-date">12/10/2022    Admin Administrator</span>
-                        <h5 className="card-title-text">The Input Technology for the Metaverse</h5>
+                        <span className="news-date">26/01/2022    TechTarget</span>
+                        <h5 className="card-title-text">Top 8 Web 3.0 trends and predictions for 2023</h5>
                       </div>
-                      <p className="card-text">Receive feedback and financials support at a very early stage - from the idea creation</p>
-                      <a href="#" className="read-more-btn">Read more</a>
+                      <p className="card-text">Web 3.0 is evolving and growing, here are eight Web 3.0 trends and predictions</p>
+                      <a href="https://www.techtarget.com/searchcio/tip/Top-Web-30-trends-and-predictions" className="read-more-btn">Read more</a>
                     </div>
                   </div>
                 </SwiperSlide>

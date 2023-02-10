@@ -263,7 +263,7 @@ const Profile = (props) => {
               <section className="container-lg projects-wrap pt-5" >
               <div className="mt-5 d-flex flex-column">
                   {invIdeas.length > 0 ?
-                    <IdeaCard ideas={invIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
+                    <IdeaCard isInvestment={true} ideas={invIdeas} loadMoreIdeas={loadMoreIdeas} onProfile={true} collectFunds={collectFunds} editIdea={editIdea} />
                     : 
                     <React.Fragment>
                       <h4>
