@@ -161,7 +161,7 @@ const IdeaCard = (props) => {
                                 <p className="supporters"><b>{item.investors_count}</b> supportes</p>
                               </div>
                               {
-                                item.goal_reached && !props.isInvestment && 
+                                item.collect_enabled && !props.isInvestment && 
                                 <Button variant="outline-primary ms-auto tag-btn collect-btn" data-idea={item.idea_id} onClick={(e) => props.collectFunds(e)}>
                                   COLLECT
                                 </Button>
