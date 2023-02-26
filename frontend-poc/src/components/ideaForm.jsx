@@ -165,7 +165,7 @@ function IdeaForm(props) {
     formData.append("walletId", accountId);
     formData.append("projectId", ideaId);
 
-    const rawResponse = await fetch('http://localhost:9999/api/upload', {
+    const rawResponse = await fetch('http://185.237.15.81:9999/api/upload', {
       method: 'POST',
 
       body: formData
@@ -183,7 +183,7 @@ function IdeaForm(props) {
 
     if(!ideaInfo) {
       const pictureURL = await uploadImage(ideaId);
-      formData.append('picture_url', 'http://localhost:9999' + pictureURL);
+      formData.append('picture_url', 'http://185.237.15.81:9999' + pictureURL);
     }else {
       formData.append('picture_url', ideaInfo.picture_url);
     }

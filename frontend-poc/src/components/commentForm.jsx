@@ -155,11 +155,11 @@ function CommentForm(props) {
     formData.append('walletId', accountId);
     formData.append('projectId', ideaId);
 
-    const rawResponse = await fetch('http://localhost:9999/api/comment', {
+    const rawResponse = await fetch('http://185.237.15.81:9999/api/comment', {
       method: 'POST',
 
       body: formData
-    })
+    })  
     const response = await rawResponse.json();
     console.log(response);
 
