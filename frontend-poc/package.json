@@ -2,6 +2,7 @@
   "name": "frontend-poc",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://mydandelion.app/",
   "dependencies": {
     "@babel/core": "^7.19.0",
     "@babel/preset-env": "^7.19.0",
@@ -62,6 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "homepage": "https://dandelion-13018.web.app"
+  }
 }
