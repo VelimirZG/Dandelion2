@@ -41,7 +41,7 @@ router.post('/upload', async (req: any, res: Response) => {
   if (path.extname(image.name) != '.png' && path.extname(image.name) != '.jpg') return res.sendStatus(500);
 
   // Move the uploaded image to our upload folder
-  const imagePath: string = __dirname + '/../../upload/' + projectId + path.extname(image.name);
+  const imagePath: string = '/var/www/html/upload' + projectId + path.extname(image.name);
   image.mv(imagePath);
   console.log(imagePath);
   
