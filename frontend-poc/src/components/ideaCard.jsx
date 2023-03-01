@@ -24,7 +24,7 @@ const IdeaCard = (props) => {
 
 
   async function getAllLikes() {
-    const rawResponse = await fetch('http://mydandelion.app:9999/api/likes', {
+    const rawResponse = await fetch('https://mydandelion.app:9999/api/likes', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -52,7 +52,7 @@ const IdeaCard = (props) => {
   async function likeIdea(event) {
     if(accountId) {
       const ideaId = event.currentTarget.getAttribute('data-idea');
-      const rawResponse = await fetch('http://mydandelion.app:9999/api/like', {
+      const rawResponse = await fetch('https://mydandelion.app:9999/api/like', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

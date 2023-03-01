@@ -43,7 +43,7 @@ const Single = (props) => {
     let formData = new FormData();
     formData.append("projectId", ideaId);
     
-    const rawResponse = await fetch('http://mydandelion.app:9999/api/comments', {
+    const rawResponse = await fetch('https://mydandelion.app:9999/api/comments', {
       method: 'POST',
       body: formData
     })
@@ -88,7 +88,7 @@ const Single = (props) => {
     formData.append('walletId', accountId);
     formData.append('projectId', ideaId);
 
-    const rawResponse = await fetch('http://mydandelion.app:9999/api/comment', {
+    const rawResponse = await fetch('https://mydandelion.app:9999/api/comment', {
       method: 'POST',
 
       body: formData

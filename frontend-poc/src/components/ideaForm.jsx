@@ -165,7 +165,7 @@ function IdeaForm(props) {
     formData.append("walletId", accountId);
     formData.append("projectId", ideaId);
 
-    const rawResponse = await fetch('http://mydandelion.app:9999/api/upload', {
+    const rawResponse = await fetch('https://mydandelion.app:9999/api/upload', {
       method: 'POST',
 
       body: formData
@@ -183,7 +183,7 @@ function IdeaForm(props) {
 
     if(!ideaInfo) {
       const pictureURL = await uploadImage(ideaId);
-      formData.append('picture_url', 'http://mydandelion.app:9999' + pictureURL);
+      formData.append('picture_url', 'https://mydandelion.app:9999' + pictureURL);
     }else {
       formData.append('picture_url', ideaInfo.picture_url);
     }
