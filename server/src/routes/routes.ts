@@ -43,6 +43,7 @@ router.post('/upload', async (req: any, res: Response) => {
   // Move the uploaded image to our upload folder
   const imagePath: string = __dirname + '/../../upload/' + projectId + path.extname(image.name);
   image.mv(imagePath);
+  console.log(imagePath);
   
   
   const user: any = await findUserById(walletId);
@@ -57,6 +58,7 @@ router.post('/upload', async (req: any, res: Response) => {
     }
   }
   const imageURL = '/upload/' + projectId + path.extname(image.name)
+  
   console.log(imageURL);
   const project: any = {
     id: projectId,

@@ -6,7 +6,7 @@ import { dbConnection } from '../config/database';
 const projectRepository = dbConnection.getRepository(Project);
 
 export const createProject = async (input: Partial<Project>, user: User) => {
-  return await projectRepository.save(projectRepository.create({ ...input, user }));
+  return await projectRepository.save(projectRepository.create({ ...input, ...user }));
 };
 
 export const getProject = async (projectId: string) => {

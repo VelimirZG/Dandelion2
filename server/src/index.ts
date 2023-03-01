@@ -2,6 +2,7 @@
 import express from 'express';
 import router from './routes/routes';
 import { dbConnection } from './config/database';
+import fs from 'fs';
 
 // initialize servers
 const app = express();
@@ -13,7 +14,10 @@ const path = require("path");
 
 let http: {
   listen: (arg0: number, arg1: any) => any;
-} = require('http').createServer(app);
+} = require('https').createServer({
+  key: fs.readFileSync('/etc/ssl/dandelion/private.key'),
+  cert: fs.readFileSync('/etc/ssl/dandelion/certificate.crt')
+},app);
 
 app.set('port', process.env.PORT || 3000);
 app.use(cors());
