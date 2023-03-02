@@ -40,7 +40,7 @@ const Profile = (props) => {
   const [activeIdeasCount, setActiveIdeasCount] = useState(0);
   const [inactiveIdeasCount, setInactiveIdeasCount] = useState(0);
 
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(4);
   const limit = 4;
 
   
