@@ -53,7 +53,7 @@ impl Contract {
             PromiseResult::Failed => near_sdk::json_types::U128(0),//"Cannot read from that contract, please contact support.".to_string(),
             PromiseResult::Successful(result) => {
               let balance:U128=serde_json::from_slice(&result).unwrap();
-              log!("balance_json: {:?}", balance);
+             // log!("balance_json: {:?}", balance);
                self.insert_contract_supply(idea_id, balance);
                //let balance=balance.to_string();
                balance
@@ -141,7 +141,7 @@ impl Contract {
           PromiseResult::Failed => (near_sdk::json_types::U128(0),near_sdk::json_types::U128(0)),//"oops!".to_string(),
           PromiseResult::Successful(result) => {
             let mut balance:U128=serde_json::from_slice(&result).unwrap();
-            log!("balance_json: {:?}", balance);
+            //log!("balance_json: {:?}", balance);
             self.insert_total_supply(idea_id, balance);
              //let balance=String::from_utf8(result).unwrap();
            //calculate 11% from balance

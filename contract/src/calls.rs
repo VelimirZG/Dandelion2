@@ -11,7 +11,7 @@ impl Contract {
         let project_phase_goals = [amount1, amount2, amount3, amount4];
         self.ideas.insert(&idea_id, &metadata);
         project_phase_goals.iter().enumerate().for_each(|(i, amount)| {
-            log!("Creating goal for idea {} phase {} amount {}", idea_id, i, amount) ;
+            // log!("Creating goal for idea {} phase {} amount {}", idea_id, i, amount) ;
             let project_phase = (i + 1) as u8;
             match project_phase {
                 1 => self.create_goals(idea_id, project_phase, *amount, true),
@@ -21,11 +21,11 @@ impl Contract {
     }
 
     pub fn create_goals(&mut self, idea_id: IdeaId, project_phase: u8, goal_amount: Balance, active: bool) {
-        log!("Creating goal for idea {} phase {} amount {}", idea_id, project_phase, goal_amount) ;  
+        // log!("Creating goal for idea {} phase {} amount {}", idea_id, project_phase, goal_amount) ;  
         let mut goals = self.goals.get(&idea_id).unwrap_or_else(||Vec::new());
         goals.push(ProjectPhaseGoals{idea_id, project_phase, goal_amount, goal_reached: false, phase_start: env::block_timestamp(),phase_paid: false, collect_enabled: false, active });
         self.goals.insert(&idea_id, &goals);
-        log!("Goal phase {} created", project_phase);
+        // log!("Goal phase {} created", project_phase);
     }
 
     //invest active phase of idea
@@ -61,7 +61,7 @@ impl Contract {
     
         if goal - to_be_invested <= 1000000000 {
             self.set_goal_reached(idea_id, project_phase);
-            log!("Goal reached");
+            // log!("Goal reached");
         }
 
     }
@@ -107,7 +107,7 @@ pub fn edit_idea(&mut self, idea_id: IdeaId, metadata: IdeaMetadata, amount1:u12
         if goal.idea_id == idea_id {
             let goal_reached = self.get_goal_reached(idea_id, goal.project_phase);
     if goal_reached == true{
-        log!("Goal phase {} reached, cannot edit", goal.project_phase);
+        // log!("Goal phase {} reached, cannot edit", goal.project_phase);
         previous_goal_reached = true;
         i=i+1;
 
@@ -115,15 +115,15 @@ pub fn edit_idea(&mut self, idea_id: IdeaId, metadata: IdeaMetadata, amount1:u12
     }else if previous_goal_reached == true{
         //assert that project phase goal is more then 0
         assert!(project_phase_goals[i] > 0, "The goal amount for the project phase must be greater than 0");
-            log!("Goal phase {} edited", goal.project_phase);
-            log!("New amount: {}", project_phase_goals[i]);
+            // log!("Goal phase {} edited", goal.project_phase);
+            // log!("New amount: {}", project_phase_goals[i]);
             goal.goal_amount = project_phase_goals[i];
             i=i+1; 
             previous_goal_reached = false;
             //set goal to active
             goal.active = true;
             }else{
-             log!("Goal phase {}, cannot edit. Previous goal not reached", goal.project_phase);
+            //  log!("Goal phase {}, cannot edit. Previous goal not reached", goal.project_phase);
             }
     }
         
@@ -134,15 +134,15 @@ pub fn edit_idea(&mut self, idea_id: IdeaId, metadata: IdeaMetadata, amount1:u12
 
 pub fn collect_funds_for_all_phases(&mut self, idea_id: IdeaId) {
     for project_phase in 1..=4 {
-        log!("Collecting funds for phase {} and idea_id {}", project_phase, idea_id);
+        // log!("Collecting funds for phase {} and idea_id {}", project_phase, idea_id);
         let result = self.collect_funds(idea_id, project_phase);
         let result_str = String::from_utf8(result).unwrap();
-        log!("Result for phase {}: {:?}", project_phase, result_str);
+        // log!("Result for phase {}: {:?}", project_phase, result_str);
         // check the value of result_str
         // if it's equals to "Funds collected successfully" the funds collection for that phase succeeded
         // otherwise it contains the reason why the collection failed
     }
-    log!("Funds collection for all phases completed.");
+    // log!("Funds collection for all phases completed.");
 }
 
 
@@ -196,13 +196,13 @@ pub fn check_date_all(&mut self) {
     let phase_paid = self.get_phase_paid(idea_phase.0, idea_phase.1);
     let active = self.get_active_phase(idea_phase.0, idea_phase.1);
     if time_passed > 259200000000 && goal_reached == false && active == true && phase_paid == false{
-        log!("time passed and goal not reached");
-        log!("idea id: {} and phase: {} has been closed wihtout reaching goal", idea_phase.0, idea_phase.1);
+        // log!("time passed and goal not reached");
+        // log!("idea id: {} and phase: {} has been closed wihtout reaching goal", idea_phase.0, idea_phase.1);
         self.return_to_investors(idea_phase.0, idea_phase.1);
         self.set_phase_paid(idea_phase.0, idea_phase.1);
         
     }else if time_passed < 259200000000{
-        log!("time not passed");
+        // log!("time not passed");
     }
     }
 }
@@ -217,7 +217,7 @@ pub fn return_to_investors(&mut self, idea_id: IdeaId, project_phase: u8){
         let investment = self.investment.get(&investment_id).unwrap();
         if investment.idea_id == idea_id && investment.project_phase == project_phase{
             Promise::new(investment.investor_id).transfer(investment.amount);
-            log!("Funds returned to investor");
+            // log!("Funds returned to investor");
         }
     }
 }
@@ -300,7 +300,7 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
     //         }
     //     }
     //     Promise::new(investor_id).transfer(tokens);
-    //     log!("Tokens collected from investor");
+    // //     log!("Tokens collected from investor");
     // }
 
     pub fn collect_token(&mut self, idea_id: IdeaId, project_phase: u8, investor_id: AccountId){
@@ -327,9 +327,9 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
     
         let receiver_id = investor_id;
         let amount = tokens;
-        log!("contract_id: {}, receiver_id{}, amount{}", contract_id, receiver_id, amount);
+        // log!("contract_id: {}, receiver_id{}, amount{}", contract_id, receiver_id, amount);
         // self.transfer(contract_id, receiver_id, near_sdk::json_types::U128(amount));
-        // log!("Tokens collected from investor");
+        // // log!("Tokens collected from investor");
     }
 
   //get token_contract for idea
@@ -368,9 +368,9 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
     
         let receiver_id = investor_id;
         let amount = tokens;
-        log!("contract_id: {}, receiver_id{}, amount{}", contract_id, receiver_id, amount);
+        // log!("contract_id: {}, receiver_id{}, amount{}", contract_id, receiver_id, amount);
         // self.transfer(contract_id, receiver_id, near_sdk::json_types::U128(amount));
-        // log!("Tokens collected from investor");
+        // // log!("Tokens collected from investor");
     }
     
 
@@ -383,7 +383,7 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
 //             let percentage = self.get_investor_percentage(idea_id, project_phase, investor.0);
 //             let tokens = (percentage * (self.get_goal(idea_id, project_phase) as f32)) as u128;
 //             Promise::new(investor.0).transfer(tokens);
-//             log!("Tokens collected from investor");
+// //             log!("Tokens collected from investor");
 //         }
 //     }
 
@@ -410,7 +410,7 @@ pub fn get_investors_sum(&self, idea_id: IdeaId, project_phase: u8) -> Vec<(Acco
             self.ideas.remove(&idea_id);
             self.goals.remove(&idea_id);
             self.investment.remove(&idea_id);
-            log!("Idea deleted");
+            // log!("Idea deleted");
         }
     }
 

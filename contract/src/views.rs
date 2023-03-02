@@ -54,7 +54,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
 //         for goal in goal.iter() {
 //             if goal.goal_reached == false && goal.phase_paid == false && goal.active {
 //                 if index >= from_index && index < from_index + limit {
-//                     log!("idea_id: {}", key);
+// //                     log!("idea_id: {}", key);
 //                     let idea = self.ideas.get(&key).expect("Idea not found for given idea_id");
 //                     // let active_phase = self.get_active_project_phase(key.clone());
 //                     let investment_amount_sum: u128 = self.get_investments_by_idea_id_and_project_phase(key, goal.project_phase).iter().map(|(_, investment)| investment.amount).sum();
@@ -102,7 +102,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
             for goal in goal.iter() {
                 if goal.goal_reached == false && goal.phase_paid == false && goal.active {
                     if index >= from_index && index < from_index + limit {
-                        log!("idea_id: {}", key);
+                        // log!("idea_id: {}", key);
                         let idea = self.ideas.get(&key).expect("Idea not found for given idea_id");
                         // let active_phase = self.get_active_project_phase(key.clone());
                         let investment_amount_sum: u128 = self.get_investments_by_idea_id_and_project_phase(key, goal.project_phase).iter().map(|(_, investment)| investment.amount).sum();
@@ -201,7 +201,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
             if index >= from_index && index < from_index + limit {
                 let idea = self.get_idea_by_id(*idea_id);
                 let goals = self.get_goals_from_idea_id(idea_id.clone()).expect("No goals found for given idea_id");
-                log!("goals: {:?}", goals);
+                // log!("goals: {:?}", goals);
                 let investors_count = self.get_investors_count_by_idea_id(*idea_id);
                 let investment_amount_sum: u128 = self.get_investments_by_idea_id(*idea_id).iter().map(|(_, investment)| investment.amount).sum();
                 let sum_amount = self.get_total_amount_by_idea(idea_id.clone());
@@ -305,11 +305,11 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
             if key == idea_id {
                 for goal in goal.iter(){
                     if goal.collect_enabled == true{
-                        log!("goal.collect_enabled == true");
+                        // log!("goal.collect_enabled == true");
                         goals = goal.clone();
                         break;
                     }else{
-                        log!("goal.collect_enabled == false");
+                        // log!("goal.collect_enabled == false");
                         goals = goal.clone();
                     }
                 }
@@ -388,7 +388,7 @@ pub fn get_idea_for_single(&self, idea_id: IdeaId) -> Option<JsonIdeaWithInvestm
             goal_reached,
         });
     }
-    log!("investments: {:?}", investments);
+    // log!("investments: {:?}", investments);
 
     Some(JsonIdeaWithInvestments {
         idea_id: idea_id,
@@ -455,7 +455,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         for goal in goal.iter(){
             if goal.goal_reached == true {
                 let idea = self.ideas.get(&key).expect("Idea not found for given idea_id");
-                log!("Found idea: {:?} for goal: {:?}", idea, goal);
+                // log!("Found idea: {:?} for goal: {:?}", idea, goal);
                 if !ideas.contains(&key) {
                     
                     ideas.push(key);
@@ -463,7 +463,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
             }
         }
     }
-    log!("Ideas: {:?}", ideas);
+    // log!("Ideas: {:?}", ideas);
     for idea_id in ideas.iter(){
         let investments = self.investment
         .iter()
@@ -472,7 +472,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         let mut found_match = false;
         for (_, investment) in investments.iter(){
             if investment.investor_id == investor_id {
-                log!("Found matching investment: {:?} for investor_id: {}", investment, investor_id);
+                // log!("Found matching investment: {:?} for investor_id: {}", investment, investor_id);
                 found_match = true;
                 project_phases_count = project_phases_count + 1;
             }
