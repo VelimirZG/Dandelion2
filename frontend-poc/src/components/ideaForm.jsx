@@ -183,7 +183,7 @@ function IdeaForm(props) {
 
     if(!ideaInfo) {
       const pictureURL = await uploadImage(ideaId);
-      formData.append('picture_url', 'https://mydandelion.app:9999' + pictureURL);
+      formData.append('picture_url', 'https://mydandelion.app' + pictureURL);
     }else {
       formData.append('picture_url', ideaInfo.picture_url);
     }
