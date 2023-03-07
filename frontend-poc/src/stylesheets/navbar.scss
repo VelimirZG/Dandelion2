@@ -123,8 +123,8 @@
       cursor: pointer;
       
       opacity: 0; /* hide this */
-      z-index: 2; /* and place it over the hamburger */
-      
+      z-index: 20; /* and place it over the hamburger */
+      pointer-events: initial;
       -webkit-touch-callout: none;
     }
   
