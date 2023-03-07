@@ -406,6 +406,7 @@ pub fn get_idea_for_single(&self, idea_id: IdeaId) -> Option<JsonIdeaWithInvestm
         investors_count: self.get_investors_count_by_idea_id(idea_id),
         active_phase:Some(active_phase),
         token_contract:idea_metadata.token_contract,
+        airdrop:idea_metadata.airdrop,
     })
 }
 

@@ -73,5 +73,18 @@
   input[data-autocompleted] {
     background-color: transparent !important;
   }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    color: white;
+    margin-right: auto;
+  }
+  
+  .checkbox-label input[type="checkbox"] {
+    margin-right: 10px;
+    color: white;
+  }
+  
 }
 

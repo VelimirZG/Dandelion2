@@ -70,7 +70,7 @@ const ModalBody = styled.div`
     }
 
     label {
-      width: 30%;
+      width: 103%;
     }
 
     input, textarea {
@@ -196,8 +196,13 @@ function IdeaForm(props) {
     
     formData.append('owner_id', window.accountId);
     console.log('FROM DATA: ', formData.entries());
-   
-    let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id', 'token_contract'];
+    const checkbox = document.getElementById('airdrop');
+    
+    formData.append('airdrop', checkbox.checked);
+
+
+    
+    let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id', 'airdrop'];
     let data = {};
     for (let [key, value] of formData.entries()) {
       if(metadata.includes(key)) {
@@ -234,6 +239,30 @@ function IdeaForm(props) {
       })
     }
   }
+
+    //get current active phase 
+    const getActivePhase = () => {
+      if (!ideaInfo) {
+        return 0;
+      }
+      let activePhase = 0;
+      const investments = ideaInfo.investments; // reference to the original investments array
+      for (let i = investments.length - 1; i >= 0; i--) {
+        const inv = investments[i];
+        console.log('OVO JE INV: ', inv);
+        console.log('OVO JE I: ', i);
+        if (inv.goal_reached) {
+          activePhase = i + 2;
+          console.log('OVO JE AKTIVNA FAZA sa goal reached: ', activePhase);
+          break;
+        } else {
+          activePhase = 1;
+          console.log('OVO JE AKTIVNA FAZA samo 1: ', activePhase);
+        }
+      }
+      console.log('OVO se vraća AKTIVNA FAZA: ', activePhase);
+      return activePhase;
+    }
 
   const renderPhasesInput = () => {
     if(!ideaInfo) {
@@ -312,36 +341,50 @@ function IdeaForm(props) {
                       <label htmlFor="investment_goal" className="form-label">Investment goal:</label>
                       <input name="investment_goal" type="number" className="form-control" id="investment_goal" aria-describedby="investment_goal" />
                     </div> */}
+                    {getActivePhase() >= 2 &&
                     <div className="input-wrap">
                       <label htmlFor="team" className="form-label">Team*</label>
                       <input name="team" type="text" className="form-control" required id="team" aria-describedby="team" defaultValue={ideaInfo ? ideaInfo.team : ''} />
                     </div>
+                    }
                     <div className="input-wrap">
                       <label htmlFor="tags" className="form-label">Tags <span>(divide by comma)*</span></label>
                       <input name="tags" type="text" className="form-control" id="tags" required aria-describedby="tags" defaultValue={ideaInfo ? ideaInfo.tags.join(',') : ''} />
                     </div>
-                    <div className="input-wrap">
-                      <label htmlFor="competitors" className="form-label">Competitors</label>
-                      <input name="competitors" type="text" className="form-control" id="competitors" aria-describedby="competitors" defaultValue={ideaInfo ? ideaInfo.competitors.join(',') : ''} />
-                    </div>
+                    {getActivePhase() >= 2 &&
+                      <div className="input-wrap">
+                        <label htmlFor="competitors" className="form-label">Competitors</label>
+                        <input name="competitors" type="text" className="form-control" id="competitors" aria-describedby="competitors" defaultValue={ideaInfo && ideaInfo.competitors ? ideaInfo.competitors.join(',') : ''} />
+                      </div>
+                    }
+
+                     {getActivePhase() >= 2 &&
                     <div className="input-wrap">
                       <label htmlFor="value_proposition" className="form-label">Value proposition*</label>
                       <input name="value_proposition" type="text" className="form-control" required id="value_proposition" aria-describedby="value_proposition" defaultValue={ideaInfo ? ideaInfo.value_proposition : ''} />
                     </div>
+                    }
+                    {getActivePhase() >= 2 &&
                     <div className="input-wrap">
                       <label className="form-label" htmlFor="website">External website URL</label>
                       <input name="website" type="url" className="form-control" id="website" defaultValue={ideaInfo ? ideaInfo.website : ''}/>
                     </div>
+                  }
                     <div className="input-wrap">
                       {/* <label className="form-label" htmlFor="picture_url">Idea image file path*</label>
                       <input name="picture_url" type="url" className="form-control" required id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/> */}
-                      <label className="form-label" htmlFor="picture_url">Idea image file path*</label>
+                      <label className="form-label" htmlFor="picture_url">Image representing your idea*</label>
                       <input type="file" accept="image/*" name="image" className="form-control" id="image-file" />
                     </div>
                     <div className="input-wrap">
-                      <label htmlFor="token_contract" className="form-label">Token contract address*<span>(mandatory before 3. goal)*</span></label>
-                      <input name="token_contract" type="text" className="form-control" required id="token_contract" aria-describedby="token_contract" defaultValue={ideaInfo ? ideaInfo.token_contract : ''} />
-                    </div>
+                    <label htmlFor="airdrop" className="form-label">Will investors be eligible for airdrop?<span></span></label>
+                    <label htmlFor="airdrop" className="checkbox-label">
+                    <input type="checkbox" id="airdrop" name="airdrop" value="checkbox-value" defaultChecked={Boolean(ideaInfo && ideaInfo.airdrop === 'true')} />
+
+                      Yes
+                    </label>
+                  </div>
+
                     <h3 className="form-header">Phases</h3>
                     <div className="phases-wrap">
                     {ideaInfo ? 

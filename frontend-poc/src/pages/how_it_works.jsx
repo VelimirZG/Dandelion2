@@ -47,6 +47,7 @@ const How = () => {//zamijeniti sa imenom stranice Page
 	<p>Presale: After the project is completed, a presale of the token begins. For earlier investors tokens are released through airdrop.</p>
 	</li>
 </ol>
+<p>IMPORTANT!! <br></br>If goal is not reached within 90 days, investments are reverted to investors and idea is closed.</p>
 
 
             </div>

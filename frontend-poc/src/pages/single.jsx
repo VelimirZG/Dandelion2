@@ -82,6 +82,30 @@ const Single = (props) => {
     }
   }
 
+  const getActivePhase = () => {
+    if (!idea) {
+      console.log('nema ideje!! ');
+      return 0;
+    }
+    let activePhase = 0;
+    const investments = idea.investments; // reference to the original investments array
+    for (let i = investments.length - 1; i >= 0; i--) {
+      const inv = investments[i];
+      console.log('OVO JE INV: ', inv);
+      console.log('OVO JE I: ', i);
+      if (inv.goal_reached) {
+        activePhase = i + 2;
+        console.log('OVO JE AKTIVNA FAZA sa goal reached: ', activePhase);
+        break;
+      } else {
+        activePhase = 1;
+        console.log('OVO JE AKTIVNA FAZA samo 1: ', activePhase);
+      }
+    }
+    console.log('OVO se vraća AKTIVNA FAZA: ', activePhase);
+    return activePhase;
+  }
+
   async function submitComment(event) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -225,6 +249,9 @@ const Single = (props) => {
                           })
                         }
                       </ul>
+                      <p className="card-text">{idea.airdrop === 'true' &&
+                        <span className="airdrop-text">Investors will be eligible for airdrop <b></b></span>
+                      }</p>
                     {
                       !accountId ?
                       (<button type="button" className="connect-btn mt-3" onClick={() => login()  }>Connect wallet to fund</button>)
@@ -256,20 +283,29 @@ const Single = (props) => {
                       <Tab eventKey="description" title="Description">
                         <p dangerouslySetInnerHTML={{__html: idea.description.replace(/\n/g, "<br />")}} />
                       </Tab>
-                      <Tab eventKey="competitors" title="Competitors">
-                        <p>{idea.competitors}</p>
-                      </Tab>
-                      <Tab eventKey="valueProposition" title="Value proposition">
-                        <p dangerouslySetInnerHTML={{__html: idea.value_proposition.replace(/\n/g, "<br />")}} />
-                      </Tab>
+                      {getActivePhase() >= 2 && idea.competitors &&
+                        <Tab eventKey="competitors" title="Competitors">
+                          <p>{idea.competitors}</p>
+                        </Tab>
+                      }
+
+                    {getActivePhase() >= 2 && idea.value_proposition &&
+                    <Tab eventKey="valueProposition" title="Value proposition">
+                      <p dangerouslySetInnerHTML={{__html: idea.value_proposition.replace(/\n/g, "<br />")}} />
+                    </Tab>
+                    }
+                    {getActivePhase() >= 2 && idea.team &&
                       <Tab eventKey="team" title="Team">
                         <p>{idea.team}</p>
-                
                       </Tab>
+                    }
+
                     </Tabs>
                   </div>
+                  
                     
                   <div className="comments-wrap">
+                 
                     <Tabs defaultActiveKey="comments" id="uncontrolled-tab-example" >
                       <Tab eventKey="comments" title="Comments">
                         {
