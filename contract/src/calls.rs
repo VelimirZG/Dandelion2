@@ -195,13 +195,13 @@ pub fn check_date_all(&mut self) {
         let goal_reached = self.get_goal_reached(idea_phase.0, idea_phase.1);
         let phase_paid = self.get_phase_paid(idea_phase.0, idea_phase.1);
         let active = self.get_active_phase(idea_phase.0, idea_phase.1);
-        if (time_passed as u64) > (1.0368e14f64.round() as u64)  && goal_reached == false && active == true && phase_paid == false{
+        if (time_passed as u64) > (7.776e15f64.round() as u64)  && goal_reached == false && active == true && phase_paid == false{
             // log!("time passed and goal not reached");
             log!("idea id: {} and phase: {} has been closed wihtout reaching goal", idea_phase.0, idea_phase.1);
             self.return_to_investors(idea_phase.0, idea_phase.1);
             self.set_phase_paid(idea_phase.0, idea_phase.1);
             
-        }else if (time_passed as u64) > (1.0368e14f64.round() as u64){
+        }else if (time_passed as u64) > (7.776e15f64.round() as u64){
             log!("time not passed");
         }
     }
