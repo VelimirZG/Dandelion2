@@ -177,6 +177,7 @@ function IdeaForm(props) {
 
   async function submitIdea(event) {
     event.preventDefault();
+    console.log('submit idea image', document.getElementById("image-file").files[0]);
     const formData = new FormData(event.currentTarget);
 
     let ideaId =  parseInt(new Date().getTime());
@@ -187,7 +188,6 @@ function IdeaForm(props) {
     }else {
       formData.append('picture_url', ideaInfo.picture_url);
     }
-
     if(ideaInfo) {
       formData.append('idea_id', parseInt(props.ideaId));
     }else {
@@ -374,7 +374,7 @@ function IdeaForm(props) {
                       {/* <label className="form-label" htmlFor="picture_url">Idea image file path*</label>
                       <input name="picture_url" type="url" className="form-control" required id="picture_url" defaultValue={ideaInfo ? ideaInfo.picture_url : ''}/> */}
                       <label className="form-label" htmlFor="picture_url">Image representing your idea*</label>
-                      <input type="file" accept="image/*" name="image" className="form-control" id="image-file" />
+                      <input type="file" accept="image/*" name="image" required className="form-control" id="image-file" />
                     </div>
                     <div className="input-wrap">
                     <label htmlFor="airdrop" className="form-label">Will investors be eligible for airdrop?<span></span></label>
