@@ -8,6 +8,8 @@ import Page from "./pages/page";
 import About from "./pages/about";
 import How from "./pages/how_it_works";
 import Faq from "./pages/faq";
+import Terms from "./pages/terms";
+import Privacy from "./pages/privacy";
 
 
 const Main = () => {
@@ -43,7 +45,9 @@ const Main = () => {
       <Route exact path="/about"  render={() => <About/> } /> 
       <Route exact path="/how"  render={() => <How/> } />
       <Route exact path="/faq"  render={() => <Faq/> } />
-      {/* skopirati liniju i promijeniti page  */}
+      <Route exact path="/terms"  render={() => <Terms/> } />
+      <Route exact path="/privacy"  render={() => <Privacy/> } />
+      {/* copy the line and change the page */}
     </BrowserRouter>
   );
 

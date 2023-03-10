@@ -45,8 +45,8 @@ const Footer = () => {
                 <p>Dandelion, 2023. All rights reserved.</p>
               </div>
               <div className="col-12 col-lg-6 footer-links">
-                <a href="#">Privacy policy</a>
-                <a href="#">Terms of use</a>
+                <a href="./privacy">Privacy policy</a>
+                <a href="./terms">Terms of use</a>
               </div>
             </div>
         </div>
