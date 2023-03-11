@@ -17,6 +17,7 @@ pub struct IdeaMetadata {
     pub website: Option<String>,
     pub token_contract: Option<AccountId>,
     pub airdrop: Option<String>,
+    pub approved: Option<String>,
 }
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
@@ -82,6 +83,7 @@ pub struct JsonIdea {
     pub investors_count: u64,
     pub collect_enabled: bool,
     pub active: bool,
+    pub approved: Option<String>,
     
 }
 
@@ -102,6 +104,7 @@ pub struct JsonIdeaWithGoals{
     pub owner_id: AccountId,
     pub website: Option<String>,
     pub goals: Vec<ProjectPhaseGoals>,
+    pub approved: Option<String>,
    
 }
 
@@ -127,6 +130,7 @@ pub struct JsonIdeaWithInvestments{
     pub active_phase: Option<u8>,
     pub token_contract: Option<AccountId>,
     pub airdrop: Option<String>,
+    pub approved: Option<String>,
    
 }
 

@@ -21,15 +21,17 @@ const Terms = () => {//zamijeniti sa imenom stranice Page
 
 <p>Welcome to Dandelion, the community platform for blockchain and web3 innovators. By accessing or using our services, you agree to be bound by these Terms of Use. Please read them carefully before using our platform.</p>
 
-<ol>
-	<li>Description of Service</li>
-</ol>
+<p>Description of Service</p>
 
 <p>Dandelion is a decentralized and open-source platform that provides resources for idea creators and investors in the blockchain and web3 space. For creators, Dandelion offers exposure, validation, and the ability to raise funds to bring their ideas to life. For investors, Dandelion offers access to innovative projects and the ability to diversify their portfolio. The platform is designed with four different phases for projects: idea validation, proof of concept, delivery plan, and presale.</p>
 
 <p>Use of the Platform</p>
 
 <p>You may use Dandelion as an idea creator or investor, provided that you comply with these Terms of Use and any applicable laws and regulations. You are solely responsible for any content you post on the platform, and you represent and warrant that you have all necessary rights to post such content.</p>
+
+<p>Fee policy</p>
+
+<p>Please note that we charge a fee of 0.25% on investments made through our platform. This fee covers the cost of operating our platform and providing our services to you. By using our platform, you agree to pay this fee. This fee is deducted from the total amount raised. We do not charge any fees for unsuccessful campaigns</p>
 
 <p>No Investment Advice</p>
 

@@ -70,7 +70,7 @@ const FeaturedIdeaCard = (props) => {
                 "backgroundSize": "cover"
               });
               return (
-                <SwiperSlide onClick={() => { window.location.href= process.env.PUBLIC_URL + '/' + item.idea_id}} style={{cursor: 'pointer'}}>
+                <SwiperSlide key={id} onClick={() => { window.location.href= process.env.PUBLIC_URL + '/' + item.idea_id}} style={{cursor: 'pointer'}}>
                   <div className="card swiper-card-wrap p-1" {...style}>
                     <div className="card-body">
                       <div className="card-title">

@@ -43,7 +43,7 @@ const Single = (props) => {
     let formData = new FormData();
     formData.append("projectId", ideaId);
     
-    const rawResponse = await fetch('https://mydandelion.app:9999/api/comments', {
+    const rawResponse = await fetch(process.env.REACT_APP_SERVER_URL + '/comments', {
       method: 'POST',
       body: formData
     })
@@ -91,18 +91,18 @@ const Single = (props) => {
     const investments = idea.investments; // reference to the original investments array
     for (let i = investments.length - 1; i >= 0; i--) {
       const inv = investments[i];
-      console.log('OVO JE INV: ', inv);
-      console.log('OVO JE I: ', i);
+      //console.log('OVO JE INV: ', inv);
+      //console.log('OVO JE I: ', i);
       if (inv.goal_reached) {
         activePhase = i + 2;
-        console.log('OVO JE AKTIVNA FAZA sa goal reached: ', activePhase);
+        //console.log('OVO JE AKTIVNA FAZA sa goal reached: ', activePhase);
         break;
       } else {
         activePhase = 1;
-        console.log('OVO JE AKTIVNA FAZA samo 1: ', activePhase);
+        //console.log('OVO JE AKTIVNA FAZA samo 1: ', activePhase);
       }
     }
-    console.log('OVO se vraća AKTIVNA FAZA: ', activePhase);
+    //console.log('OVO se vraća AKTIVNA FAZA: ', activePhase);
     return activePhase;
   }
 
@@ -112,7 +112,7 @@ const Single = (props) => {
     formData.append('walletId', accountId);
     formData.append('projectId', ideaId);
 
-    const rawResponse = await fetch('https://mydandelion.app:9999/api/comment', {
+    const rawResponse = await fetch(process.env.REACT_APP_SERVER_URL + '/comment', {
       method: 'POST',
 
       body: formData

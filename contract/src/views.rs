@@ -132,6 +132,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                             phase_start: goals_metadata.phase_start,
                             investors_count: investors_count,
                             active: active,
+                            approved: idea_metadata.approved,
                         });
                     }
                     index += 1;
@@ -179,6 +180,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                             phase_start: goals_metadata.phase_start,
                             investors_count: investors_count,
                             active: active,
+                            approved: idea_metadata.approved,
                         };
                         if !ideas_with_active_goals.iter().any(|json_idea| json_idea.idea_id == new_idea.idea_id) {
                             ideas_with_active_goals.push(new_idea);
@@ -227,6 +229,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                     investors_count: investors_count,
                     collect_enabled: goals.collect_enabled,
                     active: active,
+                    approved: idea.approved,
                 });
             }
             index += 1;
@@ -407,6 +410,7 @@ pub fn get_idea_for_single(&self, idea_id: IdeaId) -> Option<JsonIdeaWithInvestm
         active_phase:Some(active_phase),
         token_contract:idea_metadata.token_contract,
         airdrop:idea_metadata.airdrop,
+        approved:idea_metadata.approved,
     })
 }
 
@@ -605,6 +609,8 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
                             investors_count: investors_count,
                             collect_enabled: goals_metadata.collect_enabled,
                             active: active,
+                            approved: idea_metadata.approved,
+
                         });
                     }
                     index += 1;
@@ -614,7 +620,19 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         ideas_with_active_goals
     } 
 
-   
+   //check if idea is approved
+    pub fn is_idea_approved(&self, idea_id: IdeaId) -> Option<String> {
+        let idea = self.ideas.get(&idea_id).expect("Idea not found for given idea_id");
+        idea.approved
+    }
+
+    //set idea approved
+    pub fn set_idea_approved(&mut self, idea_id: IdeaId, approved: String) {
+        let mut idea = self.ideas.get(&idea_id).expect("Idea not found for given idea_id");
+        idea.approved = Some(approved);
+        self.ideas.insert(&idea_id, &idea);
+    }
+    
     //refactor upper function to use idea_id from output of get_all_active_ideas_id
     pub fn get_all_active_ideas_homepage_by_owner_id(&self, owner_id: AccountId, from_index: usize, limit: usize) -> Vec<JsonIdea> {
         let mut ideas_with_active_goals: Vec<JsonIdea> = Vec::new();
@@ -652,6 +670,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
                             investors_count: investors_count,
                             collect_enabled: goals_metadata.collect_enabled,
                             active: active,
+                            approved: idea_metadata.approved,
                         });
                     }
                     index += 1;
@@ -698,6 +717,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
                             investors_count: investors_count,
                             collect_enabled: goals_metadata.collect_enabled,
                             active: active,
+                            approved: idea_metadata.approved,
                         });
                     }
                     index += 1;
@@ -719,6 +739,7 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         }
         ideas_with_active_goals
     }
+
 
     //get idea_id for all ideas with inactive goals
     pub fn get_all_inactive_ideas_id(&self) -> Vec<u64> {

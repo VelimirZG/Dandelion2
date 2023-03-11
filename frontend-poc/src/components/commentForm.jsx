@@ -155,7 +155,7 @@ function CommentForm(props) {
     formData.append('walletId', accountId);
     formData.append('projectId', ideaId);
 
-    const rawResponse = await fetch('https://mydandelion.app:9999/api/comment', {
+    const rawResponse = await fetch(process.env.REACT_APP_SERVER_URL + '/comment', {
       method: 'POST',
 
       body: formData

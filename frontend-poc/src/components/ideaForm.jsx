@@ -158,6 +158,8 @@ function IdeaForm(props) {
     }
   },[]);
 
+
+
   async function uploadImage(ideaId) {
     let formData = new FormData();
          
@@ -165,7 +167,7 @@ function IdeaForm(props) {
     formData.append("walletId", accountId);
     formData.append("projectId", ideaId);
 
-    const rawResponse = await fetch('https://mydandelion.app:9999/api/upload', {
+    const rawResponse = await fetch(process.env.REACT_APP_SERVER_URL + '/upload', {
       method: 'POST',
 
       body: formData
@@ -185,24 +187,26 @@ function IdeaForm(props) {
     if(!ideaInfo) {
       const pictureURL = await uploadImage(ideaId);
       formData.append('picture_url', 'https://mydandelion.app' + pictureURL);
+      formData.append('approved', "false");
+      formData.append('idea_id', parseInt(ideaId))
     }else {
       formData.append('picture_url', ideaInfo.picture_url);
-    }
-    if(ideaInfo) {
+      formData.append('approved', ideaInfo.approved);
       formData.append('idea_id', parseInt(props.ideaId));
-    }else {
-      formData.append('idea_id', parseInt(ideaId))
     }
+   
+   
     
     formData.append('owner_id', window.accountId);
     console.log('FROM DATA: ', formData.entries());
     const checkbox = document.getElementById('airdrop');
     
     formData.append('airdrop', checkbox.checked);
-
+  
 
     
-    let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id', 'airdrop'];
+    
+    let metadata = ['website', 'title', 'description', 'picture_url', 'team', 'excerpt', 'value_proposition', 'owner_id', 'airdrop', 'approved'];
     let data = {};
     for (let [key, value] of formData.entries()) {
       if(metadata.includes(key)) {
@@ -240,6 +244,9 @@ function IdeaForm(props) {
     }
   }
 
+  
+
+
     //get current active phase 
     const getActivePhase = () => {
       if (!ideaInfo) {
@@ -249,18 +256,18 @@ function IdeaForm(props) {
       const investments = ideaInfo.investments; // reference to the original investments array
       for (let i = investments.length - 1; i >= 0; i--) {
         const inv = investments[i];
-        console.log('OVO JE INV: ', inv);
-        console.log('OVO JE I: ', i);
+        // console.log('OVO JE INV: ', inv);
+        // console.log('OVO JE I: ', i);
         if (inv.goal_reached) {
           activePhase = i + 2;
-          console.log('OVO JE AKTIVNA FAZA sa goal reached: ', activePhase);
+          // console.log('OVO JE AKTIVNA FAZA sa goal reached: ', activePhase);
           break;
         } else {
           activePhase = 1;
-          console.log('OVO JE AKTIVNA FAZA samo 1: ', activePhase);
+          // console.log('OVO JE AKTIVNA FAZA samo 1: ', activePhase);
         }
       }
-      console.log('OVO se vraća AKTIVNA FAZA: ', activePhase);
+      // console.log('OVO se vraća AKTIVNA FAZA: ', activePhase);
       return activePhase;
     }
 
@@ -268,6 +275,7 @@ function IdeaForm(props) {
     if(!ideaInfo) {
       return;
     }
+ 
     let content = [];
     let res = [];
     ideaInfo.investments.forEach((inv, i) => {

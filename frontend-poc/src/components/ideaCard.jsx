@@ -24,7 +24,7 @@ const IdeaCard = (props) => {
 
 
   async function getAllLikes() {
-    const rawResponse = await fetch('https://mydandelion.app:9999/api/likes', {
+    const rawResponse = await fetch(process.env.REACT_APP_SERVER_URL + '/likes', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -52,7 +52,7 @@ const IdeaCard = (props) => {
   async function likeIdea(event) {
     if(accountId) {
       const ideaId = event.currentTarget.getAttribute('data-idea');
-      const rawResponse = await fetch('https://mydandelion.app:9999/api/like', {
+      const rawResponse = await fetch(process.env.REACT_APP_SERVER_URL + '/like', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -142,10 +142,10 @@ const IdeaCard = (props) => {
                             <div className="invest-wrap d-flex justify-content-start align-items-center">
                               <select className="form-select" defaultValue={0.1} style={{width: '30%'}} aria-label="Default select example" onChange={(e) => setCurrentInvValue(e.target.value)}>
                                 {
-                                  investOptions.map((option) => {
+                                  investOptions.map((option, key) => {
                                     if(option <= (item.goal_amount - item.sum)) {
                                       return (
-                                        <option value={option}>{option}</option>
+                                        <option key={key} value={option}>{option}</option>
                                       )
                                     }
                                   })
