@@ -190,7 +190,13 @@ function IdeaForm(props) {
       formData.append('approved', "false");
       formData.append('idea_id', parseInt(ideaId))
     }else {
-      formData.append('picture_url', ideaInfo.picture_url);
+      if(document.getElementById("image-file").files[0]) {
+        const pictureURL = await uploadImage(ideaId);
+        formData.append('picture_url', 'https://mydandelion.app' + pictureURL);
+      }else {
+        formData.append('picture_url', ideaInfo.picture_url);
+      }
+      
       formData.append('approved', ideaInfo.approved);
       formData.append('idea_id', parseInt(props.ideaId));
     }

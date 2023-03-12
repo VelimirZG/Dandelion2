@@ -91,13 +91,16 @@ const Profile = (props) => {
 
   function listActiveIdeas(nextPage = false) {
     let currentIndex = activeIdeasIndex;
+    console.log('currentIndex: ', currentIndex);
     if(!nextPage) {
       currentIndex = 0;
     }
     get_all_active_ideas_homepage_by_owner_id(accountId, currentIndex, limit).then( res => {
       console.log('active ideas: ', res);
       setActiveIdeas(res);
-      setActiveIdeasIndex(res.length);
+      if(!nextPage) {
+        setActiveIdeasIndex(res.length);
+      }
       if(nextPage) {
         setActiveIdeas([...activeIdeas, ...res])
       }else {
@@ -117,6 +120,7 @@ const Profile = (props) => {
       if(nextPage) {
         setInactiveIdeas([...inactiveIdeas, ...res])
       }else {
+        setInactiveIdeasIndex(res.length);
         setInactiveIdeas(res);
       }
     });
@@ -133,7 +137,7 @@ const Profile = (props) => {
   }
 
   function loadMoreActiveIdeas() {
-    setActiveIdeasIndex((activeIdeasIndex) => activeIdeasIndex + limit);
+    setActiveIdeasIndex(activeIdeasIndex + limit);
     listActiveIdeas(true);
   }
 
