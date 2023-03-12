@@ -245,19 +245,19 @@
       @media (max-width: 820px) {
         padding: 26px 21px 31px 21px !important;
       }
+      
+      .idea-phase-img {
+        @media (max-width: 820px) {
+          top: -20px;
+          left: 20px;
+        }
+      }
 
       .card-title {
         @media (max-width: 820px) {
           text-align: left !important;
           font-size: 20px;
           line-height: 32px;
-        }
-
-        &::before {
-          @media (max-width: 820px) {
-            top: -45px;
-            left: 0;
-          }
         }
       }
       .card-text {

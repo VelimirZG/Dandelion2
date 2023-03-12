@@ -253,16 +253,14 @@
 .projects-wrap .card-title {
   position: relative;
 }
-.projects-wrap .card-title::before {
-  background-image: url('../assets/images/icon-bulb.png');
-  content: "";
+.idea-phase-img {
   display: inline-block;
   cursor: pointer;
   width: 36px;
   height: 36px;
   background-repeat: no-repeat;
-  top: 0;
-  left: -46px;
+  top: 32px;
+  left: -20px;
   z-index: 100000;
   position: absolute;
 }
