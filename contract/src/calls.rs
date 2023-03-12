@@ -58,8 +58,9 @@ impl Contract {
             token_received: false,
         };
         self.investment.insert(&investment_id, &investment);
-    
+    log!("to be invested: {}", to_be_invested);
         if goal - to_be_invested <= 1000000000 {
+            log!("ušao je u if");    
             self.set_goal_reached(idea_id, project_phase);
             // log!("Goal reached");
         }
