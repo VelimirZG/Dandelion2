@@ -1,4 +1,5 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME ||'dev-1678603326627-44703993152111'
+// const CONTRACT_NAME = process.env.CONTRACT_NAME ||'dev-1678700692111-64573621555300'
+const CONTRACT_NAME = process.env.CONTRACT_NAME ||'mydandelion.near'
 
 
 

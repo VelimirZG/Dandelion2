@@ -111,6 +111,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                         let goals_metadata = goal.clone();
                         let near = self.yocto_to_near(investment_amount_sum);
                         let active= self.has_active_goals(key);
+                        //if idea.approved == Some("true".to_string()){
                         ideas_with_active_goals.push(JsonIdea {
                             idea_id: key,
                             title: idea_metadata.title,
@@ -134,6 +135,8 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                             active: active,
                             approved: idea_metadata.approved,
                         });
+                   // }
+
                     }
                     index += 1;
                 }
@@ -320,6 +323,33 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
         }
         Some(goals)
     }
+
+    //get goals from idea idea that is currently active
+    pub fn get_active_goals_from_idea_id(&self, idea_id:u64)->Option<ProjectPhaseGoals>{
+        let mut goals:ProjectPhaseGoals = ProjectPhaseGoals{
+            idea_id: idea_id,
+            project_phase: 0,
+            goal_amount: 0,
+            goal_reached: false,
+            phase_start: 0,
+            phase_paid: false,
+            collect_enabled: false,
+            active: false,
+        };
+        for (key, goal) in self.goals.iter(){
+            if key == idea_id {
+                for goal in goal.iter(){
+                    if goal.active == true{
+                        goals = goal.clone();
+                        break;
+                    }
+                }
+            }
+        }
+        Some(goals)
+    }
+
+
 
     pub fn get_idea_by_id(&self, idea_id:u64)->IdeaMetadata{
         self.ideas.get(&idea_id).unwrap().clone()
@@ -641,15 +671,17 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         for idea_id in active_ideas.iter() {
             let idea = self.ideas.get(&idea_id).unwrap();
             if idea.owner_id == owner_id {
-                let goals = self.get_goals_from_idea_id(idea_id.clone());
+                let goals = self.get_active_goals_from_idea_id(idea_id.clone());
                 let investment_amount_sum: u128 = self.get_investments_by_idea_id(*idea_id).iter().map(|(_, investment)| investment.amount).sum();
                 let sum_amount = self.get_total_amount_by_idea(*idea_id);
 
                 let investors_count = self.get_investors_count_by_idea_id(*idea_id);
                 let idea_metadata = idea.clone();
                 let active= self.has_active_goals(idea_id.clone());
+                
                 if let Some(goals_metadata) = goals {
-                    if index >= from_index && index < (from_index + limit) && active == true {
+                    if index >= from_index && index < (from_index + limit) && active == true  {
+                        log!("phase_start: {}", goals_metadata.project_phase);
                         ideas_with_active_goals.push(JsonIdea {
                             idea_id: idea_id.clone(),
                             title: idea_metadata.title,
