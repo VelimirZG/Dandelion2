@@ -86,11 +86,11 @@ const IdeaCard = (props) => {
           favColor="#FFF";
         }
         let iconPath;
-        if (item.project_phase == 0){
+        if (item.project_phase == 1){
           iconPath = process.env.PUBLIC_URL + '/phase_1.png';
-        } else if (item.project_phase == 1){
-          iconPath = process.env.PUBLIC_URL + '/phase_2.png';
         } else if (item.project_phase == 2){
+          iconPath = process.env.PUBLIC_URL + '/phase_2.png';
+        } else if (item.project_phase == 3){
           iconPath = process.env.PUBLIC_URL + '/phase_3.png';
         }else{
           iconPath = process.env.PUBLIC_URL + '/phase_4.png';
