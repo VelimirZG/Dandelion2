@@ -105,11 +105,11 @@ const IdeaCard = (props) => {
                     </div>
                     <a href={process.env.PUBLIC_URL + '/' + item.idea_id} className="card-content d-flex mb-lg-auto flex-column justify-content-between  col-xs-12 col-sm-12 col-md-12 col-lg-5" style={{textDecoration: 'none'}}>
                       <img src={iconPath} className="idea-phase-img" />
+                      {item.approved=="false" &&  
                       <p className="card-text"> 
-                      {item.approved=="false" &&    
                                 <p>Pending approval</p>       
-                      }
                       </p>
+                         }
                       <h4 className="card-title text-center text-md-start text-lg-start" data-image={iconPath} style={{cursor: 'pointer'}} >{item.title}</h4>
                       <p className="card-text">
                         {item.excerpt}
