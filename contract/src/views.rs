@@ -111,7 +111,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                         let goals_metadata = goal.clone();
                         let near = self.yocto_to_near(investment_amount_sum);
                         let active= self.has_active_goals(key);
-                        //if idea.approved == Some("true".to_string()){
+                        if idea.approved == Some("true".to_string()){
                         ideas_with_active_goals.push(JsonIdea {
                             idea_id: key,
                             title: idea_metadata.title,
@@ -135,7 +135,7 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                             active: active,
                             approved: idea_metadata.approved,
                         });
-                   // }
+                   }
 
                     }
                     index += 1;
@@ -186,7 +186,9 @@ pub fn get_active_project_phase(&self, idea_id: IdeaId) -> u8 {
                             approved: idea_metadata.approved,
                         };
                         if !ideas_with_active_goals.iter().any(|json_idea| json_idea.idea_id == new_idea.idea_id) {
+                            if idea.approved == Some("true".to_string()){
                             ideas_with_active_goals.push(new_idea);
+                            }
                         }
                     }
                     index += 1;
@@ -656,8 +658,50 @@ pub fn count_phases_and_ideas_by_investor_id(&self, investor_id: AccountId)->(u6
         idea.approved
     }
 
+    //get all ideas that are not approved
+    pub fn get_all_ideas_not_approved(&self) -> Vec<JsonIdea> {
+        let mut ideas_not_approved: Vec<JsonIdea> = Vec::new();
+        for (key, idea) in self.ideas.iter() {
+            if idea.approved==Some("false".to_string()) {
+                let goals = self.get_goals_from_idea_id(key.clone());
+                let investment_amount_sum: u128 = self.get_investments_by_idea_id(key).iter().map(|(_, investment)| investment.amount).sum();
+                let sum_amount = self.get_total_amount_by_idea(key);
+                let investors_count = self.get_investors_count_by_idea_id(key);
+                let idea_metadata = idea.clone();
+                if let Some(goals_metadata) = goals {
+                    ideas_not_approved.push(JsonIdea {
+                        idea_id: key,
+                        title: idea_metadata.title,
+                        excerpt: idea_metadata.excerpt,
+                        description: idea_metadata.description,
+                        competitors: idea_metadata.competitors,
+                        value_proposition: idea_metadata.value_proposition,
+                        tags: idea_metadata.tags,
+                        team: idea_metadata.team,
+                        picture_url: idea_metadata.picture_url,
+                        owner_id: idea_metadata.owner_id,
+                        website: idea_metadata.website,
+                        project_phase: goals_metadata.project_phase,
+                        goal_amount: sum_amount,
+                        sum: self.yocto_to_near(investment_amount_sum),
+                        goal_reached: goals_metadata.goal_reached,
+                        phase_start: goals_metadata.phase_start,
+                        investors_count: investors_count,
+                        collect_enabled: goals_metadata.collect_enabled,
+                        active: self.has_active_goals(key.clone()),
+                        approved: idea_metadata.approved,
+                    });
+                }
+            }
+        }
+        ideas_not_approved
+    }
+
     //set idea approved
     pub fn set_idea_approved(&mut self, idea_id: IdeaId, approved: String) {
+        //check if caller is owner of contract
+        assert_eq!(env::predecessor_account_id(), env::current_account_id(), "Only admin can set idea approved");
+
         let mut idea = self.ideas.get(&idea_id).expect("Idea not found for given idea_id");
         idea.approved = Some(approved);
         self.ideas.insert(&idea_id, &idea);
