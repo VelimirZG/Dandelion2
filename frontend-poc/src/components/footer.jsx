@@ -32,8 +32,8 @@ const Footer = () => {
           <div className="col-12 col-lg-3 f-menu-2">
             <h6 className="footer-menu-title">More from us</h6>
             <ul className="footer-menu-ul">
-              <li><a href="#">Twitter</a></li>
-              <li><a href="#">Medium</a></li>
+              <li><a href="https://twitter.com/mydandelionapp">Twitter</a></li>
+              <li><a href="https://medium.com/@mydandelion">Medium</a></li>
               <li><a href="#">Discord</a></li>
             </ul>
           </div>
