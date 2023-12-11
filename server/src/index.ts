@@ -15,8 +15,8 @@ const path = require("path");
 let http: {
   listen: (arg0: number, arg1: any) => any;
 } = require('https').createServer({
-  key: fs.readFileSync('/etc/ssl/dandelion/private.key'),
-  cert: fs.readFileSync('/etc/ssl/dandelion/certificate.crt')
+  key: fs.readFileSync('/etc/letsencrypt/live/mydandelion.app/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/mydandelion.app/fullchain.pem')
 },app);
 
 app.set('port', process.env.PORT || 3000);
